@@ -3,6 +3,7 @@
 English | [简体中文](https://github.com/Xyntax/CDK/wiki/CDK-Home-CN)
 
 ## Legal Disclaimer
+
 Usage of CDK for attacking targets without prior mutual consent is illegal.
 CDK is for security testing purposes only.
 
@@ -13,9 +14,9 @@ CDK is an open-sourced container penetration toolkit, designed for offering stab
 Currently still under development, submit [issues](https://github.com/Xyntax/CDK/issues) or mail <i@cdxy.me> if you need any help. 
 
 ## Installation
-Drop executable files into target container and start testing.
+Download latest release in: https://github.com/Xyntax/CDK/releases/
 
-https://github.com/Xyntax/CDK/tree/main/release
+Drop executable files into target container and start testing.
 
 ## Usage
 ```
@@ -77,8 +78,7 @@ This command will run the scripts below without local file scanning, using `--fu
 |Information Gathering|Sensitive local files|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Sensitive-Files)|
 |Discovery|K8s api-server info|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-K8s-API-Server)|
 |Discovery|K8s service-account info|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-K8s-Service-Account)|
-|Discovery|Cloud Provider Metadata API|✔||
-
+|Discovery|Cloud Provider Metadata API|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Cloud-Provider-Metadata-API)|
 
 ### Exploit Module
 
@@ -117,7 +117,7 @@ cdk run <script-name> [options]
 |Persistence|Deploy WebShell||||
 |Persistence|Deploy Backdoor Pod||||
 |Persistence|Deploy Shadow K8s api-server||||
-|Persistence|Deploy K8s Cronbob||||
+|Persistence|Deploy K8s CronJob||||
 |Defense Evasion|Disable K8s Audit||||
 
 
