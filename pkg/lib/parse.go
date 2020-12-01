@@ -67,7 +67,7 @@ func ParseDocopt() {
 	}
 
 	// nc needs -v and -h , parse it outside
-	if os.Args[1] ==  "nc" {
+	if os.Args[1] == "nc" {
 		// https://github.com/jiguangin/netcat
 		PassInnerArgs()
 		netcat.RunVendorNetcat()
@@ -92,11 +92,14 @@ func ParseDocopt() {
 		fmt.Printf("\n[Information Gathering - Mounts]\n")
 		evaluate.MountEscape()
 
-		fmt.Printf("\n[Information Gathering - K8s API Server]\n")
+		fmt.Printf("\n[Discovery - K8s API Server]\n")
 		evaluate.CheckK8sAnonymousLogin()
 
-		fmt.Printf("\n[Information Gathering - K8s Service Account]\n")
+		fmt.Printf("\n[Discovery - K8s Service Account]\n")
 		evaluate.CheckK8sServiceAccount(conf.K8sSATokenDefaultPath)
+
+		fmt.Printf("\n[Discovery - Cloud Provider Metadata API]\n")
+		evaluate.CheckCloudMetadataAPI()
 
 		if Args["--full"].(bool) {
 			fmt.Printf("\n[Information Gathering - Sensitive Files]\n")
@@ -133,7 +136,7 @@ func ParseDocopt() {
 			if len(args) != 4 {
 				log.Fatal("invalid input args, Example: ./cdk ucurl get /var/run/docker.sock http://127.0.0.1/info \"\"")
 			}
-			ans:=util.UnixHttpSend(args[0], args[1], args[2], args[3])
+			ans := util.UnixHttpSend(args[0], args[1], args[2], args[3])
 			log.Println("response:")
 			fmt.Println(ans)
 		case "ifconfig":
