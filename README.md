@@ -1,6 +1,9 @@
+
 # CDK - Zero Dependency Container Penetration Toolkit
 
 English | [简体中文](https://github.com/Xyntax/CDK/wiki/CDK-Home-CN)
+
+![png](https://static.cdxy.me/20201203170308_NwzGiT_Screenshot.jpeg)
 
 ## Legal Disclaimer
 
@@ -14,6 +17,7 @@ CDK is an open-sourced container penetration toolkit, designed for offering stab
 Currently still under development, submit [issues](https://github.com/Xyntax/CDK/issues) or mail <i@cdxy.me> if you need any help. 
 
 ## Installation
+
 Download latest release in: https://github.com/Xyntax/CDK/releases/
 
 Drop executable files into target container and start testing.
@@ -69,15 +73,16 @@ This command will run the scripts below without local file scanning, using `--fu
 
 |Tactics|Script|Supported|Usage/Example|
 |---|---|---|---|
-|Information Gathering|OS basic info|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-System-Info)|
-|Information Gathering|Available capabilities|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Commands-and-Capabilities)|
-|Information Gathering|Available Linux commands|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Commands-and-Capabilities)|
+|Information Gathering|OS Basic Info|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-System-Info)|
+|Information Gathering|Available Capabilities|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Commands-and-Capabilities)|
+|Information Gathering|Available Linux Commands|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Commands-and-Capabilities)|
 |Information Gathering|Mounts|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Mounts)|
+|Information Gathering|Net Namespace|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Net-Namespace)|
 |Information Gathering|Sensitive ENV|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Services)|
-|Information Gathering|Sensitive process|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Services)|
-|Information Gathering|Sensitive local files|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Sensitive-Files)|
-|Discovery|K8s api-server info|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-K8s-API-Server)|
-|Discovery|K8s service-account info|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-K8s-Service-Account)|
+|Information Gathering|Sensitive Process|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Services)|
+|Information Gathering|Sensitive Local Files|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Sensitive-Files)|
+|Discovery|K8s Api-server Info|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-K8s-API-Server)|
+|Discovery|K8s Service-account Info|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-K8s-Service-Account)|
 |Discovery|Cloud Provider Metadata API|✔|[link](https://github.com/Xyntax/CDK/wiki/Evaluate:-Cloud-Provider-Metadata-API)|
 
 ### Exploit Module
