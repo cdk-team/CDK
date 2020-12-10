@@ -92,6 +92,9 @@ func ParseDocopt() {
 		fmt.Printf("\n[Information Gathering - Mounts]\n")
 		evaluate.MountEscape()
 
+		fmt.Printf("\n[Information Gathering - Net Namespace]\n")
+		evaluate.CheckNetNamespace()
+
 		fmt.Printf("\n[Discovery - K8s API Server]\n")
 		evaluate.CheckK8sAnonymousLogin()
 

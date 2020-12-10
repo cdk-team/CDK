@@ -50,7 +50,9 @@ type sensitiveFileRules struct {
 var SensitiveFileConf = sensitiveFileRules{
 	StartDir: "/",
 	NameList: []string{
-		`docker.sock`,
+		`/docker.sock`,     // docker socket (http)
+		`/containerd.sock`, // containerd socket (grpc)
+		`/containerd/s/`,   // containerd-shim socket (grpc)
 		`.kube/`,
 		`.git/`,
 		`.svn/`,
