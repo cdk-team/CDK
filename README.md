@@ -101,7 +101,7 @@ cdk run <script-name> [options]
 |---|---|---|---|---|
 |Escaping|docker-runc CVE-2019-5736|runc-pwn|✔||
 |Escaping|docker-cp CVE-2019-14271||||
-|Escaping|containerd-shim CVE-2020-15257||||
+|Escaping|containerd-shim CVE-2020-15257|shim-pwn|✔|[link](https://github.com/Xyntax/CDK/wiki/Exploit:-shim-pwn)|
 |Escaping|dirtycow CVE-2016-5159||||
 |Escaping|docker.sock PoC (DIND attack)|docker-sock-check|✔|[link](https://github.com/Xyntax/CDK/wiki/Exploit:-docker-sock-check)|
 |Escaping|docker.sock Backdoor Image Deploy|docker-sock-deploy|✔|[link](https://github.com/Xyntax/CDK/wiki/Exploit:-docker-sock-deploy)|
