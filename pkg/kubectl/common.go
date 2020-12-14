@@ -12,6 +12,15 @@ import (
 	"strings"
 )
 
+type K8sRequestOption struct {
+	TokenPath string
+	Server string
+	Api string
+	Method string
+	Args string
+	Anonymous bool
+}
+
 func ApiServerAddr() (string, error) {
 	host, port := os.Getenv("KUBERNETES_SERVICE_HOST"), os.Getenv("KUBERNETES_SERVICE_PORT")
 	if len(host) == 0 || len(port) == 0 {
@@ -33,13 +42,44 @@ func GetServiceAccountToken(tokenPath string) (string, error) {
 curl -s https://192.168.0.234:6443/api/v1/nodes?watch  --header "Authorization: Bearer xxx" --cacert ca.crt
 */
 //https://github.com/kubernetes/client-go/blob/66db2540991da169fb60fce735064a55bfc52b71/rest/config.go#L483
-func ServerAccountRequest(token string, method string, api string, args string) string {
+func ServerAccountRequest(opts K8sRequestOption) string {
+
+	// parse token
+	var token string
+	var tokenErr error
+	if opts.Anonymous {
+		token=""
+	}else if opts.TokenPath == "" {
+		token,tokenErr = GetServiceAccountToken(conf.K8sSATokenDefaultPath)
+	}else{
+		token,tokenErr = GetServiceAccountToken(opts.TokenPath)
+	}
+	if tokenErr != nil {
+		log.Println(tokenErr)
+		return ""
+	}
+
+	// parse url
+	var url string
+	var server string
+	var urlErr error
+	if opts.Server == "" {
+		server,urlErr = ApiServerAddr()
+		url = server+opts.Api
+	} else {
+		url = opts.Server+opts.Api
+		urlErr = nil
+	}
+	if urlErr != nil {
+		log.Println(urlErr)
+		return ""
+	}
 
 	cli := goz.NewClient()
-	switch strings.ToLower(method) {
+	switch strings.ToLower(opts.Method) {
 	case "get":
 		if len(token) > 0 {
-			resp, err := cli.Get(api, goz.Options{
+			resp, err := cli.Get(url, goz.Options{
 				Headers: map[string]interface{}{
 					"Authorization": "Bearer " + string(token),
 				},
@@ -55,7 +95,7 @@ func ServerAccountRequest(token string, method string, api string, args string) 
 			r, _ := resp.GetBody()
 			return r.String()
 		} else {
-			resp, err := cli.Get(api)
+			resp, err := cli.Get(url)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -65,7 +105,7 @@ func ServerAccountRequest(token string, method string, api string, args string) 
 
 	case "post":
 		if len(token) > 0 {
-			resp, err := cli.Post(api, goz.Options{
+			resp, err := cli.Post(url, goz.Options{
 				Headers: map[string]interface{}{
 					"Authorization": "Bearer " + string(token),
 				},
@@ -81,7 +121,7 @@ func ServerAccountRequest(token string, method string, api string, args string) 
 			r, _ := resp.GetBody()
 			return r.String()
 		} else {
-			resp, err := cli.Post(api)
+			resp, err := cli.Post(url)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -103,23 +143,39 @@ func fatalWithUsage() {
 }
 
 func KubectlMain(args []string) {
-	method := args[0]
-	url := args[1]
-	token, err := GetServiceAccountToken(conf.K8sSATokenDefaultPath)
-	if err != nil {
-		log.Fatal("reading service-account token failed, err:", err)
-	}
-
-	switch len(args) {
-	case 3:
-		postArgs := args[2]
-		fmt.Println("post data:", postArgs)
-		log.Println("response:")
-		fmt.Println(ServerAccountRequest(token, method, url, postArgs))
-	case 2:
-		log.Println("response:")
-		fmt.Println(ServerAccountRequest(token, method, url, ""))
-	default:
-		fatalWithUsage()
-	}
+	// kubectl get https://1/2 id=1 --anonymous
+	fmt.Println(args)
+	//method := args[0]
+	//url := args[1]
+	//
+	//var opts K8sRequestOption
+	//
+	//{
+	//	tokenPath: "",
+	//	server:    "",
+	//	api:       "",
+	//	method:    "",
+	//	args:      "",
+	//	anonymous: false,
+	//}
+	//
+	//opts.anonymous = false
+	//for _, arg.():= range args{
+	//	if arg == "--anonymous"{
+	//		opts.anonymous=true
+	//	}
+	//}
+	//
+	//switch len(args) {
+	//case 3:
+	//	postArgs := args[2]
+	//	fmt.Println("post data:", postArgs)
+	//	log.Println("response:")
+	//	fmt.Println(ServerAccountRequest())
+	//case 2:
+	//	log.Println("response:")
+	//	fmt.Println(ServerAccountRequest(token, method, url, ""))
+	//default:
+	//	fatalWithUsage()
+	//}
 }

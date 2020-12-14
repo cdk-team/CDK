@@ -17,53 +17,14 @@ import (
 	"strconv"
 )
 
-var Args map[string]interface{} // global for scripts to parse inner args
-
-var usage = `
-Container DucK
-Zero-dependency docker/k8s penetration toolkit by <i@cdxy.me>
-Find tutorial, configuration and use-case in https://github.com/Xyntax/CDK/wiki
-
-Usage:
-  cdk evaluate [--full]
-  cdk run (--list | <exploit> [<args>...])
-  cdk <tool> [<args>...]
-
-Evaluate:
-  cdk evaluate                              Gather information to find weekness inside container.
-  cdk evaluate --full                       Enable file scan during information gathering.
-
-Exploit:
-  cdk run --list                            List all available exploits.
-  cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/Xyntax/CDK/wiki
-
-Tool:
-  vi <file>                                 Edit files in container like "vi" command.
-  ps                                        Show process information like "ps -ef" command.
-  nc [options]                              Create TCP tunnel.
-  ifconfig                                  Show network information.
-  kcurl	(get|post) <url> <data>             Make request to K8s api-server.
-  ucurl (get|post) <socket> <uri> <data>    Make request to docker unix socket.
-  probe <ip> <port> <parallel> <timeout-ms> TCP port scan, example: cdk probe 10.0.1.0-255 80,8080-9443 50 1000
-
-Options:
-  -h --help     Show this help msg.
-  -v --version  Show version.
-`
-var version = "cdk v0.1.5"
-
-func ParseCmds() map[string]interface{} {
-	arguments, _ := docopt.ParseArgs(usage, os.Args[1:], version)
-	return arguments
-}
-
 func PassInnerArgs() {
 	os.Args = os.Args[1:]
 }
 
-func ParseDocopt() {
+func ParseCDKMain() {
+
 	if len(os.Args) == 1 {
-		docopt.PrintHelpAndExit(nil, usage)
+		docopt.PrintHelpAndExit(nil, BannerContainer)
 	}
 
 	// nc needs -v and -h , parse it outside
@@ -74,7 +35,6 @@ func ParseDocopt() {
 		return
 	}
 
-	Args = ParseCmds()
 
 	if Args["evaluate"].(bool) {
 
@@ -164,7 +124,7 @@ func ParseDocopt() {
 			}
 			probe.TCPScanToolAPI(args[0], args[1], parallel, timeout)
 		default:
-			docopt.PrintHelpAndExit(nil, usage)
+			docopt.PrintHelpAndExit(nil, BannerContainer)
 		}
 	}
 }
