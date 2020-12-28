@@ -3,6 +3,7 @@ package evaluate
 import (
 	"bufio"
 	"fmt"
+	"github.com/Xyntax/CDK/pkg/errors"
 	"io"
 	"log"
 	"os"
@@ -10,10 +11,6 @@ import (
 	"strings"
 	"syscall"
 )
-
-type runtimeError struct {
-	Err error
-}
 
 type Mount struct {
 	Device     string
@@ -26,7 +23,7 @@ type Mount struct {
 // runtime error if the Closer returns an error
 func checkClose(c io.Closer) {
 	if err := c.Close(); err != nil {
-		panic(&runtimeError{err})
+		panic(&errors.CDKRuntimeError{Err: err})
 	}
 }
 

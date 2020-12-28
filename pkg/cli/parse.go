@@ -1,9 +1,12 @@
-package lib
+package cli
 
 import (
 	"fmt"
 	"github.com/Xyntax/CDK/conf"
 	"github.com/Xyntax/CDK/pkg/evaluate"
+	"github.com/Xyntax/CDK/pkg/plugin"
+
+	//"github.com/Xyntax/CDK/pkg/exploit"
 	"github.com/Xyntax/CDK/pkg/kubectl"
 	"github.com/Xyntax/CDK/pkg/netcat"
 	"github.com/Xyntax/CDK/pkg/network"
@@ -35,7 +38,10 @@ func ParseCDKMain() {
 		return
 	}
 
-
+	if Args["auto-escape"].(bool){
+		plugin.RunSingleTask("auto-escape")
+		return
+	}
 	if Args["evaluate"].(bool) {
 
 		fmt.Printf("\n[Information Gathering - System Info]\n")
@@ -73,16 +79,16 @@ func ParseCDKMain() {
 
 	if Args["run"].(bool) {
 		if Args["--list"].(bool) {
-			ListAllPlugin()
+			plugin.ListAllExploit()
 			os.Exit(0)
 		}
 		name := Args["<exploit>"].(string)
-		if Plugins[name] == nil {
+		if plugin.Exploits[name] == nil {
 			fmt.Printf("\nInvalid script name: %s , available scripts:\n", name)
-			ListAllPlugin()
+			plugin.ListAllExploit()
 			return
 		}
-		RunSinglePlugin(name)
+		plugin.RunSingleExploit(name)
 		return
 	}
 

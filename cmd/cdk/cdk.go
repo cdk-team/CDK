@@ -1,11 +1,11 @@
 package main
 
 import (
-	_ "github.com/Xyntax/CDK/pkg/evaluate" // register all scripts
-	_ "github.com/Xyntax/CDK/pkg/exploit"  // register all scripts
-	"github.com/Xyntax/CDK/pkg/lib"
+	_ "github.com/Xyntax/CDK/pkg/exploit"  // register all exploits
+	_ "github.com/Xyntax/CDK/pkg/task" // register all task
+	"github.com/Xyntax/CDK/pkg/cli"
 )
 
 func main() {
-	lib.ParseCDKMain()
+	cli.ParseCDKMain()
 }

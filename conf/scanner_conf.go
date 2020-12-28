@@ -25,7 +25,7 @@ var TCPScannerConf = TCPScannerConfS{
 		"kubelet-auth":        "10250",
 		"kubelet-read":        "10255",
 		"dashboard":           "30000",
-		"tiller,weave,calico": "44134",
 		"nodeport-service":    "30001-32767", //default NodePort service port range：30000-32767。
+		"tiller,weave,calico": "44134",
 	},
 }

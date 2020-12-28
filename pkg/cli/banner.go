@@ -1,4 +1,4 @@
-package lib
+package cli
 
 import (
 	"github.com/docopt/docopt-go"
@@ -17,15 +17,20 @@ var BannerContainer = BannerHeader + `
 Usage:
   cdk evaluate [--full]
   cdk run (--list | <exploit> [<args>...])
+  cdk auto-escape <cmd>
   cdk <tool> [<args>...]
 
 Evaluate:
-  cdk evaluate                              Gather information to find weekness inside container.
+  cdk evaluate                              Gather information to find weakness inside container.
   cdk evaluate --full                       Enable file scan during information gathering.
+
 Exploit:
 
   cdk run --list                            List all available exploits.
   cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/Xyntax/CDK/wiki
+
+Auto Escape:
+  cdk auto-escape <cmd>                     Escape container in different ways then let target execute <cmd>.
 
 Tool:
   vi <file>                                 Edit files in container like "vi" command.

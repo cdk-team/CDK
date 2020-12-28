@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-func GetProcCapabilities() {
+func GetProcCapabilities() bool {
 	data, err := ioutil.ReadFile("/proc/self/status")
 	if err != nil {
 		log.Println(err)
+		return false
 	}
-	//fmt.Println(string(data))
 
 	pattern := regexp.MustCompile("(?i)capeff:\\s*?[a-z0-9]+\\s")
 	params := pattern.FindStringSubmatch(string(data))
@@ -22,6 +22,8 @@ func GetProcCapabilities() {
 		fmt.Printf("\t%s\n", matched)
 		if strings.Contains(matched, "3fffffffff") {
 			fmt.Println("Critical - Possible Privileged Container Found.")
+			return true
 		}
 	}
+	return false
 }

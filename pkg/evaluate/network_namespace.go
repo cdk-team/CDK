@@ -16,7 +16,7 @@ func CheckNetNamespace() {
 		return
 	}
 
-	if strings.Contains(string(data),"/systemd/") || strings.Contains(string(data),"/run/user/") {
+	if strings.Contains(string(data), "/systemd/") || strings.Contains(string(data), "/run/user/") {
 		fmt.Println("\thost unix-socket found, seems container started with --net=host privilege.")
 	} else {
 		fmt.Println("\tcontainer net namespace isolated.")
@@ -27,4 +27,5 @@ func CheckNetNamespace() {
 	for _, matched := range params {
 		fmt.Printf("\tfound containerd-shim socket in: %s\n", matched)
 	}
+
 }
