@@ -148,6 +148,10 @@ cdk ps
 |rcurl|Request to Docker Registry API|||
 |probe|IP/Port Scanning|✔|[link](https://github.com/Xyntax/CDK/wiki/Tool:-probe)|
 
+## Developer Docs
+
+* [run test in container.](https://github.com/Xyntax/CDK/wiki/Run-Test)
+
 ## TODO
 
 1. Echo loader for delivering CDK into target container via Web RCE. 
