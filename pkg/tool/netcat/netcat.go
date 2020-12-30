@@ -243,7 +243,7 @@ func dial(network, host string, port int, command bool) {
 
 func RunVendorNetcat() {
 	parseArgs()
-	if config.Help {
+	if config.Help || len(os.Args) == 1 {
 		flag.Usage()
 		return
 	}

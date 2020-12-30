@@ -31,22 +31,27 @@ Find tutorial, configuration and use-case in https://github.com/Xyntax/CDK/wiki
 Usage:
   cdk evaluate [--full]
   cdk run (--list | <exploit> [<args>...])
+  cdk auto-escape <cmd>
   cdk <tool> [<args>...]
 
 Evaluate:
-  cdk evaluate                              Gather information to find weekness inside container.
+  cdk evaluate                              Gather information to find weakness inside container.
   cdk evaluate --full                       Enable file scan during information gathering.
 
 Exploit:
+
   cdk run --list                            List all available exploits.
   cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/Xyntax/CDK/wiki
+
+Auto Escape:
+  cdk auto-escape <cmd>                     Escape container in different ways then let target execute <cmd>.
 
 Tool:
   vi <file>                                 Edit files in container like "vi" command.
   ps                                        Show process information like "ps -ef" command.
   nc [options]                              Create TCP tunnel.
   ifconfig                                  Show network information.
-  kcurl	(get|post) <url> <data>             Make request to K8s api-server.
+  kcurl <path> (get|post) <uri> <data>      Make request to K8s api-server.
   ucurl (get|post) <socket> <uri> <data>    Make request to docker unix socket.
   probe <ip> <port> <parallel> <timeout-ms> TCP port scan, example: cdk probe 10.0.1.0-255 80,8080-9443 50 1000
 

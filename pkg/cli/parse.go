@@ -37,6 +37,9 @@ func ParseCDKMain() {
 		return
 	}
 
+	// docopt argparse start
+	parseDocopt()
+
 	if Args["auto-escape"].(bool) {
 		plugin.RunSingleTask("auto-escape")
 		return

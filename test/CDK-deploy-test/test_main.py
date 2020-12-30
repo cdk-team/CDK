@@ -13,7 +13,7 @@ def test_all():
         image='ubuntu:latest',
         docker_args='',
         cmd='',
-        white_list=['Usage'],
+        white_list=['i@cdxy.me'],
         black_list=[],
         verbose=False
     )

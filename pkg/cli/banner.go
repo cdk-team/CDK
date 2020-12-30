@@ -64,7 +64,7 @@ Example:
 
 var Args docopt.Opts
 
-func init() {
+func parseDocopt() {
 	args, err := docopt.ParseArgs(BannerContainer, os.Args[1:], BannerVersion)
 	if err != nil {
 		log.Fatalln("docopt err: ",err)

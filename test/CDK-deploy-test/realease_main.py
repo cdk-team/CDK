@@ -1,7 +1,6 @@
 import os
 from lib.conf import CDK
 
-
 version = 'cdk_v0.1.7'
 
 cmd = '''
@@ -14,6 +13,10 @@ cd ../../cdk_release_binary/ && tar -zcvf {}_release.tar.gz cdk_*;
 
 
 def gox_release():
+    print("check cdk version")
+    print("check cdk banner in .go")
+    print("check cdk banner in readme.md")
+    print("check cdk banner in github wiki")
     os.system(cmd)
 
 
