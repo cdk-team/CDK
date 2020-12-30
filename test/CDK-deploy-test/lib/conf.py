@@ -1,9 +1,8 @@
-
-
-class SERVER: # your remote server for test
+class SERVER:  # your remote server for test
     HOST = '39.104.80.49'
     USER = 'root'
     KEY_PATH = '/Users/xy/.ssh/lezhen-cdk.pem'
+
 
 class CDK:
     # local source-code dir to run `go build`
@@ -16,3 +15,9 @@ class CDK:
     # you can keep it unchanged
     REMOTE_HOST_PATH = '/root/cdk-fabric'
     REMOTE_CONTAINER_PATH = '/cdk-fabric'
+
+
+class K8S:
+    # upload cdk to target pod then check command output using kubectl
+    TARGET_POD = 'myappnew'
+    REMOTE_POD_PATH = '/cdk-fabric'

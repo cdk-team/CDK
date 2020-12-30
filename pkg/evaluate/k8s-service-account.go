@@ -2,13 +2,13 @@ package evaluate
 
 import (
 	"fmt"
-	"github.com/Xyntax/CDK/pkg/kubectl"
+	"github.com/Xyntax/CDK/pkg/tool/kubectl"
 	"log"
 	"strings"
 )
 
 func CheckK8sServiceAccount(tokenPath string) bool {
-	resp := kubectl.ServerAccountRequest(
+	resp, err := kubectl.ServerAccountRequest(
 		kubectl.K8sRequestOption{
 			TokenPath: "",
 			Server:    "",
@@ -17,12 +17,15 @@ func CheckK8sServiceAccount(tokenPath string) bool {
 			Args:      "",
 			Anonymous: false,
 		})
+	if err != nil {
+		fmt.Println(err)
+	}
 	if len(resp) > 0 && strings.Contains(resp, "APIGroupList") {
 		fmt.Println("\tservice-account is available")
 
 		// check if the current service-account can list namespaces
 		log.Println("trying to list namespaces")
-		resp := kubectl.ServerAccountRequest(
+		resp, err := kubectl.ServerAccountRequest(
 			kubectl.K8sRequestOption{
 				TokenPath: "",
 				Server:    "",
@@ -31,6 +34,9 @@ func CheckK8sServiceAccount(tokenPath string) bool {
 				Args:      "",
 				Anonymous: false,
 			})
+		if err != nil {
+			fmt.Println(err)
+		}
 		if len(resp) > 0 && strings.Contains(resp, "kube-system") {
 			fmt.Println("\tsuccess, the service-account have a high authority.")
 			fmt.Println("\tnow you can make your own request to takeover the entire k8s cluster with `./cdk kcurl` command\n\tgood luck and have fun.")

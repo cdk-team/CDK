@@ -5,15 +5,14 @@ import (
 	"github.com/Xyntax/CDK/conf"
 	"github.com/Xyntax/CDK/pkg/evaluate"
 	"github.com/Xyntax/CDK/pkg/plugin"
+	"github.com/Xyntax/CDK/pkg/tool/kubectl"
 
-	//"github.com/Xyntax/CDK/pkg/exploit"
-	"github.com/Xyntax/CDK/pkg/kubectl"
-	"github.com/Xyntax/CDK/pkg/netcat"
-	"github.com/Xyntax/CDK/pkg/network"
-	"github.com/Xyntax/CDK/pkg/probe"
-	"github.com/Xyntax/CDK/pkg/ps"
+	"github.com/Xyntax/CDK/pkg/tool/netcat"
+	"github.com/Xyntax/CDK/pkg/tool/network"
+	"github.com/Xyntax/CDK/pkg/tool/probe"
+	"github.com/Xyntax/CDK/pkg/tool/ps"
+	"github.com/Xyntax/CDK/pkg/tool/vi"
 	"github.com/Xyntax/CDK/pkg/util"
-	"github.com/Xyntax/CDK/pkg/vi"
 	"github.com/docopt/docopt-go"
 	"log"
 	"os"
@@ -38,7 +37,7 @@ func ParseCDKMain() {
 		return
 	}
 
-	if Args["auto-escape"].(bool){
+	if Args["auto-escape"].(bool) {
 		plugin.RunSingleTask("auto-escape")
 		return
 	}
@@ -100,7 +99,7 @@ func ParseCDKMain() {
 			PassInnerArgs()
 			vi.RunVendorVi()
 		case "kcurl":
-			kubectl.KubectlMain(args)
+			kubectl.KubectlToolApi(args)
 		case "ucurl":
 			if len(args) != 4 {
 				log.Fatal("invalid input args, Example: ./cdk ucurl get /var/run/docker.sock http://127.0.0.1/info \"\"")

@@ -37,7 +37,7 @@ Tool:
   ps                                        Show process information like "ps -ef" command.
   nc [options]                              Create TCP tunnel.
   ifconfig                                  Show network information.
-  kcurl (get|post) <url> <data>             Make request to K8s api-server.
+  kcurl <path> (get|post) <uri> <data>      Make request to K8s api-server.
   ucurl (get|post) <socket> <uri> <data>    Make request to docker unix socket.
   probe <ip> <port> <parallel> <timeout-ms> TCP port scan, example: cdk probe 10.0.1.0-255 80,8080-9443 50 1000
 

@@ -2,7 +2,7 @@ package plugin
 
 import "fmt"
 
-type PluginInterface interface {
+type ExploitInterface interface {
 	Desc() string
 	Run() bool
 }
@@ -12,11 +12,11 @@ type TaskInterface interface {
 	Desc() string
 }
 
-var Exploits map[string]PluginInterface
+var Exploits map[string]ExploitInterface
 var Tasks map[string]TaskInterface
 
 func init() {
-	Exploits = make(map[string]PluginInterface)
+	Exploits = make(map[string]ExploitInterface)
 	Tasks = make(map[string]TaskInterface)
 }
 
@@ -31,8 +31,8 @@ func RunSingleExploit(name string) {
 	Exploits[name].Run()
 }
 
-func RegisterExploit(name string, plugin PluginInterface) {
-	Exploits[name] = plugin
+func RegisterExploit(name string, exploit ExploitInterface) {
+	Exploits[name] = exploit
 }
 
 func RunSingleTask(name string) {

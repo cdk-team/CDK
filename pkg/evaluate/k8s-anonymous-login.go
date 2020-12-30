@@ -2,7 +2,7 @@ package evaluate
 
 import (
 	"fmt"
-	"github.com/Xyntax/CDK/pkg/kubectl"
+	"github.com/Xyntax/CDK/pkg/tool/kubectl"
 	"log"
 	"strings"
 )
@@ -12,7 +12,7 @@ func CheckK8sAnonymousLogin() bool {
 	// check if api-server allows system:anonymous request
 	log.Println("checking if api-server allows system:anonymous request.")
 
-	resp := kubectl.ServerAccountRequest(
+	resp, err := kubectl.ServerAccountRequest(
 		kubectl.K8sRequestOption{
 			TokenPath: "",
 			Server:    "", // default
@@ -21,13 +21,16 @@ func CheckK8sAnonymousLogin() bool {
 			Args:      "",
 			Anonymous: true,
 		})
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	if strings.Contains(resp, "/api") {
 		fmt.Println("\tcongrats, api-server allows anonymous request.")
 		log.Println("trying to list namespaces")
 
 		// check if system:anonymous can list namespaces
-		resp := kubectl.ServerAccountRequest(
+		resp, err := kubectl.ServerAccountRequest(
 			kubectl.K8sRequestOption{
 				TokenPath: "",
 				Server:    "", // default
@@ -36,6 +39,9 @@ func CheckK8sAnonymousLogin() bool {
 				Args:      "",
 				Anonymous: true,
 			})
+		if err != nil {
+			fmt.Println(err)
+		}
 		if len(resp) > 0 && strings.Contains(resp, "kube-system") {
 			fmt.Println("\tsuccess, the system:anonymous role have a high authority.")
 			fmt.Println("\tnow you can make your own request to takeover the entire k8s cluster with `./cdk kcurl` command\n\tgood luck and have fun.")
