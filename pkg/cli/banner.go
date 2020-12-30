@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-var BannerVersion = "cdk v0.1.5"
+var BannerVersion = "cdk v0.1.7"
 
 var BannerHeader = `Container DucK
 Zero-dependency k8s/docker/serverless penetration toolkit by <i@cdxy.me>

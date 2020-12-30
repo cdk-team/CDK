@@ -57,7 +57,6 @@ def test_all():
         '/kubernetes.io/serviceaccount/token',
         'failed to dial Google Cloud API',
         'failed to dial Azure API',
-        '/containerd-shim/',
         # for --full
         '/root/.bashrc',
         'Sensitive Files',

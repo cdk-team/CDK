@@ -1,7 +1,8 @@
 *.DS_Store
 *.swp
 .idea
-/release
+/cdk_release_binary
 /vendor
+/venv
 *.pyc
 *.pyo
