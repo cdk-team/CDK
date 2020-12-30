@@ -25,7 +25,6 @@ Evaluate:
   cdk evaluate --full                       Enable file scan during information gathering.
 
 Exploit:
-
   cdk run --list                            List all available exploits.
   cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/Xyntax/CDK/wiki
 

@@ -24,10 +24,6 @@ Drop executable files into target container and start testing.
 
 ## Usage
 ```
-Container DucK
-Zero-dependency docker/k8s penetration toolkit by <i@cdxy.me>
-Find tutorial, configuration and use-case in https://github.com/Xyntax/CDK/wiki
-
 Usage:
   cdk evaluate [--full]
   cdk run (--list | <exploit> [<args>...])
@@ -39,7 +35,6 @@ Evaluate:
   cdk evaluate --full                       Enable file scan during information gathering.
 
 Exploit:
-
   cdk run --list                            List all available exploits.
   cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/Xyntax/CDK/wiki
 
