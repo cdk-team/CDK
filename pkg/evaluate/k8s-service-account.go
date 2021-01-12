@@ -2,7 +2,7 @@ package evaluate
 
 import (
 	"fmt"
-	"github.com/Xyntax/CDK/pkg/tool/kubectl"
+	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"log"
 	"strings"
 )
@@ -14,7 +14,7 @@ func CheckK8sServiceAccount(tokenPath string) bool {
 			Server:    "",
 			Api:       "/apis",
 			Method:    "get",
-			Args:      "",
+			PostData:  "",
 			Anonymous: false,
 		})
 	if err != nil {
@@ -31,7 +31,7 @@ func CheckK8sServiceAccount(tokenPath string) bool {
 				Server:    "",
 				Api:       "/api/v1/namespaces",
 				Method:    "get",
-				Args:      "",
+				PostData:  "",
 				Anonymous: false,
 			})
 		if err != nil {

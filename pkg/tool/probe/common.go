@@ -2,7 +2,7 @@ package probe
 
 import (
 	"fmt"
-	"github.com/Xyntax/CDK/conf"
+	"github.com/cdk-team/CDK/conf"
 	"os/exec"
 	"strconv"
 	"strings"

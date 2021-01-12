@@ -10,7 +10,7 @@ var BannerVersion = "cdk v0.1.7"
 
 var BannerHeader = `Container DucK
 Zero-dependency k8s/docker/serverless penetration toolkit by <i@cdxy.me>
-Find tutorial, configuration and use-case in https://github.com/Xyntax/CDK/wiki
+Find tutorial, configuration and use-case in https://github.com/cdk-team/CDK/wiki
 `
 
 var BannerContainer = BannerHeader + `
@@ -26,7 +26,7 @@ Evaluate:
 
 Exploit:
   cdk run --list                            List all available exploits.
-  cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/Xyntax/CDK/wiki
+  cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/cdk-team/CDK/wiki
 
 Auto Escape:
   cdk auto-escape <cmd>                     Escape container in different ways then let target execute <cmd>.
@@ -36,7 +36,7 @@ Tool:
   ps                                        Show process information like "ps -ef" command.
   nc [options]                              Create TCP tunnel.
   ifconfig                                  Show network information.
-  kcurl <path> (get|post) <uri> <data>      Make request to K8s api-server.
+  kcurl <path> (get|post) <uri> [<data>]    Make request to K8s api-server.
   ucurl (get|post) <socket> <uri> <data>    Make request to docker unix socket.
   probe <ip> <port> <parallel> <timeout-ms> TCP port scan, example: cdk probe 10.0.1.0-255 80,8080-9443 50 1000
 

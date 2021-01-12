@@ -2,4 +2,4 @@
 
 This is the function test script, see doc: 
 
-* https://github.com/Xyntax/CDK/wiki/Run-Test
+* https://github.com/cdk-team/CDK/wiki/Run-Test

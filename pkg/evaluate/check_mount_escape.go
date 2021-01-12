@@ -3,7 +3,7 @@ package evaluate
 import (
 	"bufio"
 	"fmt"
-	"github.com/Xyntax/CDK/pkg/errors"
+	"github.com/cdk-team/CDK/pkg/errors"
 	"io"
 	"log"
 	"os"

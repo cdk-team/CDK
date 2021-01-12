@@ -2,10 +2,10 @@ package task
 
 import (
 	"fmt"
-	"github.com/Xyntax/CDK/pkg/cli"
-	"github.com/Xyntax/CDK/pkg/evaluate"
-	"github.com/Xyntax/CDK/pkg/exploit"
-	"github.com/Xyntax/CDK/pkg/plugin"
+	"github.com/cdk-team/CDK/pkg/cli"
+	"github.com/cdk-team/CDK/pkg/evaluate"
+	"github.com/cdk-team/CDK/pkg/exploit"
+	"github.com/cdk-team/CDK/pkg/plugin"
 	"log"
 )
 

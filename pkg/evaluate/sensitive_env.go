@@ -1,7 +1,7 @@
 package evaluate
 
 import (
-	"github.com/Xyntax/CDK/conf"
+	"github.com/cdk-team/CDK/conf"
 	"log"
 	"os"
 	"regexp"

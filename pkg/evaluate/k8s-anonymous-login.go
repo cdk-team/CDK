@@ -2,7 +2,7 @@ package evaluate
 
 import (
 	"fmt"
-	"github.com/Xyntax/CDK/pkg/tool/kubectl"
+	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"log"
 	"strings"
 )
@@ -18,7 +18,7 @@ func CheckK8sAnonymousLogin() bool {
 			Server:    "", // default
 			Api:       "/",
 			Method:    "get",
-			Args:      "",
+			PostData:  "",
 			Anonymous: true,
 		})
 	if err != nil {
@@ -36,7 +36,7 @@ func CheckK8sAnonymousLogin() bool {
 				Server:    "", // default
 				Api:       "/api/v1/namespaces",
 				Method:    "get",
-				Args:      "",
+				PostData:  "",
 				Anonymous: true,
 			})
 		if err != nil {

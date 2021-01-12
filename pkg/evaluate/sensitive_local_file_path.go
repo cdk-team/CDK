@@ -2,8 +2,8 @@ package evaluate
 
 import (
 	"fmt"
-	"github.com/Xyntax/CDK/conf"
-	"github.com/Xyntax/CDK/pkg/util"
+	"github.com/cdk-team/CDK/conf"
+	"github.com/cdk-team/CDK/pkg/util"
 	"os"
 	"path/filepath"
 	"strings"

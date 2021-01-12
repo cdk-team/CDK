@@ -1,11 +1,13 @@
 package kubectl
 
 import (
-	"github.com/Xyntax/CDK/conf"
-	"github.com/Xyntax/CDK/pkg/errors"
-	"github.com/idoubi/goz"
+	"bytes"
+	"crypto/tls"
+	"github.com/cdk-team/CDK/conf"
+	"github.com/cdk-team/CDK/pkg/errors"
 	"io/ioutil"
 	"net"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -15,12 +17,10 @@ type K8sRequestOption struct {
 	Server    string
 	Api       string
 	Method    string
-	Args      string
+	PostData  string
 	Url       string
 	Anonymous bool
 }
-
-
 
 func ApiServerAddr() (string, error) {
 	host, port := os.Getenv("KUBERNETES_SERVICE_HOST"), os.Getenv("KUBERNETES_SERVICE_PORT")
@@ -75,61 +75,40 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 		}
 	}
 
-	cli := goz.NewClient()
-	switch strings.ToLower(opts.Method) {
-	case "get":
-		if len(token) > 0 {
-			resp, err := cli.Get(opts.Url, goz.Options{
-				Headers: map[string]interface{}{
-					"Authorization": "Bearer " + string(token),
-				},
-				//FormParams: map[string]interface{}{
-				//	"key1": "value1",
-				//	"key2": []string{"value21", "value22"},
-				//	"key3": "333",
-				//},
-			})
-			if err != nil {
-				return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "http request error."}
-			}
-			r, _ := resp.GetBody()
-			return r.String(), nil
-		} else {
-			resp, err := cli.Get(opts.Url)
-			if err != nil {
-				return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "http request error."}
-			}
-			r, _ := resp.GetBody()
-			return r.String(), nil
-		}
-
-	case "post":
-		if len(token) > 0 {
-			resp, err := cli.Post(opts.Url, goz.Options{
-				Headers: map[string]interface{}{
-					"Authorization": "Bearer " + string(token),
-				},
-				//FormParams: map[string]interface{}{
-				//	"key1": "value1",
-				//	"key2": []string{"value21", "value22"},
-				//	"key3": "333",
-				//},
-			})
-			if err != nil {
-				return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "http request error."}
-			}
-			r, _ := resp.GetBody()
-			return r.String(), nil
-		} else {
-			resp, err := cli.Post(opts.Url)
-			if err != nil {
-				return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "http request error."}
-			}
-			r, _ := resp.GetBody()
-			return r.String(), nil
-		}
-
-	default:
-		return "", errors.New("K8s request: invalid http method " + strings.ToLower(opts.Method))
+	// http client
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
 	}
+	var request *http.Request
+	opts.Method = strings.ToUpper(opts.Method)
+
+	request, err := http.NewRequest(opts.Method, opts.Url, bytes.NewBuffer([]byte(opts.PostData)))
+	if err != nil {
+		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found while generate post request in net.http ."}
+	}
+	if len(token) > 0 {
+		request.Header.Set("Authorization", "Bearer "+token)
+	}
+
+	// set request header
+	if opts.Method == "POST" {
+		request.Header.Set("Content-Type", "application/json")
+	}
+	// auth token
+	if len(token) > 0 {
+		request.Header.Set("Authorization", "Bearer "+token)
+	}
+
+	resp, err := client.Do(request)
+	if err != nil {
+		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
+	}
+	//defer resp.Body.Close()
+	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
+	}
+	return string(content), nil
 }
