@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/cdk-team/CDK/conf"
 	"log"
+	"strings"
 )
 
 var kcurlBanner = `kcurl - send HTTP request to K8s api-server.
@@ -13,7 +14,7 @@ Usage:
 
 Options:
   token_path  connect api-server with user-specified service-account token.
-  anonymous   connect api-server using system:anonymous service-account
+  anonymous   connect api-server using system:anonymous service-account.
   default     connect api-server using pod default service-account token.
 
 Example: 
@@ -43,11 +44,11 @@ func KubectlToolApi(args []string) {
 		opts.TokenPath = args[0]
 	}
 
-	switch args[1] {
-	case "post":
-		opts.Method = "post"
-	case "get":
-		opts.Method = "get"
+	switch strings.ToUpper(args[1]) {
+	case "POST":
+		opts.Method = "POST"
+	case "GET":
+		opts.Method = "GET"
 	default: // err break
 		fmt.Println(kcurlBanner)
 		return
@@ -57,7 +58,6 @@ func KubectlToolApi(args []string) {
 		opts.Url = args[2]
 	} else {
 		opts.Url = args[2]
-		fmt.Println("post data:", opts.PostData)
 		opts.PostData = args[3]
 	}
 
