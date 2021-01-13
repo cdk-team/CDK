@@ -1,0 +1,11 @@
+var AK = "SKaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+var AWS = "AKIA99999999999999AB"
+
+
+-----BEGIN RSA PRIVATE KEY-----
+
+
+
+
+
+AKIAVA9
