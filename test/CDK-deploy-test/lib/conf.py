@@ -1,16 +1,17 @@
 class SERVER:  # your remote server for test
     HOST = '39.104.80.49'
     USER = 'root'
-    KEY_PATH = '/Users/xy/.ssh/lezhen-cdk.pem'
+    KEY_PATH = '/Users/xy/.ssh/id_rsa'
 
 
 class CDK:
+    GO_BINARY = '/Users/xy/go/go1.16beta1/bin/go'
     # local source-code dir to run `go build`
-    BUILD_PATH = '/usr/local/go/bin/src/github.com/cdk-team/CDK/cmd/cdk'
+    BUILD_PATH = '/Users/xy/go/CDK/cmd/cdk'
     # build command
-    BUILD_CMD = 'cd {} && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cdk.go'.format(BUILD_PATH)
+    BUILD_CMD = 'cd {} && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 {} build cdk.go'.format(BUILD_PATH,GO_BINARY)
     # binary after build
-    BIN_PATH = '/usr/local/go/bin/src/github.com/cdk-team/CDK/cmd/cdk/cdk'
+    BIN_PATH = '/Users/xy/go/CDK/cmd/cdk/cdk'
 
     # you can keep it unchanged
     REMOTE_HOST_PATH = '/root/cdk-fabric'

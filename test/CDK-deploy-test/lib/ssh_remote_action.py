@@ -23,13 +23,12 @@ def test():
 
 
 def update_remote_bin():
-    print('[compile and upload]')
+    print('[upload to host]')
     try:
-        os.system(CDK.BUILD_CMD)
         conn.put(CDK.BIN_PATH, CDK.REMOTE_HOST_PATH)
         conn.run('chmod a+x {}'.format(CDK.REMOTE_HOST_PATH))
     except Exception as e:
-        print('errors while compile and update.')
+        print('errors while update cdk binary.')
         print(e)
         exit(1)
 
