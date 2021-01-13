@@ -507,19 +507,21 @@ def test_all():
         False
     )
 
-
-def test_dev():
+    # run: istio-check
     check_pod_exec(
-        'run k8s-backdoor-daemonset 1', # success dump
-        ['invalid'],
+        'run istio-check',
+        ['the shell is not in a istio'],
         ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
         False
     )
+
+
+def test_dev():
     check_pod_exec(
-        'run k8s-backdoor-daemonset anonymous ubuntu',  # success dump
-        ['cdk-backdoor-daemonset'],
-        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
-        True
+        'run istio-check', # success dump
+        ['the shell is not in a istio'],
+        ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
+        False
     )
 
 
