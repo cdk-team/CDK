@@ -110,6 +110,7 @@ cdk run <script-name> [options]
 |Escaping|Procfs Escaping|mount-procfs|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-procfs)|
 |Escaping|Ptrace Escaping PoC|check-ptrace|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-ptrace)|
 |Discovery|K8s Component Probe|service-probe|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-service-probe)|
+|Discovery|Dump Istio Sidecar Meta|istio-check|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-istio)|
 |Lateral Movement|K8s Service Account Control||||
 |Lateral Movement|Attack K8s api-server||||
 |Lateral Movement|Attack K8s Kubelet||||
