@@ -34,3 +34,5 @@ class SELFBUILD_K8S:
     TARGET_POD = 'myappnew'
     # you can keep it unchanged
     REMOTE_POD_PATH = '/cdk-fabric'
+    KUBERNETES_SERVICE_PORT = '6443'
+    KUBERNETES_SERVICE_HOST = '192.168.0.150'

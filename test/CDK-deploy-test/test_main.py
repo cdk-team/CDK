@@ -6,7 +6,7 @@ from lib.ssh_remote_action import check_host_evaluate
 from lib.ssh_remote_action import inside_container_cmd
 from lib.ssh_remote_action import check_host_exec
 from lib.k8s_remote_action import check_pod_exec, k8s_pod_upload
-from lib.k8s_selfbuild_action import selfbuild_k8s_pod_upload, check_selfbuild_k8s_pod_exec
+from lib.k8s_selfbuild_action import selfbuild_k8s_pod_upload, check_selfbuild_k8s_pod_exec, k8s_master_ssh_cmd
 from lib.conf import CDK
 
 
@@ -525,16 +525,37 @@ def test_all():
         False
     )
 
+    # run: k8s-shadow-apiserver
+    k8s_master_ssh_cmd(
+        'kubectl delete pod kube-apiserver-cn-beijing.192.168.0.150-shadow -n kube-system',
+        [],
+        [],
+        False
+    )
+    check_selfbuild_k8s_pod_exec(
+        'run k8s-shadow-apiserver default',  # success
+        ['listening insecure-port: 0.0.0.0:9443'],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        False
+    )
+    check_selfbuild_k8s_pod_exec(
+        'run k8s-shadow-apiserver anonymous',  # forbidden
+        ['forbidden this request'],
+        ['listening insecure-port: 0.0.0.0:9443', 'panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        False
+    )
+    k8s_master_ssh_cmd(
+        'kubectl exec myappnew -- curl 192.168.0.150:9443',  # curl shadow-apiserver
+        ['/api/v1'],
+        [],
+        False
+    )
+
 
 def test_dev():
     time.sleep(0.5)
-    #
-    check_selfbuild_k8s_pod_exec(
-        'run k8s-shadow-apiserver default',
-        [],
-        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
-        True
-    )
+
+
 
 
 def clear_all_container():
@@ -554,7 +575,6 @@ if __name__ == '__main__':
     print('-' * 10, 'upload all done', '-' * 10)
 
     # test
-    test_dev()
-
-    # test_all()
-    # clear_all_container()
+    # test_dev()
+    test_all()
+    clear_all_container()

@@ -29,6 +29,7 @@ def update_remote_bin():
 
 def k8s_master_ssh_cmd(cmd_parsed, white_list, black_list, verbose=False):
     print('[TEST] [{}] {}'.format('Selfbuild k8s master node', cmd_parsed))
+
     try:
         result = conn.run(cmd_parsed, hide=bool(1 - verbose))
         for pattern in white_list:
@@ -66,7 +67,10 @@ def selfbuild_k8s_pod_upload():
 def check_selfbuild_k8s_pod_exec(cmd, white_list, black_list, verbose=False):
     # OCI runtime exec failed: exec failed: container_linux.go:344: starting container process caused "text file busy"
     time.sleep(1)
-
-    cmd_parsed = r'kubectl exec {} -- {} {}'.format(SELFBUILD_K8S.TARGET_POD, SELFBUILD_K8S.REMOTE_POD_PATH, cmd)
-    print('[TEST] [{}] {}'.format('Selfbuild K8s Pod', cmd_parsed))
+    cmd_parsed = r'kubectl exec {} -- {} {}'.format(
+        SELFBUILD_K8S.TARGET_POD,
+        SELFBUILD_K8S.REMOTE_POD_PATH,
+        cmd
+    )
+    # print('[TEST] [{}] {}'.format('Selfbuild K8s Pod', cmd_parsed))
     k8s_master_ssh_cmd(cmd_parsed, white_list, black_list, verbose)
