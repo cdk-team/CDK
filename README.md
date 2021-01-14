@@ -123,8 +123,8 @@ cdk run <script-name> [options]
 |Credential Access|Dump K8s Secrets|k8s-secret-dump|✔||
 |Credential Access|Dump K8s Config|k8s-configmap-dump|✔||
 |Persistence|Deploy WebShell||||
-|Persistence|Deploy Backdoor Pod||||
-|Persistence|Deploy Shadow K8s api-server||||
+|Persistence|Deploy Backdoor Pod|k8s-backdoor-daemonset|✔||
+|Persistence|Deploy Shadow K8s api-server|k8s-shadow-apiserver|✔||
 |Persistence|Deploy K8s CronJob||||
 |Defense Evasion|Disable K8s Audit||||
 
