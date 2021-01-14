@@ -6,6 +6,7 @@ from lib.ssh_remote_action import check_host_evaluate
 from lib.ssh_remote_action import inside_container_cmd
 from lib.ssh_remote_action import check_host_exec
 from lib.k8s_remote_action import check_pod_exec, k8s_pod_upload
+from lib.k8s_selfbuild_action import selfbuild_k8s_pod_upload, check_selfbuild_k8s_pod_exec
 from lib.conf import CDK
 
 
@@ -435,19 +436,19 @@ def test_all():
     check_pod_exec(
         'run k8s-configmap-dump',
         ['input args'],
-        ['i@cdxy.me','cdk evaluate'],
+        ['i@cdxy.me', 'cdk evaluate'],
         False
     )
     check_pod_exec(
         'run k8s-configmap-dump auto',
         ['success', 'k8s_configmaps.json'],
-        ['input args', 'i@cdxy.me','cdk evaluate'],
+        ['input args', 'i@cdxy.me', 'cdk evaluate'],
         False
     )
     check_pod_exec(
         'run k8s-configmap-dump /tmp/jkdhahdjfka2',
         ['no such file or directory'],
-        ['input args', 'i@cdxy.me','cdk evaluate'],
+        ['input args', 'i@cdxy.me', 'cdk evaluate'],
         False
     )
 
@@ -455,49 +456,49 @@ def test_all():
     check_pod_exec(
         'run k8s-secret-dump',
         ['input args'],
-        ['i@cdxy.me','cdk evaluate'],
+        ['i@cdxy.me', 'cdk evaluate'],
         False
     )
     check_pod_exec(
         'run k8s-secret-dump auto',
-        ['success','k8s_secrets.json'],
-        ['input args','i@cdxy.me','cdk evaluate'],
+        ['success', 'k8s_secrets.json'],
+        ['input args', 'i@cdxy.me', 'cdk evaluate'],
         False
     )
 
     # tool: kcurl
     check_pod_exec(
         'kcurl',
-        ['to K8s api-server'], # help msg
-        ['panic:','cdk evaluate'],
+        ['to K8s api-server'],  # help msg
+        ['panic:', 'cdk evaluate'],
         False
     )
     check_pod_exec(
-        'kcurl default get https://172.21.0.1:443/api/v1/nodes', # forbidden
-        ['apiVersion','nodes is forbidden'],
-        ['panic:', 'cdk evaluate','empty'],
+        'kcurl default get https://172.21.0.1:443/api/v1/nodes',  # forbidden
+        ['apiVersion', 'nodes is forbidden'],
+        ['panic:', 'cdk evaluate', 'empty'],
         False
     )
     check_pod_exec(
-        'kcurl anonymous get https://172.21.0.1:443/api/v1/nodes', # success dump
+        'kcurl anonymous get https://172.21.0.1:443/api/v1/nodes',  # success dump
         ['apiVersion'],
-        ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
         False
     )
     check_pod_exec(
         r'''
         kcurl anonymous post 'https://172.21.0.1:443/api/v1/namespaces/default/pods?fieldManager=kubectl-client-side-apply' '{"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration":"{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"cdxy-test-2021\",\"namespace\":\"default\"},\"spec\":{\"containers\":[{\"image\":\"ubuntu:latest\",\"name\":\"container\"}]}}\n"},"name":"cdxy-test-2021","namespace":"default"},"spec":{"containers":[{"image":"ubuntu:latest","name":"container"}]}}'
-        '''.replace('\n',''),
-        ['apiVersion','api-server response'],
+        '''.replace('\n', ''),
+        ['apiVersion', 'api-server response'],
         ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
         False
     )
 
     # run: k8s-backdoor-daemonset
     check_pod_exec(
-        'run k8s-backdoor-daemonset 1', # success dump
+        'run k8s-backdoor-daemonset 1',  # success dump
         ['invalid'],
-        ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
         False
     )
     check_pod_exec(
@@ -511,17 +512,28 @@ def test_all():
     check_pod_exec(
         'run istio-check',
         ['the shell is not in a istio'],
-        ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        False
+    )
+
+    # test evaluate in selfbuild k8s
+    # make sure bind system:default:default to cluster-admin first (test/k8s_exploit_yaml/default_to_admin.yaml)
+    check_selfbuild_k8s_pod_exec(
+        'evaluate',
+        ['00000000a80425fb', 'Discovery - K8s API Server', 'the service-account have a high authority'],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
         False
     )
 
 
 def test_dev():
-    check_pod_exec(
-        'run istio-check', # success dump
-        ['the shell is not in a istio'],
-        ['panic:', 'nodes is forbidden','cdk evaluate','empty'],
-        False
+    time.sleep(0.5)
+    #
+    check_selfbuild_k8s_pod_exec(
+        'run k8s-shadow-apiserver default',
+        [],
+        ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        True
     )
 
 
@@ -531,14 +543,18 @@ def clear_all_container():
 
 if __name__ == '__main__':
     # build
+    print('-' * 10, 'build CDK binary', '-' * 10)
     os.system(CDK.BUILD_CMD)
 
     # upload
-    update_remote_bin()
-    k8s_pod_upload()
+    print('-' * 10, 'upload CDK to ECS, ACK, Selfbuild-K8s', '-' * 10)
+    # update_remote_bin()
+    # k8s_pod_upload()
+    selfbuild_k8s_pod_upload()
+    print('-' * 10, 'upload all done', '-' * 10)
 
     # test
-    # test_dev()
+    test_dev()
 
-    test_all()
-    clear_all_container()
+    # test_all()
+    # clear_all_container()
