@@ -13,6 +13,7 @@ require (
 	github.com/idoubi/goz v1.0.0
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/mitchellh/go-ps v1.0.0
+	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/shirou/gopsutil/v3 v3.20.10
 	github.com/sirupsen/logrus v1.6.0 // indirect

@@ -120,11 +120,12 @@ cdk run <script-name> [options]
 |Lateral Movement|Attack Private Docker Registry||||
 |Remote Control|Reverse Shell|reverse-shell|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-reverse-shell)|
 |Credential Access|Access Key Scanning|ak-leakage|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-ak-leakage)|
-|Credential Access|Dump K8s Secrets|k8s-secret-dump|✔||
-|Credential Access|Dump K8s Config|k8s-configmap-dump|✔||
+|Credential Access|Dump K8s Secrets|k8s-secret-dump|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-secret-dump)|
+|Credential Access|Dump K8s Config|k8s-configmap-dump|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-configmap-dump)|
 |Persistence|Deploy WebShell||||
-|Persistence|Deploy Backdoor Pod|k8s-backdoor-daemonset|✔||
-|Persistence|Deploy Shadow K8s api-server|k8s-shadow-apiserver|✔||
+|Persistence|Deploy Backdoor Pod|k8s-backdoor-daemonset|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-backdoor-daemonset)|
+|Persistence|Deploy Shadow K8s api-server|k8s-shadow-apiserver|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-shadow-apiserver)|
+|Persistence|K8s MITM Attack (CVE-2020-8554)|k8s-mitm-clusterip|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-k8s-mitm-clusterip)|
 |Persistence|Deploy K8s CronJob||||
 |Defense Evasion|Disable K8s Audit||||
 

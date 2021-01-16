@@ -551,14 +551,50 @@ def test_all():
         False
     )
 
+    # run: k8s-mitm-clusterip
+    k8s_master_ssh_cmd(
+        'kubectl delete deployment mitm-payload-deploy',
+        [],
+        [],
+        False
+    )
+    k8s_master_ssh_cmd(
+        'kubectl delete service mitm-externalip',
+        [],
+        [],
+        False
+    )
+    check_selfbuild_k8s_pod_exec(
+        'run k8s-mitm-clusterip default ubuntu 9.9.9.9 99',  # forbidden
+        ['selfLink'],
+        ['listening insecure-port: 0.0.0.0:9443', 'panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        False
+    )
+
 
 def test_dev():
     time.sleep(0.5)
 
 
-
-
-def clear_all_container():
+def clear_all_env():
+    k8s_master_ssh_cmd(
+        'kubectl delete pod kube-apiserver-cn-beijing.192.168.0.150-shadow -n kube-system',
+        [],
+        [],
+        False
+    )
+    k8s_master_ssh_cmd(
+        'kubectl delete deployment mitm-payload-deploy',
+        [],
+        [],
+        False
+    )
+    k8s_master_ssh_cmd(
+        'kubectl delete service mitm-externalip',
+        [],
+        [],
+        False
+    )
     check_host_exec(r'docker stop $(docker ps -q) & docker rm $(docker ps -aq)', [], [], False)
 
 
@@ -577,4 +613,4 @@ if __name__ == '__main__':
     # test
     # test_dev()
     test_all()
-    clear_all_container()
+    clear_all_env()
