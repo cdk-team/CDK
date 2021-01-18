@@ -63,6 +63,9 @@ func ParseCDKMain() {
 		fmt.Printf("\n[Information Gathering - Net Namespace]\n")
 		evaluate.CheckNetNamespace()
 
+		fmt.Printf("\n[Information Gathering - Sysctl Variables]\n")
+		evaluate.CheckRouteLocalNetworkValue()
+
 		fmt.Printf("\n[Discovery - K8s API Server]\n")
 		evaluate.CheckK8sAnonymousLogin()
 
