@@ -1,6 +1,7 @@
 package util
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 	"syscall"
@@ -40,4 +41,13 @@ func RewriteFile(path string, content string, perm os.FileMode) {
 		log.Println("overwrite file:", path, "success.")
 		defer cmdFile.Close()
 	}
+}
+
+func WriteFile(path string, content string) error {
+	var d = []byte(content)
+	err := ioutil.WriteFile(path, d, 0666)
+	if err != nil {
+		return err
+	}
+	return nil
 }

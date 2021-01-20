@@ -571,6 +571,32 @@ def test_all():
         False
     )
 
+    # exploit: webshell-deploy
+    check_pod_exec(
+        'run webshell-deploy php /var/www/html212/1.php',
+        ['no such file or directory', 'failed'],
+        ['input args', 'i@cdxy.me', 'cdk evaluate'],
+        False
+    )
+    check_pod_exec(
+        'run webshell-deploy php',
+        ['input args'],
+        ['i@cdxy.me', 'cdk evaluate'],
+        False
+    )
+    check_pod_exec(
+        'run webshell-deploy js1p /tmp/1.jsp',
+        ['input args'],
+        ['i@cdxy.me', 'cdk evaluate'],
+        False
+    )
+    check_pod_exec(
+        'run webshell-deploy jsp /tmp/1.jsp',
+        ['webshell saved in'],
+        ['i@cdxy.me', 'cdk evaluate', '%s', 'input args'],
+        False
+    )
+
 
 def test_dev():
     time.sleep(0.5)
@@ -601,16 +627,17 @@ def clear_all_env():
 if __name__ == '__main__':
     # build
     print('-' * 10, 'build CDK binary', '-' * 10)
+    print('[Local]', CDK.BUILD_CMD)
     os.system(CDK.BUILD_CMD)
 
     # upload
     print('-' * 10, 'upload CDK to ECS, ACK, Selfbuild-K8s', '-' * 10)
-    # update_remote_bin()
-    # k8s_pod_upload()
+    update_remote_bin()
+    k8s_pod_upload()
     selfbuild_k8s_pod_upload()
     print('-' * 10, 'upload all done', '-' * 10)
 
     # test
-    # test_dev()
-    test_all()
-    clear_all_env()
+    test_dev()
+    # test_all()
+    # clear_all_env()
