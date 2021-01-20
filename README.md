@@ -81,6 +81,7 @@ This command will run the scripts below without local file scanning, using `--fu
 |Information Gathering|Sensitive ENV|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-Services)|
 |Information Gathering|Sensitive Process|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-Services)|
 |Information Gathering|Sensitive Local Files|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-Sensitive-Files)|
+|Information Gathering|Kube-proxy Route Localnet(CVE-2020-8558)|✔||
 |Discovery|K8s Api-server Info|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-K8s-API-Server)|
 |Discovery|K8s Service-account Info|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-K8s-Service-Account)|
 |Discovery|Cloud Provider Metadata API|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-Cloud-Provider-Metadata-API)|
@@ -100,9 +101,7 @@ cdk run <script-name> [options]
 |Tactic|Technique|CDK Exploit Name|Supported|Doc|
 |---|---|---|---|---|
 |Escaping|docker-runc CVE-2019-5736|runc-pwn|✔||
-|Escaping|docker-cp CVE-2019-14271||||
 |Escaping|containerd-shim CVE-2020-15257|shim-pwn|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-shim-pwn)|
-|Escaping|dirtycow CVE-2016-5159||||
 |Escaping|docker.sock PoC (DIND attack)|docker-sock-check|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-check)|
 |Escaping|docker.sock Backdoor Image Deploy|docker-sock-deploy|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-deploy)|
 |Escaping|Device Mount Escaping|mount-disk|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-disk)|
@@ -111,24 +110,15 @@ cdk run <script-name> [options]
 |Escaping|Ptrace Escaping PoC|check-ptrace|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-ptrace)|
 |Discovery|K8s Component Probe|service-probe|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-service-probe)|
 |Discovery|Dump Istio Sidecar Meta|istio-check|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-istio)|
-|Lateral Movement|K8s Service Account Control||||
-|Lateral Movement|Attack K8s api-server||||
-|Lateral Movement|Attack K8s Kubelet||||
-|Lateral Movement|Attack K8s Dashboard||||
-|Lateral Movement|Attack K8s Helm||||
-|Lateral Movement|Attack K8s Etcd||||
-|Lateral Movement|Attack Private Docker Registry||||
 |Remote Control|Reverse Shell|reverse-shell|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-reverse-shell)|
 |Credential Access|Access Key Scanning|ak-leakage|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-ak-leakage)|
 |Credential Access|Dump K8s Secrets|k8s-secret-dump|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-secret-dump)|
 |Credential Access|Dump K8s Config|k8s-configmap-dump|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-configmap-dump)|
-|Persistence|Deploy WebShell||||
+|Persistence|Deploy WebShell|webshell-deploy|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-webshell-deploy)|
 |Persistence|Deploy Backdoor Pod|k8s-backdoor-daemonset|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-backdoor-daemonset)|
 |Persistence|Deploy Shadow K8s api-server|k8s-shadow-apiserver|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-shadow-apiserver)|
 |Persistence|K8s MITM Attack (CVE-2020-8554)|k8s-mitm-clusterip|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-k8s-mitm-clusterip)|
-|Persistence|Deploy K8s CronJob||||
-|Defense Evasion|Disable K8s Audit||||
-
+|Persistence|Deploy K8s CronJob|k8s-cronjob|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-cronjob)|
 
 ### Tool Module
 

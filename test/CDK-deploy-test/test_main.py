@@ -614,6 +614,12 @@ def test_all():
 
 def test_dev():
     time.sleep(0.5)
+    k8s_master_ssh_cmd(
+        'kubectl delete cronjob cdk-backdoor-cronjob -n kube-system',
+        [],
+        [],
+        False
+    )
 
 
 def clear_all_env():
@@ -645,17 +651,17 @@ def clear_all_env():
 
 
 if __name__ == '__main__':
-    # build
-    print('-' * 10, 'build CDK binary', '-' * 10)
-    print('[Local]', CDK.BUILD_CMD)
-    os.system(CDK.BUILD_CMD)
-
-    # upload
-    print('-' * 10, 'upload CDK to ECS, ACK, Selfbuild-K8s', '-' * 10)
-    update_remote_bin()
-    k8s_pod_upload()
-    selfbuild_k8s_pod_upload()
-    print('-' * 10, 'upload all done', '-' * 10)
+    # # build
+    # print('-' * 10, 'build CDK binary', '-' * 10)
+    # print('[Local]', CDK.BUILD_CMD)
+    # os.system(CDK.BUILD_CMD)
+    #
+    # # upload
+    # print('-' * 10, 'upload CDK to ECS, ACK, Selfbuild-K8s', '-' * 10)
+    # update_remote_bin()
+    # k8s_pod_upload()
+    # selfbuild_k8s_pod_upload()
+    # print('-' * 10, 'upload all done', '-' * 10)
 
     # test
     test_dev()
