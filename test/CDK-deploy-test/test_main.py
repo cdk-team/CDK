@@ -597,12 +597,32 @@ def test_all():
         False
     )
 
+    # run: cronjob
+    k8s_master_ssh_cmd(
+        'kubectl delete cronjob cdk-backdoor-cronjob -n kube-system',
+        [],
+        [],
+        False
+    )
+    check_selfbuild_k8s_pod_exec(
+        'run k8s-cronjob default min alpine "echo helloworld"',
+        ['generate cronjob with', 'selfLink'],
+        ['i@cdxy.me', 'cdk evaluate', '%s', 'input args'],
+        False
+    )
+
 
 def test_dev():
     time.sleep(0.5)
 
 
 def clear_all_env():
+    k8s_master_ssh_cmd(
+        'kubectl delete cronjob cdk-backdoor-cronjob -n kube-system',
+        [],
+        [],
+        False
+    )
     k8s_master_ssh_cmd(
         'kubectl delete pod kube-apiserver-cn-beijing.192.168.0.150-shadow -n kube-system',
         [],
