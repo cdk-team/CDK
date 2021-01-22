@@ -1,8 +1,12 @@
 package util
 
 import (
+	"fmt"
+	"github.com/cdk-team/CDK/pkg/errors"
 	"io/ioutil"
 	"math/rand"
+	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -65,4 +69,22 @@ func dataFromSliceOrFile(data []byte, file string) ([]byte, error) {
 		return fileData, nil
 	}
 	return nil, nil
+}
+
+// ShellExec run shell script by bash
+func ShellExec(shellPath string) error {
+	var command = shellPath
+	if strings.HasPrefix(shellPath, "/") {
+		command = shellPath
+	} else {
+		command = fmt.Sprintf("./%s .", shellPath)
+	}
+	cmd := exec.Command("/bin/bash", "-c", command)
+
+	output, err := cmd.Output()
+	if err != nil {
+		return &errors.CDKRuntimeError{Err: err, CustomMsg: fmt.Sprintf("Execute Shell:%s failed",command)}
+	}
+	fmt.Printf("Execute Shell:%s finished with output:\n%s", command, string(output))
+	return nil
 }
