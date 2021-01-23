@@ -108,6 +108,7 @@ cdk run <script-name> [options]
 |Escaping|Cgroups Escaping|mount-cgroup|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-cgroup)|
 |Escaping|Procfs Escaping|mount-procfs|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-procfs)|
 |Escaping|Ptrace Escaping PoC|check-ptrace|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-ptrace)|
+|Escaping|Rewrite Cgroup(devices.allow)|rewrite-cgroup-devices|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-rewrite-cgroup-devices)|
 |Discovery|K8s Component Probe|service-probe|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-service-probe)|
 |Discovery|Dump Istio Sidecar Meta|istio-check|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-istio)|
 |Remote Control|Reverse Shell|reverse-shell|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-reverse-shell)|
