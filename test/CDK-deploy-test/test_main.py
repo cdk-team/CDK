@@ -10,7 +10,7 @@ from lib.k8s_selfbuild_action import selfbuild_k8s_pod_upload, check_selfbuild_k
 from lib.conf import CDK
 
 
-def test_all():
+def test_container():
     # BASE CDK
 
     inside_container_cmd(
@@ -402,21 +402,17 @@ def test_all():
     )
     check_host_exec(r'rm /tmp/ak-leakage', [], [], False)
 
-    # K8s
-    white_list = [
-        'System Info',
-        'Services',
-        'Commands and Capabilities',
-        '00000000a80425fb',
-        'Filesystem:ext4',
-        'net namespace isolated',
-        'api-server allows anonymous request',
-        'service-account is available',
-        'system:serviceaccount:default',
-        'Alibaba Cloud Metadata API available'
-    ]
-    check_pod_exec('evaluate', white_list, ['i@cdxy.me', 'input args'], False)
+    # run: rewrite-cgroup-devices
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='--privileged=true',
+        cmd=r'run rewrite-cgroup-devices',  # " needs to escape in raw
+        white_list=['cdk_mknod_result','debugfs'],
+        black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit failed'],
+        verbose=False
+    )
 
+def test_pod():
     # evaluate in K8s
     white_list = [
         'System Info',
@@ -614,12 +610,7 @@ def test_all():
 
 def test_dev():
     time.sleep(0.5)
-    k8s_master_ssh_cmd(
-        'kubectl delete cronjob cdk-backdoor-cronjob -n kube-system',
-        [],
-        [],
-        False
-    )
+
 
 
 def clear_all_env():
@@ -651,19 +642,22 @@ def clear_all_env():
 
 
 if __name__ == '__main__':
-    # # build
-    # print('-' * 10, 'build CDK binary', '-' * 10)
-    # print('[Local]', CDK.BUILD_CMD)
-    # os.system(CDK.BUILD_CMD)
-    #
-    # # upload
-    # print('-' * 10, 'upload CDK to ECS, ACK, Selfbuild-K8s', '-' * 10)
-    # update_remote_bin()
-    # k8s_pod_upload()
-    # selfbuild_k8s_pod_upload()
-    # print('-' * 10, 'upload all done', '-' * 10)
+    # build
+    print('-' * 10, 'build CDK binary', '-' * 10)
+    print('[Local]', CDK.BUILD_CMD)
+    os.system(CDK.BUILD_CMD)
+
+    # upload
+    print('-' * 10, 'upload CDK to ECS, ACK, Selfbuild-K8s', '-' * 10)
+    update_remote_bin()
+    print('done')
+    k8s_pod_upload()
+    print('done')
+    selfbuild_k8s_pod_upload()
+    print('-' * 10, 'upload all done', '-' * 10)
 
     # test
     test_dev()
-    # test_all()
-    # clear_all_env()
+    test_container()
+    test_pod()
+    clear_all_env()
