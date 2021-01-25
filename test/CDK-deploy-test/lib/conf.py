@@ -18,6 +18,8 @@ class CDK:
 
 
 class K8S:
+    KUBE_CONFIG = '/Users/xy/.kube/cdk.config'
+    # KUBE_CONFIG = '/Users/xy/.kube/config'
     # upload cdk to target pod then check command output using kubectl
     TARGET_POD = 'myappnew'
     # you can keep it unchanged

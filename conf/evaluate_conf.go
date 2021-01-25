@@ -95,4 +95,10 @@ var CloudAPI = []cloudAPIS{
 		ResponseMatch: "deviceName",
 		DocURL:        "https://cloud.google.com/compute/docs/storing-retrieving-metadata",
 	},
+	{
+		CloudProvider: "Tencent Cloud",
+		API:           "http://metadata.tencentyun.com/latest/meta-data/",
+		ResponseMatch: "instance-name",
+		DocURL:        "https://cloud.tencent.com/document/product/213/4934",
+	},
 }
