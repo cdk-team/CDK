@@ -146,6 +146,38 @@ cdk ps
 
 * [run test in container.](https://github.com/cdk-team/CDK/wiki/Run-Test)
 
+## Contributing to CDK
+  
+First off, thanks for taking the time to contribute!   
+  
+By reporting any issue, ideas or PRs, your GitHub ID will be listed here.
+
+* https://github.com/cdk-team/CDK/blob/main/thanks.md
+
+#### Bug Reporting
+
+Bugs are tracked as [GitHub Issues](https://github.com/cdk-team/CDK/issues). Create an issue with the current CDK version, error msg and the environment. Describe the exact steps which reproduce the problem.
+
+#### Suggesting Enhancements
+
+Enhancement suggestions are tracked as [GitHub Discussions](https://github.com/cdk-team/CDK/discussions). You can publish any thoughts here to discuss with developers directly.
+
+#### Pull Requests
+
+Fix problems or maintain CDK's quality:
+
+* Describe the current CDK version, environment, problem and exact steps that reproduce the problem.
+* Running screenshots or logs before and after you fix the problem.
+
+New feature or exploits:
+
+* Explain why this enhancement would be useful to other users.
+* Please enable a sustainable environment for us to review contributions.
+* Screenshots about how this new feature works. 
+* If you are committing a new evaluate/exploit scripts, please add a simple doc to your PR message, here is an [example](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-deploy). 
+
+
+
 ## TODO
 
 1. Echo loader for delivering CDK into target container via Web RCE. 
