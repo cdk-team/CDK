@@ -5,6 +5,7 @@ import (
 	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/evaluate"
 	"github.com/cdk-team/CDK/pkg/plugin"
+	"github.com/cdk-team/CDK/pkg/tool/dockerd_api"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 
 	"github.com/cdk-team/CDK/pkg/tool/netcat"
@@ -12,7 +13,6 @@ import (
 	"github.com/cdk-team/CDK/pkg/tool/probe"
 	"github.com/cdk-team/CDK/pkg/tool/ps"
 	"github.com/cdk-team/CDK/pkg/tool/vi"
-	"github.com/cdk-team/CDK/pkg/util"
 	"github.com/docopt/docopt-go"
 	"log"
 	"os"
@@ -107,12 +107,9 @@ func ParseCDKMain() {
 		case "kcurl":
 			kubectl.KubectlToolApi(args)
 		case "ucurl":
-			if len(args) != 4 {
-				log.Fatal("invalid input args, Example: ./cdk ucurl get /var/run/docker.sock http://127.0.0.1/info \"\"")
-			}
-			ans := util.UnixHttpSend(args[0], args[1], args[2], args[3])
-			log.Println("response:")
-			fmt.Println(ans)
+			dockerd_api.UcurlToolApi(args)
+		case "dcurl":
+			dockerd_api.DcurlToolApi(args)
 		case "ifconfig":
 			network.GetLocalAddresses()
 		case "ps":
