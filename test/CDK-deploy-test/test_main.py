@@ -407,10 +407,29 @@ def test_container():
         image='ubuntu:latest',
         docker_args='--privileged=true',
         cmd=r'run rewrite-cgroup-devices',  # " needs to escape in raw
-        white_list=['cdk_mknod_result','debugfs'],
+        white_list=['cdk_mknod_result', 'debugfs'],
         black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit failed'],
         verbose=False
     )
+
+    # run: check-ptrace
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='',
+        cmd='run check-ptrace',
+        white_list=['SYS_PTRACE capability was disabled'],
+        black_list=[],
+        verbose=False
+    )
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='--cap-add=SYS_PTRACE',
+        cmd='run check-ptrace',
+        white_list=['SYS_PTRACE capability was enabled', 'root'],
+        black_list=[],
+        verbose=False
+    )
+
 
 def test_pod():
     # evaluate in K8s
@@ -610,7 +629,6 @@ def test_pod():
 
 def test_dev():
     time.sleep(0.5)
-
 
 
 def clear_all_env():
