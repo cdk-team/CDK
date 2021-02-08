@@ -103,7 +103,8 @@ cdk run <script-name> [options]
 |Escaping|docker-runc CVE-2019-5736|runc-pwn|✔||
 |Escaping|containerd-shim CVE-2020-15257|shim-pwn|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-shim-pwn)|
 |Escaping|docker.sock PoC (DIND attack)|docker-sock-check|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-check)|
-|Escaping|docker.sock Backdoor Image Deploy|docker-sock-deploy|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-deploy)|
+|Escaping|docker.sock RCE|docker-sock-pwn|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-pwn)|
+|Escaping|Docker API(2375) RCE|docker-api-pwn|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-api-pwn)|
 |Escaping|Device Mount Escaping|mount-disk|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-disk)|
 |Escaping|Cgroups Escaping|mount-cgroup|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-cgroup)|
 |Escaping|Procfs Escaping|mount-procfs|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-procfs)|
@@ -137,7 +138,7 @@ cdk ps
 |ifconfig|Network Information|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ifconfig)|
 |vi|Edit Files|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-vi)|
 |kcurl|Request to K8s api-server|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-kcurl)|
-|dcurl|Request to Docker HTTP API|||
+|dcurl|Request to Docker HTTP API|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-dcurl)|
 |ucurl|Request to Docker Unix Socket|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ucurl)|
 |rcurl|Request to Docker Registry API|||
 |probe|IP/Port Scanning|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-probe)|

@@ -1,7 +1,7 @@
 import os
 from lib.conf import CDK
 
-version = 'cdk_v0.1.8'
+version = 'cdk_v0.10'
 
 cmd = '''
 cd {}; 
