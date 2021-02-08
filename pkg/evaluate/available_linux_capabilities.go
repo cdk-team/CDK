@@ -2,6 +2,7 @@ package evaluate
 
 import (
 	"fmt"
+	"github.com/cdk-team/CDK/pkg/util/capability"
 	"io/ioutil"
 	"log"
 	"regexp"
@@ -19,7 +20,15 @@ func GetProcCapabilities() bool {
 	params := pattern.FindStringSubmatch(string(data))
 	for _, matched := range params {
 		log.Println("Capabilities:")
-		fmt.Printf("\t%s\n", matched)
+		fmt.Printf("\t%s", matched)
+
+		// make capabilities readable
+		lst := strings.Split(matched, ":")
+		if len(lst) == 2 {
+			capStr := strings.TrimSpace(lst[1])
+			fmt.Printf("\tCap decode: 0x%s = %s\n", capStr, capability.CapHexToText(capStr))
+		}
+
 		if strings.Contains(matched, "3fffffffff") {
 			fmt.Println("Critical - Possible Privileged Container Found.")
 			return true
