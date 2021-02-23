@@ -14,7 +14,7 @@ CDK is for security testing purposes only.
 
 CDK is an open-sourced container penetration toolkit, designed for offering stable exploitation in different slimmed containers without any OS dependency. It comes with useful net-tools and many powerful PoCs/EXPs helps you to escape container and takeover K8s cluster easily.
 
-Currently still under development, submit [issues](https://github.com/cdk-team/CDK/issues) or mail <i@cdxy.me> if you need any help. 
+Currently still under development, submit [issues](https://github.com/cdk-team/CDK/issues) or mail <i@cdxy.me> if you need any help.
 
 ## Installation
 
@@ -59,13 +59,13 @@ Options:
 
 CDK have three modules:
 
-1. Evaluate: gather information inside container to find potential weakness. 
+1. Evaluate: gather information inside container to find potential weakness.
 2. Exploit: for container escaping, persistance and lateral movement
 3. Tool: network-tools and APIs for TCP/HTTP requests, tunnels and K8s cluster management.
 
 ### Evaluate Module
 
-Usage 
+Usage
 ```
 cdk evaluate [--full]
 ```
@@ -148,9 +148,9 @@ cdk ps
 * [run test in container.](https://github.com/cdk-team/CDK/wiki/Run-Test)
 
 ## Contributing to CDK
-  
-First off, thanks for taking the time to contribute!   
-  
+
+First off, thanks for taking the time to contribute!
+
 By reporting any issue, ideas or PRs, your GitHub ID will be listed here.
 
 * https://github.com/cdk-team/CDK/blob/main/thanks.md
@@ -174,14 +174,21 @@ New feature or exploits:
 
 * Explain why this enhancement would be useful to other users.
 * Please enable a sustainable environment for us to review contributions.
-* Screenshots about how this new feature works. 
-* If you are committing a new evaluate/exploit scripts, please add a simple doc to your PR message, here is an [example](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-deploy). 
-
-
+* Screenshots about how this new feature works.
+* If you are committing a new evaluate/exploit scripts, please add a simple doc to your PR message, here is an [example](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-deploy).
 
 ## TODO
 
-1. Echo loader for delivering CDK into target container via Web RCE. 
+1. Echo loader for delivering CDK into target container via Web RCE.
 2. EDR defense evasion.
 3. Compile optimization.
 4. Dev docs
+
+## Events
+
+### 404StarLink 2.0 - Galaxy
+![png](https://github.com/knownsec/404StarLink-Project/raw/master/logo.png)
+
+Project CDK is now included in 404Team [Starlink Project 2.0](https://github.com/knownsec/404StarLink2.0-Galaxy). Join the StarLink community to get in touch with CDK dev-team.
+
+- [https://github.com/knownsec/404StarLink2.0-Galaxy#community](https://github.com/knownsec/404StarLink2.0-Galaxy#community)
