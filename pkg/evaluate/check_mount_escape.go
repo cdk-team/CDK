@@ -57,16 +57,16 @@ func GetMounts() ([]Mount, error) {
 }
 
 func MountEscape() {
+	re := regexp.MustCompile("/kubelet/|/dev/[\\w-]*?\\blog$|/etc/host[\\w]*?$|/etc/[\\w]*?\\.conf$")
 	mounts, _ := GetMounts()
 
 	for _, m := range mounts {
 		if strings.Contains(m.Device, "/") || strings.Contains(m.Filesystem, "ext") {
-			matched, _ := regexp.MatchString("/kubelet/|/dev/[\\w-]*?\\blog$|/etc/host[\\w]*?$|/etc/[\\w]*?\\.conf$", m.Path)
-			if !matched {
+			if !re.MatchString(m.Path) {
 				fmt.Printf("Device:%s Path:%s Filesystem:%s Flags:%s\n", m.Device, m.Path, m.Filesystem, m.Flags)
 			}
 		}
-		if m.Device == "lxcfs" && strings.Contains(m.Flags,"rw"){
+		if m.Device == "lxcfs" && strings.Contains(m.Flags, "rw") {
 			fmt.Println("Find mounted lxcfs with rw flags, run `cdk run lxcfs-rw` to escape container!")
 			fmt.Printf("Device:%s Path:%s Filesystem:%s Flags:%s\n", m.Device, m.Path, m.Filesystem, m.Flags)
 		}
