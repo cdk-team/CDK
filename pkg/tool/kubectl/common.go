@@ -88,9 +88,6 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 	if err != nil {
 		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found while generate post request in net.http ."}
 	}
-	if len(token) > 0 {
-		request.Header.Set("Authorization", "Bearer "+token)
-	}
 
 	// set request header
 	if opts.Method == "POST" {
