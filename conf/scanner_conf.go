@@ -20,6 +20,7 @@ var TCPScannerConf = TCPScannerConfS{
 		"etcd":                "2379",
 		"cAdvisor":            "4194",
 		"k8s-api-server":      "6443",
+		"kubectl-proxy":       "8001",
 		"http-1":              "8080",
 		"https-1":             "8443",
 		"kubelet-auth":        "10250",
