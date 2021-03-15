@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func CheckK8sServiceAccount(tokenPath string) bool {
+func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 	resp, err := kubectl.ServerAccountRequest(
 		kubectl.K8sRequestOption{
 			TokenPath: "",
@@ -19,6 +19,7 @@ func CheckK8sServiceAccount(tokenPath string) bool {
 		})
 	if err != nil {
 		fmt.Println(err)
+		return false
 	}
 	if len(resp) > 0 && strings.Contains(resp, "APIGroupList") {
 		fmt.Println("\tservice-account is available")
@@ -36,6 +37,7 @@ func CheckK8sServiceAccount(tokenPath string) bool {
 			})
 		if err != nil {
 			fmt.Println(err)
+			return false
 		}
 		if len(resp) > 0 && strings.Contains(resp, "kube-system") {
 			fmt.Println("\tsuccess, the service-account have a high authority.")
@@ -44,7 +46,7 @@ func CheckK8sServiceAccount(tokenPath string) bool {
 		} else {
 			fmt.Println("\tfailed")
 			fmt.Println("\tresponse:" + resp)
-			return true
+			return false
 		}
 	} else {
 		fmt.Println("\tservice-account is not available")

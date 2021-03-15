@@ -670,8 +670,93 @@ def clear_all_env():
     check_host_exec(r'rm /tmp/docker-sock-pwn', [], [], False)
 
 
+def test_auto_pwn():
+    # cover crontab with backup file
+    check_host_exec(r'cp -f /etc/crontab_bak /etc/crontab', [], ['cp'], False)
+
+    # 1.1 exploit privileged container with mount device
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='--privileged=true',
+        cmd=r'auto-escape \"touch /tmp/auto-priv-mountdir\"',  # " needs to escape in raw
+        white_list=['all exploits are finished, auto exploit success!'],
+        black_list=['i@cdxy.me', 'OCI '],
+        verbose=False
+    )
+    time.sleep(1)
+    check_host_exec(r'cat /etc/crontab', ['CDK auto exploit via mounted device in privileged container'], [], False)
+    # clear the crontab
+    # check_host_exec(r'cp -f /etc/crontab_bak /etc/crontab', [], ['cp'], False)
+
+    # 1.2 exploit privileged container with cgroup
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='--privileged=true',
+        cmd=r'auto-escape \"touch /tmp/auto-priv-cgroup\"',  # " needs to escape in raw
+        white_list=['all exploits are finished, auto exploit success!'],
+        black_list=['i@cdxy.me', 'OCI '],
+        verbose=False
+    )
+    time.sleep(1)
+    check_host_exec(r'ls /tmp/auto-priv-cgroup', ['/tmp/auto-priv-cgroup'], [], False)
+    check_host_exec(r'rm /tmp/auto-priv-cgroup', [], [], False)
+
+    # 2. shim-pwn
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='--net=host',
+        cmd=r'auto-escape \"touch /tmp/auto-shimpwn\"',  # " needs to escape in raw
+        white_list=['all exploits are finished, auto exploit success!'],
+        black_list=['i@cdxy.me', 'OCI '],
+        verbose=False
+    )
+    time.sleep(1)
+    check_host_exec(r'ls /tmp/auto-shimpwn', ['/tmp/auto-shimpwn'], [], False)
+    check_host_exec(r'rm /tmp/auto-shimpwn', [], [], False)
+
+    # 3. docker.sock
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='-v /var/run/docker.sock:/var/run/docker.sock',
+        cmd=r'auto-escape \"touch /tmp/auto-docker-sock\"',  # " needs to escape in raw
+        white_list=['all exploits are finished, auto exploit success!'],
+        black_list=['i@cdxy.me', 'OCI '],
+        verbose=False
+    )
+    time.sleep(1)
+    check_host_exec(r'cat /etc/crontab', ['CDK auto exploit via docker.sock'], [], False)
+    # clear the crontab
+    # check_host_exec(r'cp -f /etc/crontab_bak /etc/crontab', [], ['cp'], False)
+
+    # 3. docker.sock
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='-v /var/run/docker.sock:/var/run/docker.sock',
+        cmd=r'auto-escape \"touch /tmp/auto-docker-sock\"',  # " needs to escape in raw
+        white_list=['all exploits are finished, auto exploit success!'],
+        black_list=['i@cdxy.me', 'OCI '],
+        verbose=False
+    )
+    time.sleep(1)
+    check_host_exec(r'cat /etc/crontab', ['CDK auto exploit via docker.sock'], [], False)
+    # clear the crontab
+    check_host_exec(r'cp -f /etc/crontab_bak /etc/crontab', [], ['cp'], False)
+
 def test_dev():
-    time.sleep(0.5)
+
+    # 3. docker.sock
+    inside_container_cmd(
+        image='ubuntu:latest',
+        docker_args='-v /var/run/docker.sock:/var/run/docker.sock',
+        cmd=r'auto-escape \"touch /tmp/auto-docker-sock\"',  # " needs to escape in raw
+        white_list=['all exploits are finished, auto exploit success!'],
+        black_list=['i@cdxy.me', 'OCI '],
+        verbose=False
+    )
+    time.sleep(1)
+    check_host_exec(r'cat /etc/crontab', ['CDK auto exploit via docker.sock'], [], False)
+    # clear the crontab
+    check_host_exec(r'cp -f /etc/crontab_bak /etc/crontab', [], ['cp'], False)
 
 
 if __name__ == '__main__':
@@ -690,7 +775,9 @@ if __name__ == '__main__':
     print('-' * 10, 'upload all done', '-' * 10)
 
     # test
-    test_dev()
+    # test_dev()
+
+    test_auto_pwn()
     test_container()
     test_pod()
     clear_all_env()
