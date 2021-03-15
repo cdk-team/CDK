@@ -1,3 +1,5 @@
+// +build !thin,!no_containerd_shim_pwn,!no_k8s_shadow_apiserver
+
 package task
 
 import (
