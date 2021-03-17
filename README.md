@@ -122,10 +122,10 @@ cdk run <script-name> [options]
 |Escaping|docker.sock RCE|docker-sock-pwn|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-pwn)|
 |Escaping|Docker API(2375) RCE|docker-api-pwn|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-api-pwn)|
 |Escaping|Device Mount Escaping|mount-disk|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-disk)|
+|Escaping|LXCFS Escaping|lxcfs-rw|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-lxcfs-rw)|
 |Escaping|Cgroups Escaping|mount-cgroup|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-cgroup)|
 |Escaping|Procfs Escaping|mount-procfs|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-procfs)|
 |Escaping|Ptrace Escaping PoC|check-ptrace|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-ptrace)|
-|Escaping|Exploit lxcfs|lxcfs-rw|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-lxcfs-rw)|
 |Escaping|Rewrite Cgroup(devices.allow)|rewrite-cgroup-devices|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-rewrite-cgroup-devices)|
 |Discovery|K8s Component Probe|service-probe|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-service-probe)|
 |Discovery|Dump Istio Sidecar Meta|istio-check|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-istio)|
@@ -133,6 +133,7 @@ cdk run <script-name> [options]
 |Credential Access|Access Key Scanning|ak-leakage|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-ak-leakage)|
 |Credential Access|Dump K8s Secrets|k8s-secret-dump|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-secret-dump)|
 |Credential Access|Dump K8s Config|k8s-configmap-dump|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-configmap-dump)|
+|Privilege Escalation|K8s RBAC Bypass|k8s-get-sa-token|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-get-sa-token)|
 |Persistence|Deploy WebShell|webshell-deploy|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-webshell-deploy)|
 |Persistence|Deploy Backdoor Pod|k8s-backdoor-daemonset|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-backdoor-daemonset)|
 |Persistence|Deploy Shadow K8s api-server|k8s-shadow-apiserver|✔||[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-shadow-apiserver)|
