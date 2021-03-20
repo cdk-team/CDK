@@ -1,3 +1,5 @@
+// +build !no_probe_tool
+
 package probe
 
 import (

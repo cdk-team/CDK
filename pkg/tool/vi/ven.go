@@ -1,3 +1,5 @@
+// +build !thin,!no_vi_tool
+
 package vi
 
 import (
