@@ -7,6 +7,7 @@
 *.pyc
 *.pyo
 
+/bin
 cmd/cdk/cdk
 *_darwin_386*
 *_darwin_amd64*
