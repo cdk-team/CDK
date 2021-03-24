@@ -25,3 +25,6 @@ cmd/cdk/cdk
 *_netbsd_amd64*
 *_netbsd_arm*
 *_plan9_386*
+
+/*.json
+/cmd/cdk/*.json
