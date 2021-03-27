@@ -1,0 +1,57 @@
+name: CDK CI
+
+on:
+  create
+
+jobs:
+
+  release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    # needs: build
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - uses: actions/checkout@v2
+      - run: |
+          go get github.com/mitchellh/gox
+          go get github.com/tcnksm/ghr
+          sudo apt-get install -y upx
+      # - run: bash ./scripts/build_and_release.sh || exit 0
+      - run: |
+          export CGO_ENABLED=0
+          gox -parallel 5 -osarch="darwin/amd64 linux/386 linux/amd64 linux/arm linux/arm64" -ldflags="-s -w " -output="bin/{{.Dir}}_{{.OS}}_{{.Arch}}" ./cmd/cdk/
+          gox -parallel 5 -osarch="linux/386 linux/amd64 linux/arm64" -ldflags="-s -w " -tags="thin" -output="bin/{{.Dir}}_{{.OS}}_{{.Arch}}_thin" ./cmd/cdk/
+
+          # cdk_linux_386 cdk_linux_amd64 cdk_linux_arm cdk_linux_arm64
+          cp bin/cdk_linux_amd64 bin/cdk_linux_amd64_upx
+          upx bin/cdk_linux_amd64_upx
+
+          cp bin/cdk_linux_386 bin/cdk_linux_386_upx
+          upx bin/cdk_linux_386_upx
+
+          cp bin/cdk_linux_amd64_thin bin/cdk_linux_amd64_thin_upx
+          upx bin/cdk_linux_amd64_thin_upx
+
+          cp bin/cdk_linux_386_thin bin/cdk_linux_386_thin_upx
+          upx bin/cdk_linux_386_thin_upx
+      - run: |
+          sha256_text_body=`cd bin/ && shasum -a 256 * | tr -s '  ' '|'`
+          release_body=$(cat <<- EOF
+          |sha256|exectue file|
+          |---|---|
+          |$sha256_text_body|
+          EOF
+          )
+
+          date_string=`date -u +"%Y-%m-%d"`
+          TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
+          title="New release for $TAG_VERSION in $date_string"
+
+          ghr -n "$title" -u neargle -b "$release_body" "$TAG_VERSION" "bin/"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

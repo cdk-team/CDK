@@ -129,6 +129,7 @@ cdk run <script-name> [options]
 |Escaping|Rewrite Cgroup(devices.allow)|rewrite-cgroup-devices|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-rewrite-cgroup-devices)|
 |Discovery|K8s Component Probe|service-probe|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-service-probe)|
 |Discovery|Dump Istio Sidecar Meta|istio-check|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-istio)|
+|Discovery|Dump K8s Pod Security Policies|k8s-psp-dump|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-psp-dump)|
 |Remote Control|Reverse Shell|reverse-shell|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-reverse-shell)|
 |Credential Access|Access Key Scanning|ak-leakage|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-ak-leakage)|
 |Credential Access|Dump K8s Secrets|k8s-secret-dump|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-secret-dump)|
@@ -161,6 +162,10 @@ cdk ps
 |ucurl|Request to Docker Unix Socket|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ucurl)|
 |rcurl|Request to Docker Registry API|||
 |probe|IP/Port Scanning|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-probe)|
+
+### Release Document
+
+If you want to know how we released a new version, how thin is produced, why we provide upx versions, what are the differences between different versions about all、normal、thin、upx, and how to choose specific CDK exploits and tools to compile a own release for yourself, please check the [Release Document](https://github.com/cdk-team/CDK/wiki/Release).
 
 ## Developer Docs
 
