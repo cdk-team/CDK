@@ -32,6 +32,16 @@ var LinuxCommandChecklist = []string{
 	"capsh",
 	"mount",
 	"fdisk",
+	"gcc",
+	"g++",
+	"make",
+	"base64",
+	"python2",
+	"python2.7",
+	"perl",
+	"xterm",
+	"sudo",
+	"ruby",
 }
 
 // match ENV to find useful service
