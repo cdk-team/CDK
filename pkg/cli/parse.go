@@ -76,8 +76,16 @@ func ParseCDKMain() {
 		evaluate.CheckCloudMetadataAPI()
 
 		if Args["--full"].(bool) {
+
 			fmt.Printf("\n[Information Gathering - Sensitive Files]\n")
 			evaluate.SearchLocalFilePath()
+
+			fmt.Printf("\n[Information Gathering - ASLR]\n")
+			evaluate.ASLR()
+
+			fmt.Printf("\n[Information Gathering - Cgroups]\n")
+			evaluate.DumpMainCgroup()
+
 		}
 		return
 	}

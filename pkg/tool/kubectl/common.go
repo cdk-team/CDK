@@ -23,12 +23,18 @@ type K8sRequestOption struct {
 }
 
 func ApiServerAddr() (string, error) {
+	protocol := ""
 	host, port := os.Getenv("KUBERNETES_SERVICE_HOST"), os.Getenv("KUBERNETES_SERVICE_PORT")
 	if len(host) == 0 || len(port) == 0 {
 		text := "err: cannot find kubernetes api host in ENV"
 		return "", errors.New(text)
 	}
-	return "https://" + net.JoinHostPort(host, port), nil
+	if port == "8080" || port == "8001" {
+		protocol = "http://"
+	} else {
+		protocol = "https://"
+	}
+	return protocol + net.JoinHostPort(host, port), nil
 }
 
 func GetServiceAccountToken(tokenPath string) (string, error) {
