@@ -672,7 +672,13 @@ def clear_all_env():
 
 def test_dev():
     time.sleep(0.5)
-
+    # exploit: shim-pwn
+    check_selfbuild_k8s_pod_exec(
+        'run k8s-shadow-apiserver default',
+        [],
+        ['i@cdxy.me', 'cdk evaluate', '%s', 'input args'],
+        True
+    )
 
 if __name__ == '__main__':
     # build
@@ -684,13 +690,13 @@ if __name__ == '__main__':
     print('-' * 10, 'upload CDK to ECS, ACK, Selfbuild-K8s', '-' * 10)
     update_remote_bin()
     print('done')
-    k8s_pod_upload()
-    print('done')
+    # k8s_pod_upload()
+    # print('done')
     selfbuild_k8s_pod_upload()
     print('-' * 10, 'upload all done', '-' * 10)
 
     # test
     test_dev()
-    test_container()
-    test_pod()
-    clear_all_env()
+    # test_container()
+    # test_pod()
+    # clear_all_env()

