@@ -7,6 +7,7 @@
 *.pyc
 *.pyo
 
+/bin
 cmd/cdk/cdk
 *_darwin_386*
 *_darwin_amd64*
@@ -24,3 +25,6 @@ cmd/cdk/cdk
 *_netbsd_amd64*
 *_netbsd_arm*
 *_plan9_386*
+
+/*.json
+/cmd/cdk/*.json

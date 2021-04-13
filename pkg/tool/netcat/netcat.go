@@ -1,3 +1,5 @@
+// +build !thin,!no_netcat_tool
+
 package netcat
 
 import (

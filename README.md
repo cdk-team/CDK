@@ -114,30 +114,34 @@ Run targeted exploit:
 cdk run <script-name> [options]
 ```
 
-|Tactic|Technique|CDK Exploit Name|Supported|Doc|
-|---|---|---|---|---|
-|Escaping|docker-runc CVE-2019-5736|runc-pwn|✔||
-|Escaping|containerd-shim CVE-2020-15257|shim-pwn|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-shim-pwn)|
-|Escaping|docker.sock PoC (DIND attack)|docker-sock-check|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-check)|
-|Escaping|docker.sock RCE|docker-sock-pwn|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-pwn)|
-|Escaping|Docker API(2375) RCE|docker-api-pwn|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-api-pwn)|
-|Escaping|Device Mount Escaping|mount-disk|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-disk)|
-|Escaping|Cgroups Escaping|mount-cgroup|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-cgroup)|
-|Escaping|Procfs Escaping|mount-procfs|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-procfs)|
-|Escaping|Ptrace Escaping PoC|check-ptrace|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-ptrace)|
-|Escaping|Exploit lxcfs|lxcfs-rw|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-lxcfs-rw)|
-|Escaping|Rewrite Cgroup(devices.allow)|rewrite-cgroup-devices|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-rewrite-cgroup-devices)|
-|Discovery|K8s Component Probe|service-probe|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-service-probe)|
-|Discovery|Dump Istio Sidecar Meta|istio-check|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-istio)|
-|Remote Control|Reverse Shell|reverse-shell|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-reverse-shell)|
-|Credential Access|Access Key Scanning|ak-leakage|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-ak-leakage)|
-|Credential Access|Dump K8s Secrets|k8s-secret-dump|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-secret-dump)|
-|Credential Access|Dump K8s Config|k8s-configmap-dump|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-configmap-dump)|
-|Persistence|Deploy WebShell|webshell-deploy|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-webshell-deploy)|
-|Persistence|Deploy Backdoor Pod|k8s-backdoor-daemonset|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-backdoor-daemonset)|
-|Persistence|Deploy Shadow K8s api-server|k8s-shadow-apiserver|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-shadow-apiserver)|
-|Persistence|K8s MITM Attack (CVE-2020-8554)|k8s-mitm-clusterip|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-k8s-mitm-clusterip)|
-|Persistence|Deploy K8s CronJob|k8s-cronjob|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-cronjob)|
+|Tactic|Technique|CDK Exploit Name|Supported|In Thin|Doc|
+|---|---|---|---|---|---|
+|Escaping|docker-runc CVE-2019-5736|runc-pwn|✔|✔||
+|Escaping|containerd-shim CVE-2020-15257|shim-pwn|✔||[link](https://github.com/cdk-team/CDK/wiki/Exploit:-shim-pwn)|
+|Escaping|docker.sock PoC (DIND attack)|docker-sock-check|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-check)|
+|Escaping|docker.sock RCE|docker-sock-pwn|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-sock-pwn)|
+|Escaping|Docker API(2375) RCE|docker-api-pwn|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-docker-api-pwn)|
+|Escaping|Device Mount Escaping|mount-disk|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-disk)|
+|Escaping|LXCFS Escaping|lxcfs-rw|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-lxcfs-rw)|
+|Escaping|Cgroups Escaping|mount-cgroup|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-cgroup)|
+|Escaping|Procfs Escaping|mount-procfs|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-mount-procfs)|
+|Escaping|Ptrace Escaping PoC|check-ptrace|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-ptrace)|
+|Escaping|Rewrite Cgroup(devices.allow)|rewrite-cgroup-devices|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-rewrite-cgroup-devices)|
+|Discovery|K8s Component Probe|service-probe|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-service-probe)|
+|Discovery|Dump Istio Sidecar Meta|istio-check|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-check-istio)|
+|Discovery|Dump K8s Pod Security Policies|k8s-psp-dump|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-psp-dump)|
+|Remote Control|Reverse Shell|reverse-shell|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-reverse-shell)|
+|Credential Access|Access Key Scanning|ak-leakage|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-ak-leakage)|
+|Credential Access|Dump K8s Secrets|k8s-secret-dump|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-secret-dump)|
+|Credential Access|Dump K8s Config|k8s-configmap-dump|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-configmap-dump)|
+|Privilege Escalation|K8s RBAC Bypass|k8s-get-sa-token|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-get-sa-token)|
+|Persistence|Deploy WebShell|webshell-deploy|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-webshell-deploy)|
+|Persistence|Deploy Backdoor Pod|k8s-backdoor-daemonset|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-backdoor-daemonset)|
+|Persistence|Deploy Shadow K8s api-server|k8s-shadow-apiserver|✔||[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-shadow-apiserver)|
+|Persistence|K8s MITM Attack (CVE-2020-8554)|k8s-mitm-clusterip|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-k8s-mitm-clusterip)|
+|Persistence|Deploy K8s CronJob|k8s-cronjob|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-cronjob)|
+
+**Note about Thin:** The version about **thin** is prepared for container shells with a short life cycle such as Serverless. In order to be lighter, it will cut very few exploits that cause the program to become fat.
 
 ### Tool Module
 
@@ -158,6 +162,10 @@ cdk ps
 |ucurl|Request to Docker Unix Socket|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ucurl)|
 |rcurl|Request to Docker Registry API|||
 |probe|IP/Port Scanning|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-probe)|
+
+### Release Document
+
+If you want to know how we released a new version, how thin is produced, why we provide upx versions, what are the differences between different versions about all、normal、thin、upx, and how to choose specific CDK exploits and tools to compile a own release for yourself, please check the [Release Document](https://github.com/cdk-team/CDK/wiki/Release).
 
 ## Developer Docs
 
@@ -201,3 +209,11 @@ New feature or exploits:
 Project CDK is now included in 404Team [Starlink Project 2.0](https://github.com/knownsec/404StarLink2.0-Galaxy). Join the StarLink community to get in touch with CDK dev-team.
 
 - [https://github.com/knownsec/404StarLink2.0-Galaxy#community](https://github.com/knownsec/404StarLink2.0-Galaxy#community)
+
+### BlackHat Asia 2021 Arsenal
+
+- [https://www.blackhat.com/asia-21/arsenal/schedule/index.html#cdk-zero-dependency-container-penetration-toolkit-22422](https://www.blackhat.com/asia-21/arsenal/schedule/index.html#cdk-zero-dependency-container-penetration-toolkit-22422)
+
+### HITB SecConf 2021 Amsterdam
+
+- [Briefing: "Attack Cloud Native Kubernetes"](https://conference.hitb.org/hitbsecconf2021ams/)

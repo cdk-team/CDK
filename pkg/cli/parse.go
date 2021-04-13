@@ -70,14 +70,22 @@ func ParseCDKMain() {
 		evaluate.CheckK8sAnonymousLogin()
 
 		fmt.Printf("\n[Discovery - K8s Service Account]\n")
-		evaluate.CheckK8sServiceAccount(conf.K8sSATokenDefaultPath)
+		evaluate.CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
 
 		fmt.Printf("\n[Discovery - Cloud Provider Metadata API]\n")
 		evaluate.CheckCloudMetadataAPI()
 
 		if Args["--full"].(bool) {
+
 			fmt.Printf("\n[Information Gathering - Sensitive Files]\n")
 			evaluate.SearchLocalFilePath()
+
+			fmt.Printf("\n[Information Gathering - ASLR]\n")
+			evaluate.ASLR()
+
+			fmt.Printf("\n[Information Gathering - Cgroups]\n")
+			evaluate.DumpMainCgroup()
+
 		}
 		return
 	}

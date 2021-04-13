@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -23,12 +24,18 @@ type K8sRequestOption struct {
 }
 
 func ApiServerAddr() (string, error) {
+	protocol := ""
 	host, port := os.Getenv("KUBERNETES_SERVICE_HOST"), os.Getenv("KUBERNETES_SERVICE_PORT")
 	if len(host) == 0 || len(port) == 0 {
 		text := "err: cannot find kubernetes api host in ENV"
 		return "", errors.New(text)
 	}
-	return "https://" + net.JoinHostPort(host, port), nil
+	if port == "8080" || port == "8001" {
+		protocol = "http://"
+	} else {
+		protocol = "https://"
+	}
+	return protocol + net.JoinHostPort(host, port), nil
 }
 
 func GetServiceAccountToken(tokenPath string) (string, error) {
@@ -88,9 +95,6 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 	if err != nil {
 		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found while generate post request in net.http ."}
 	}
-	if len(token) > 0 {
-		request.Header.Set("Authorization", "Bearer "+token)
-	}
 
 	// set request header
 	if opts.Method == "POST" {
@@ -111,4 +115,26 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
 	}
 	return string(content), nil
+}
+
+func GetServerVersion(serverAddr string) (string, error) {
+	opts := K8sRequestOption{
+		TokenPath: "",
+		Server:    serverAddr,
+		Api:       "/version",
+		Method:    "GET",
+		PostData:  "",
+		Anonymous: true,
+	}
+	resp, err := ServerAccountRequest(opts)
+	if err != nil {
+		return "", err
+	}
+	// use regexp to find gitVersion
+	versionPattern := regexp.MustCompile(`"gitVersion":.*?"(.*?)"`)
+	results := versionPattern.FindStringSubmatch(resp)
+	if len(results) != 2 {
+		return "", errors.New("field gitVersion not found in response")
+	}
+	return results[1], nil
 }
