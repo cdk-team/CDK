@@ -4,12 +4,17 @@ from invoke import UnexpectedExit
 from lib.conf import CDK, SELFBUILD_K8S
 
 
-def get_remote_conn():
-    connect_kwargs = {'key_filename': SELFBUILD_K8S.KEY_PATH}
+def k8s_get_remote_conn():
+    # http://docs.paramiko.org/en/stable/api/client.html
+
+    if SELFBUILD_K8S.PASS:
+        connect_kwargs = {'password': SELFBUILD_K8S.PASS}
+    else:
+        connect_kwargs = {'key_filename': SELFBUILD_K8S.KEY_PATH}
     return Connection(SELFBUILD_K8S.HOST, SELFBUILD_K8S.USER, connect_kwargs=connect_kwargs)
 
 
-conn = get_remote_conn()
+conn = k8s_get_remote_conn()
 
 
 def output_err(env, cmd, pattern, type):

@@ -530,7 +530,7 @@ def test_pod():
         False
     )
     check_pod_exec(
-        'run k8s-backdoor-daemonset anonymous ubuntu',  # success dump
+        'run k8s-backdoor-daemonset default ubuntu whoami',  # success dump
         ['cdk-backdoor-daemonset'],
         ['panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
         False
@@ -555,7 +555,7 @@ def test_pod():
 
     # run: k8s-shadow-apiserver
     k8s_master_ssh_cmd(
-        'kubectl delete pod kube-apiserver-cn-beijing.192.168.0.150-shadow -n kube-system',
+        'kubectl delete pod kube-apiserver-10.206.0.11-shadow -n kube-system',
         [],
         [],
         False
@@ -573,7 +573,7 @@ def test_pod():
         False
     )
     k8s_master_ssh_cmd(
-        'kubectl exec myappnew -- curl 192.168.0.150:9443',  # curl shadow-apiserver
+        'kubectl exec myappnew -- curl 10.206.0.11:9443',  # curl shadow-apiserver
         ['/api/v1'],
         [],
         False
@@ -648,7 +648,7 @@ def clear_all_env():
         False
     )
     k8s_master_ssh_cmd(
-        'kubectl delete pod kube-apiserver-cn-beijing.192.168.0.150-shadow -n kube-system',
+        'kubectl delete pod kube-apiserver-10.206.0.11-shadow -n kube-system',
         [],
         [],
         False
@@ -745,12 +745,12 @@ def test_auto_pwn():
 
 def test_dev():
     time.sleep(0.5)
-    # exploit: shim-pwn
+    # run: k8s-shadow-apiserver
     check_selfbuild_k8s_pod_exec(
-        'run k8s-shadow-apiserver default',
-        [],
-        ['i@cdxy.me', 'cdk evaluate', '%s', 'input args'],
-        True
+        'run k8s-shadow-apiserver anonymous',  # forbidden
+        ['forbidden this request'],
+        ['listening insecure-port: 0.0.0.0:9443', 'panic:', 'nodes is forbidden', 'cdk evaluate', 'empty'],
+        False
     )
 
 
