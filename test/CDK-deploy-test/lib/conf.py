@@ -1,6 +1,7 @@
 class SERVER:  # your remote server for test
-    HOST = '39.104.80.49'
+    HOST = '118.195.140.100'
     USER = 'root'
+    PASS = ''
     KEY_PATH = '/Users/xy/.ssh/id_rsa'
 
 
@@ -32,13 +33,14 @@ class K8S:
 
 class SELFBUILD_K8S:
     # Master node SSH
-    HOST = '123.56.40.100'
+    HOST = '118.195.140.100'
     USER = 'root'
+    PASS = ''
     KEY_PATH = '/Users/xy/.ssh/id_rsa'
     REMOTE_HOST_PATH = '/root/cdk-fabric'
     # upload cdk to target pod then check command output using kubectl
     TARGET_POD = 'myappnew'
     # you can keep it unchanged
     REMOTE_POD_PATH = '/cdk-fabric'
-    KUBERNETES_SERVICE_PORT = '6443'
-    KUBERNETES_SERVICE_HOST = '192.168.0.150'
+    KUBERNETES_SERVICE_PORT = '443'
+    KUBERNETES_SERVICE_HOST = '172.16.252.1'

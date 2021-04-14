@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -114,4 +115,26 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
 	}
 	return string(content), nil
+}
+
+func GetServerVersion(serverAddr string) (string, error) {
+	opts := K8sRequestOption{
+		TokenPath: "",
+		Server:    serverAddr,
+		Api:       "/version",
+		Method:    "GET",
+		PostData:  "",
+		Anonymous: true,
+	}
+	resp, err := ServerAccountRequest(opts)
+	if err != nil {
+		return "", err
+	}
+	// use regexp to find gitVersion
+	versionPattern := regexp.MustCompile(`"gitVersion":.*?"(.*?)"`)
+	results := versionPattern.FindStringSubmatch(resp)
+	if len(results) != 2 {
+		return "", errors.New("field gitVersion not found in response")
+	}
+	return results[1], nil
 }

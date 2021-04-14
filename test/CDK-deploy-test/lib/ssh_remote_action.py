@@ -5,7 +5,12 @@ from invoke.exceptions import UnexpectedExit
 
 
 def get_remote_conn():
-    connect_kwargs = {'key_filename': SERVER.KEY_PATH}
+    # http://docs.paramiko.org/en/stable/api/client.html
+
+    if SERVER.PASS:
+        connect_kwargs = {'password': SERVER.PASS}
+    else:
+        connect_kwargs = {'key_filename': SERVER.KEY_PATH}
     return Connection(SERVER.HOST, SERVER.USER, connect_kwargs=connect_kwargs)
 
 
