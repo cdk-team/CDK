@@ -40,18 +40,28 @@ jobs:
           cp bin/cdk_linux_386_thin bin/cdk_linux_386_thin_upx
           upx bin/cdk_linux_386_thin_upx
       - run: |
+          date_string=`date -u +"%Y-%m-%d"`
           sha256_text_body=`cd bin/ && shasum -a 256 * | tr -s '  ' '|'`
           release_body=$(cat <<- EOF
+          Release Date: $date_string
+
+          **New features**
+          ---
+          ---
+
+          **Fixes**
+          ---
+          ---
+
           |sha256|exectue file|
           |---|---|
           |$sha256_text_body|
           EOF
           )
 
-          date_string=`date -u +"%Y-%m-%d"`
           TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
-          title="New release for $TAG_VERSION in $date_string"
 
+          title="CDK $TAG_VERSION"
           ghr -n "$title" -b "$release_body" "$TAG_VERSION" "bin/"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
