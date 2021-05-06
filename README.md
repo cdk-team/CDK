@@ -217,4 +217,4 @@ Project CDK is now included in 404Team [Starlink Project 2.0](https://github.com
 
 ### HITB SecConf 2021 Amsterdam
 
-- [Briefing: "Attack Cloud Native Kubernetes"](https://conference.hitb.org/hitbsecconf2021ams/)
+- [Briefing: "Attack Cloud Native Kubernetes"](https://conference.hitb.org/hitbsecconf2021ams/sessions/attacking-cloud-native-kubernetes-with-cdk/)
