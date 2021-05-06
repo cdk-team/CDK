@@ -28,3 +28,6 @@ cmd/cdk/cdk
 
 /*.json
 /cmd/cdk/*.json
+
+.vscode/
+.chglog/
