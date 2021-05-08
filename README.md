@@ -12,7 +12,7 @@ CDK is for security testing purposes only.
 
 ## Overview
 
-CDK is an open-sourced container penetration toolkit, designed for offering stable exploitation in different slimmed containers without any OS dependency. It comes with useful net-tools and many powerful PoCs/EXPs helps you to escape container and takeover K8s cluster easily.
+CDK is an open-sourced container penetration toolkit, designed for offering stable exploitation in different slimmed containers without any OS dependency. It comes with useful net-tools and many powerful PoCs/EXPs and helps you to escape container and take over K8s cluster easily.
 
 ## Installation/Delivery
 
@@ -24,7 +24,7 @@ Drop executable files into the target container and start testing.
 
 If you have an exploit that can upload a file, then you can upload CDK binary directly.
 
-If you have an RCE exploit, but the target container has no `curl` or `wget`, you can use the following method to deliver CDK:
+If you have a RCE exploit, but the target container has no `curl` or `wget`, you can use the following method to deliver CDK:
 
 1. First, host CDK binary on your host with public IP.
 ```
@@ -73,7 +73,7 @@ Options:
 
 ## Features
 
-CDK have three modules:
+CDK has three modules:
 
 1. Evaluate: gather information inside container to find potential weakness.
 2. Exploit: for container escaping, persistance and lateral movement
@@ -142,7 +142,7 @@ cdk run <script-name> [options]
 |Persistence|K8s MITM Attack (CVE-2020-8554)|k8s-mitm-clusterip|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Evaluate:-k8s-mitm-clusterip)|
 |Persistence|Deploy K8s CronJob|k8s-cronjob|✔|✔|[link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-cronjob)|
 
-**Note about Thin:** The **thin release** is prepared for short life container shells such as serverless functions. We add build tags in source code and cut a few exploits to get the binary lighter, the 2MB file contains 90% of CDK functions, also you can pick up useful exploits in CDK source code to build your own lightweight binary.
+**Note about Thin:** The **thin release** is prepared for short life container shells such as serverless functions. We add build tags in source code and cut a few exploits to get the binary lighter. The 2MB file contains 90% of CDK functions, also you can pick up useful exploits in CDK source code to build your own lightweight binary.
 
 ### Tool Module
 
@@ -166,7 +166,7 @@ cdk ps
 
 ### Release Document
 
-If you want to know how we released a new version, how thin is produced, why we provide upx versions, what are the differences between different versions about all、normal、thin、upx, and how to choose specific CDK exploits and tools to compile a own release for yourself, please check the [Release Document](https://github.com/cdk-team/CDK/wiki/Release).
+If you want to know how we released a new version, how thin is produced, why we provide upx versions, what the differences between different versions about all, normal, thin, upx are, and how to choose specific CDK exploits and tools to compile an own release for yourself, please check the [Release Document](https://github.com/cdk-team/CDK/wiki/Release).
 
 ## Developer Docs
 
