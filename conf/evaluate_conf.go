@@ -111,4 +111,10 @@ var CloudAPI = []cloudAPIS{
 		ResponseMatch: "instance-name",
 		DocURL:        "https://cloud.tencent.com/document/product/213/4934",
 	},
+	{
+		CloudProvider: "OpenStack",
+		API:           "http://169.254.169.254/openstack/latest/meta_data.json",
+		ResponseMatch: "availability_zone",
+		DocURL:        "https://docs.openstack.org/nova/rocky/user/metadata-service.html",
+	},
 }
