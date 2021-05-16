@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-
 /**
  ** POSIX-draft defined capabilities.
  ** Refer to the code https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h by torvalds.
@@ -62,7 +61,6 @@ var CAP_SETGID = 6
 /* Allows forged pids on socket credentials passing. */
 
 var CAP_SETUID = 7
-
 
 /**
  ** Linux-specific capabilities
@@ -317,7 +315,6 @@ var CAP_PERFMON = 38
  */
 var CAP_BPF = 39
 
-
 /* Allow checkpoint/restore related operations */
 /* Allow PID selection during clone3() */
 /* Allow writing to ns_last_pid */
@@ -390,6 +387,10 @@ func CapHexParser(capHex string) ([]string, error) {
 	}
 
 	return capTextList, nil
+}
+
+func CapListToString(lst []string) string {
+	return strings.Join(lst[:], ",")
 }
 
 func CapHexToText(capHex string) string {

@@ -2,11 +2,12 @@ package evaluate
 
 import (
 	"fmt"
-	"github.com/cdk-team/CDK/pkg/util/capability"
 	"io/ioutil"
 	"log"
 	"regexp"
 	"strings"
+
+	"github.com/cdk-team/CDK/pkg/util/capability"
 )
 
 func GetProcCapabilities() bool {
@@ -16,8 +17,9 @@ func GetProcCapabilities() bool {
 		return false
 	}
 
-	pattern := regexp.MustCompile("(?i)capeff:\\s*?[a-z0-9]+\\s")
+	pattern := regexp.MustCompile(`(?i)capeff:\s*?[a-z0-9]+\s`)
 	params := pattern.FindStringSubmatch(string(data))
+
 	for _, matched := range params {
 		log.Println("Capabilities:")
 		fmt.Printf("\t%s", matched)
@@ -26,9 +28,9 @@ func GetProcCapabilities() bool {
 		lst := strings.Split(matched, ":")
 		if len(lst) == 2 {
 			capStr := strings.TrimSpace(lst[1])
-			fmt.Printf("\tCap decode: 0x%s = %s\n", capStr, capability.CapHexToText(capStr))
-
 			caps, err := capability.CapHexParser(capStr)
+			fmt.Printf("\tCap decode: 0x%s = %s\n", capStr, capability.CapListToString(caps))
+
 			if err != nil {
 				log.Printf("[-] capability.CapHexParser: %v\n", err)
 				return false
@@ -36,9 +38,11 @@ func GetProcCapabilities() bool {
 			for _, c := range caps {
 				switch c {
 				case "CAP_DAC_READ_SEARCH":
-					fmt.Printf("[!] CAP_DAC_READ_SEARCH enabled. You can read files from host. Use 'cdk run cap-dac-read-search' ... for exploitation.")
+					fmt.Println("[!] CAP_DAC_READ_SEARCH enabled. You can read files from host. Use 'cdk run cap-dac-read-search' ... for exploitation.")
 				case "CAP_SYS_MODULE":
-					fmt.Printf("[!] CAP_SYS_MODULE enabled. You can escape the container via loading kernel module. More info at https://xcellerator.github.io/posts/docker_escape/.")
+					fmt.Println("[!] CAP_SYS_MODULE enabled. You can escape the container via loading kernel module. More info at https://xcellerator.github.io/posts/docker_escape/.")
+				case "CAP_SYS_ADMIN":
+					fmt.Println("Critical - SYS_ADMIN Capability Found.")
 				}
 			}
 		}
