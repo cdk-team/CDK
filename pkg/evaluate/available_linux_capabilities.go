@@ -1,6 +1,7 @@
 package evaluate
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -17,12 +18,20 @@ func GetProcCapabilities() bool {
 		return false
 	}
 
+	scanner := bufio.NewScanner(strings.NewReader(string(data)))
+	log.Println("Capabilities hex of Caps(CapInh|CapPrm|CapEff|CapBnd|CapAmb):")
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "Cap") {
+			fmt.Printf("\t%s\n", line)
+		}
+	}
+
 	pattern := regexp.MustCompile(`(?i)capeff:\s*?[a-z0-9]+\s`)
 	params := pattern.FindStringSubmatch(string(data))
 
 	for _, matched := range params {
-		log.Println("Capabilities:")
-		fmt.Printf("\t%s", matched)
 
 		// make capabilities readable
 		lst := strings.Split(matched, ":")
@@ -35,6 +44,8 @@ func GetProcCapabilities() bool {
 				log.Printf("[-] capability.CapHexParser: %v\n", err)
 				return false
 			}
+
+			fmt.Printf("[*] Maybe you can exploit the Capabilities below:\n")
 			for _, c := range caps {
 				switch c {
 				case "CAP_DAC_READ_SEARCH":
@@ -42,7 +53,7 @@ func GetProcCapabilities() bool {
 				case "CAP_SYS_MODULE":
 					fmt.Println("[!] CAP_SYS_MODULE enabled. You can escape the container via loading kernel module. More info at https://xcellerator.github.io/posts/docker_escape/.")
 				case "CAP_SYS_ADMIN":
-					fmt.Println("Critical - SYS_ADMIN Capability Found.")
+					fmt.Println("Critical - SYS_ADMIN Capability Found. Try 'cdk run rewrite-cgroup-devices/mount-cgroup/...'.")
 				}
 			}
 		}
@@ -52,5 +63,6 @@ func GetProcCapabilities() bool {
 			return true
 		}
 	}
+
 	return false
 }
