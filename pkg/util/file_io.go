@@ -2,12 +2,21 @@ package util
 
 import (
 	"fmt"
-	"github.com/cdk-team/CDK/pkg/errors"
 	"io/ioutil"
 	"log"
 	"os"
 	"syscall"
+
+	"github.com/cdk-team/CDK/pkg/errors"
 )
+
+func IsDirectory(path string) bool {
+	fileInfo, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return fileInfo.IsDir()
+}
 
 func IsSoftLink(FilePath string) bool {
 	fileInfo, err := os.Lstat(FilePath)
