@@ -117,4 +117,10 @@ var CloudAPI = []cloudAPIS{
 		ResponseMatch: "availability_zone",
 		DocURL:        "https://docs.openstack.org/nova/rocky/user/metadata-service.html",
 	},
+	{
+		CloudProvider: "Amazon Web Services (AWS)",
+		API:           "http://169.254.169.254/latest/meta-data/",
+		ResponseMatch: "instance-id",
+		DocURL:        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html",
+	},
 }
