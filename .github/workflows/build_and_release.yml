@@ -1,14 +1,15 @@
 name: CDK CI
 
 on:
-  create
+  release:
+      types: [created]
 
 jobs:
 
   release:
     name: Build and Release
     runs-on: ubuntu-latest
-    # needs: build
+
     steps:
       - uses: actions/setup-go@v2
         with:
@@ -17,12 +18,23 @@ jobs:
         with:
           node-version: 10.x
       - uses: actions/checkout@v2
-      - run: |
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v2
+      - name: Upload Release and Renew Changelog
+        env:
+          UPLOAD_URL: ${{ github.event.release.upload_url }}
+          API_HEADER: "Accept: application/vnd.github.v3+json"
+          AUTH_HEADER: "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          RELEASE_URL: ${{ github.event.release.url }}
+
+        run: |
+          set -x
+
           go get github.com/mitchellh/gox
-          go get github.com/tcnksm/ghr
           sudo apt-get install -y upx
-      # - run: bash ./scripts/build_and_release.sh || exit 0
-      - run: |
+
           export CGO_ENABLED=0
           gox -parallel 5 -osarch="darwin/amd64 linux/386 linux/amd64 linux/arm linux/arm64" -ldflags="-s -w " -output="bin/{{.Dir}}_{{.OS}}_{{.Arch}}" ./cmd/cdk/
           gox -parallel 5 -osarch="linux/386 linux/amd64 linux/arm64" -ldflags="-s -w " -tags="thin" -output="bin/{{.Dir}}_{{.OS}}_{{.Arch}}_thin" ./cmd/cdk/
@@ -39,19 +51,44 @@ jobs:
 
           cp bin/cdk_linux_386_thin bin/cdk_linux_386_thin_upx
           upx bin/cdk_linux_386_thin_upx
-      - run: |
+
           date_string=`date -u +"%Y-%m-%d"`
           sha256_text_body=`cd bin/ && shasum -a 256 * | tr -s '  ' '|'`
+          last_author=`git log --pretty="%an" | sed -n 1p`
+
+          TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
+
+          last_tag="$TAG_VERSION"
+          previous_tag=`git for-each-ref --sort='-authordate' --format="%(refname:short)" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sed -n 2p`
+
+          exploit=`git log "${last_tag}...${previous_tag}" --pretty=format:%s -- "pkg/exploit/" | grep -viE ^merge`
+          evaluate=`git log "${last_tag}...${previous_tag}" --pretty=format:%s -- "pkg/evaluate/" | grep -viE ^merge`
+          tool=`git log "${last_tag}...${previous_tag}" --pretty=format:%s -- "pkg/tool/" | grep -viE ^merge`
+
+          add_before=`echo "$exploit\n$evaluate\n$tool" | uniq`
+          all_commit_message=`git log "${last_tag}...${previous_tag}" --pretty=format:%s | grep -viE ^merge`
+          other=`diff -u <(echo "$add_before") <(echo "$all_commit_message") | grep -E "^\+[a-zA-Z]" | cut -c 2-`
+
+          exploit=`echo "$exploit" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
+          evaluate=`echo "$evaluate" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
+          tool=`echo "$tool" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
+
+          [[ $exploit = *[^[:space:]]* ]] && exploit=$'### Exploits\n\n'"$exploit"
+          [[ $evaluate = *[^[:space:]]* ]] && evaluate=$'### About Evaluate\n\n'"${evaluate}"
+          [[ $tool = *[^[:space:]]* ]] && tool=$'### Tools\n\n'"${tool}"
+
           release_body=$(cat <<- EOF
           Release Date: $date_string
 
-          **New features**
-          ---
-          ---
+          ## Changelog:
 
-          **Fixes**
-          ---
-          ---
+          $exploit
+
+          $evaluate
+
+          $tool
+
+          ## Hash Table
 
           |sha256|exectue file|
           |---|---|
@@ -59,9 +96,25 @@ jobs:
           EOF
           )
 
-          TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
-
           title="CDK $TAG_VERSION"
-          ghr -n "$title" -b "$release_body" "$TAG_VERSION" "bin/"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          UPLOAD_URL=$(echo -n $UPLOAD_URL | sed s/\{.*//g)
+          for FILE in bin/*
+          do
+              echo "Uploading ${FILE}";
+              curl \
+              -H "${API_HEADER}" \
+              -H "${AUTH_HEADER}" \
+              -H "Content-Type: $(file -b --mime-type ${FILE})" \
+              --data-binary "@${FILE}" \
+              "${UPLOAD_URL}?name=$(basename ${FILE})";
+          done
+
+          release_body=`echo "$release_body" | jq -sR .`
+          curl \
+            -XPATCH \
+            -H "${API_HEADER}" \
+            -H "${AUTH_HEADER}" \
+            -H "Content-Type: application/json" \
+            -d "{\"name\": \"$title\",\"body\": ${release_body}}" \
+            "${RELEASE_URL}";
