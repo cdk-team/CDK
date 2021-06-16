@@ -52,56 +52,8 @@ jobs:
           cp bin/cdk_linux_386_thin bin/cdk_linux_386_thin_upx
           upx bin/cdk_linux_386_thin_upx
 
-          DATE_STRING=`date -u +"%Y-%m-%d"`
-          SHA256_TEXT_BODY=`cd bin/ && shasum -a 256 * | tr -s '  ' '|'`
-
-          TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
-
-          LAST_TAG="$TAG_VERSION"
-          PREVIOUS_TAG=`git for-each-ref --sort='-authordate' --format="%(refname:short)" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sed -n 2p`
-
-          exploit=`git log "${LAST_TAG}...${PREVIOUS_TAG}" --pretty=format:%s -- "pkg/exploit/" | grep -viE ^merge`
-          evaluate=`git log "${LAST_TAG}...${PREVIOUS_TAG}" --pretty=format:%s -- "pkg/evaluate/" | grep -viE ^merge`
-          tool=`git log "${LAST_TAG}...${PREVIOUS_TAG}" --pretty=format:%s -- "pkg/tool/" | grep -viE ^merge`
-
-          add_before=`echo "$exploit\n$evaluate\n$tool" | uniq`
-          all_commit_message=`git log "${LAST_TAG}...${PREVIOUS_TAG}" --pretty=format:%s | grep -viE ^merge`
-          other=`diff -u <(echo "$add_before") <(echo "$all_commit_message") | grep -E "^\+[a-zA-Z]" | cut -c 2-`
-
-          exploit=`echo "$exploit" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
-          evaluate=`echo "$evaluate" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
-          tool=`echo "$tool" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
-          other=`echo "$other" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
-
-          [[ $exploit = *[^[:space:]]* ]] && exploit=$'### Exploits\n\n'"$exploit"
-          [[ $evaluate = *[^[:space:]]* ]] && evaluate=$'### About Evaluate\n\n'"${evaluate}"
-          [[ $tool = *[^[:space:]]* ]] && tool=$'### Tools\n\n'"${tool}"
-          [[ $other = *[^[:space:]]* ]] && other=$'### Others\n\n'"${other}"
-
-          RELEASE_BODY=$(cat <<- EOF
-          Release Date: $DATE_STRING
-
-          ## Changelog:
-
-          $exploit
-
-          $evaluate
-
-          $tool
-
-          $other
-
-          ## Hash Table
-
-          |SHA256|EXECTUE FILE|
-          |---|---|
-          |$SHA256_TEXT_BODY|
-          EOF
-          )
-
-          TITLE="CDK $TAG_VERSION"
-
           UPLOAD_URL=$(echo -n $UPLOAD_URL | sed s/\{.*//g)
+
           for FILE in bin/*
           do
               echo "Uploading ${FILE}";
@@ -113,11 +65,4 @@ jobs:
               "${UPLOAD_URL}?name=$(basename ${FILE})";
           done
 
-          RELEASE_BODY=`echo "$RELEASE_BODY" | jq -sR .`
-          curl \
-            -XPATCH \
-            -H "${API_HEADER}" \
-            -H "${AUTH_HEADER}" \
-            -H "Content-Type: application/json" \
-            -d "{\"name\": \"$TITLE\",\"body\": ${RELEASE_BODY}}" \
-            "${RELEASE_URL}";
+          bash ".github/workflows/changelog.sh"
