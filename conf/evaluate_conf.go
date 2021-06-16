@@ -123,4 +123,10 @@ var CloudAPI = []cloudAPIS{
 		ResponseMatch: "instance-id",
 		DocURL:        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html",
 	},
+	{
+		CloudProvider: "ucloud",
+		API:           "http://100.80.80.80/meta-data/latest/uhost/",
+		ResponseMatch: "uhost-id",
+		DocURL:        "https://docs.ucloud.cn/uhost/guide/metadata/metadata-server",
+	},
 }
