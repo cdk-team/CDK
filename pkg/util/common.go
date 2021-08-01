@@ -2,12 +2,13 @@ package util
 
 import (
 	"fmt"
-	"github.com/cdk-team/CDK/pkg/errors"
 	"io/ioutil"
 	"math/rand"
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/cdk-team/CDK/pkg/errors"
 )
 
 func ByteToString(orig []byte) string {
@@ -83,8 +84,18 @@ func ShellExec(shellPath string) error {
 
 	output, err := cmd.Output()
 	if err != nil {
-		return &errors.CDKRuntimeError{Err: err, CustomMsg: fmt.Sprintf("Execute Shell:%s failed",command)}
+		return &errors.CDKRuntimeError{Err: err, CustomMsg: fmt.Sprintf("Execute Shell:%s failed", command)}
 	}
 	fmt.Printf("Execute Shell:%s finished with output:\n%s", command, string(output))
 	return nil
+}
+
+// StringContains check string array contains a string
+func StringContains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
