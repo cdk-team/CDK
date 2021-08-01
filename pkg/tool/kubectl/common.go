@@ -3,14 +3,15 @@ package kubectl
 import (
 	"bytes"
 	"crypto/tls"
-	"github.com/cdk-team/CDK/conf"
-	"github.com/cdk-team/CDK/pkg/errors"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/cdk-team/CDK/conf"
+	"github.com/cdk-team/CDK/pkg/errors"
 )
 
 type K8sRequestOption struct {
@@ -102,6 +103,7 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 	}
 	// auth token
 	if len(token) > 0 {
+		token = strings.TrimSpace(token)
 		request.Header.Set("Authorization", "Bearer "+token)
 	}
 
