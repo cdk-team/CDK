@@ -20,7 +20,6 @@ func init() {
 	Tasks = make(map[string]TaskInterface)
 }
 
-
 func ListAllExploit() {
 	for name, plugin := range Exploits {
 		fmt.Println(name, "\t", plugin.Desc())
