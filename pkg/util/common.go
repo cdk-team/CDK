@@ -99,3 +99,13 @@ func StringContains(s []string, e string) bool {
 	}
 	return false
 }
+
+// IntContains check string array contains a int number
+func IntContains(s []int, e int) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}

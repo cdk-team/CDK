@@ -2,9 +2,10 @@ package evaluate
 
 import (
 	"fmt"
-	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"log"
 	"strings"
+
+	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 )
 
 func CheckK8sAnonymousLogin() bool {

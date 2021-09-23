@@ -3,6 +3,7 @@ package kubectl
 import (
 	"bytes"
 	"crypto/tls"
+	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -12,7 +13,27 @@ import (
 
 	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/errors"
+	"github.com/cdk-team/CDK/pkg/util"
 )
+
+// MaybeSuccessfulStatuscodeList from https://www.w3.org/Protocols/HTTP/HTRESP.html
+var MaybeSuccessfulStatuscodeList = []int{
+	100, // RFC 7231, 6.2.1
+	101, // RFC 7231, 6.2.2
+	102, // RFC 2518, 10.1
+	103, // RFC 8297
+
+	200, // RFC 7231, 6.3.1
+	201, // RFC 7231, 6.3.2
+	202, // RFC 7231, 6.3.3
+	203, // RFC 7231, 6.3.4
+	204, // RFC 7231, 6.3.5
+	205, // RFC 7231, 6.3.6
+	206, // RFC 7233, 4.1
+	207, // RFC 4918, 11.1
+	208, // RFC 5842, 7.1
+	226, // RFC 3229, 10.4.1
+}
 
 type K8sRequestOption struct {
 	TokenPath string
@@ -112,10 +133,22 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
 	}
 	//defer resp.Body.Close()
+
+	// Fix a bug reported by the author of crossc2 on whc2021.
+	// When the DeployBackdoorDaemonset call fails and returns an error, it will still feedback true.
+	if !util.IntContains(MaybeSuccessfulStatuscodeList, resp.StatusCode) {
+		errMsg := fmt.Sprintf("err found in post request, error response code: %v.", resp.Status)
+		return "", &errors.CDKRuntimeError{
+			Err:       err,
+			CustomMsg: errMsg,
+		}
+	}
+
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
 	}
+
 	return string(content), nil
 }
 

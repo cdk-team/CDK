@@ -4,6 +4,8 @@ package task
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/cli"
 	"github.com/cdk-team/CDK/pkg/evaluate"
@@ -11,7 +13,6 @@ import (
 	"github.com/cdk-team/CDK/pkg/plugin"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"github.com/cdk-team/CDK/pkg/util"
-	"log"
 )
 
 func autoEscape(shellCommand string) bool {
