@@ -226,7 +226,7 @@ Project CDK is now included in 404Team [Starlink Project 2.0](https://github.com
 - [CDK: Also a Awesome BugBounty Tool for Cloud Platform](https://mp.weixin.qq.com/s/UbVUidUs7MJ5TvNRLu-lMA)
 
 
-### KCON 2021 Amsterdam
+### KCON 2021 Arsenal
 
 - [http://kcon.knownsec.com/2021/#/arsenal](http://kcon.knownsec.com/2021/#/arsenal)
 
