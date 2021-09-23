@@ -1,6 +1,10 @@
 package plugin
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"text/tabwriter"
+)
 
 type ExploitInterface interface {
 	Desc() string
@@ -21,9 +25,14 @@ func init() {
 }
 
 func ListAllExploit() {
+	writer := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)
+
 	for name, plugin := range Exploits {
-		fmt.Println(name, "\t", plugin.Desc())
+		str := fmt.Sprintf("%s\t %s", name, plugin.Desc())
+		fmt.Fprintln(writer, str)
 	}
+
+	writer.Flush()
 }
 
 func RunSingleExploit(name string) {
