@@ -221,12 +221,15 @@ Project CDK is now included in 404Team [Starlink Project 2.0](https://github.com
 - [Briefing: "Attack Cloud Native Kubernetes"](https://conference.hitb.org/hitbsecconf2021ams/sessions/attacking-cloud-native-kubernetes-with-cdk/)
 
 
-### WHC 2021
+### WHC 2021 (补天白帽大会)
 
-- [CDK: Also a Awesome BugBounty Tool for Cloud Platform](https://mp.weixin.qq.com/s/UbVUidUs7MJ5TvNRLu-lMA)
-
+- [CDK: Also a Awesome BugBounty Tool for Cloud Platform](https://github.com/neargle/slidefiles/blob/main/2021%20WHC2021%20CDK-Also-a-Awesome-BugBounty-Tool-for-Cloud-Platform.pptx.pdf)
 
 ### KCON 2021 Arsenal
 
 - [http://kcon.knownsec.com/2021/#/arsenal](http://kcon.knownsec.com/2021/#/arsenal)
+
+### Kubernetes community Days 2021 
+
+- [https://community.cncf.io/events/details/cncf-kcd-china-presents-kubernetes-community-days-china/](https://community.cncf.io/events/details/cncf-kcd-china-presents-kubernetes-community-days-china/)
 
