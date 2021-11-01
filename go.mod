@@ -19,7 +19,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.20.10
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/stretchr/testify v1.6.1
-	github.com/tidwall/gjson v1.6.7
+	github.com/tidwall/gjson v1.9.3
 	github.com/tidwall/sjson v1.1.4
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
