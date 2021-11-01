@@ -1,11 +1,5 @@
 name: Go Check
-on:
-  pull_request:
-    branches:
-    - feature/*
-  push:
-    branches:
-    - feature/*
+on: [push, pull_request]
 jobs:
   buildable:
     name: Buildable
