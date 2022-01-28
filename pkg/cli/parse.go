@@ -2,11 +2,16 @@ package cli
 
 import (
 	"fmt"
+
 	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/evaluate"
 	"github.com/cdk-team/CDK/pkg/plugin"
 	"github.com/cdk-team/CDK/pkg/tool/dockerd_api"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
+
+	"log"
+	"os"
+	"strconv"
 
 	"github.com/cdk-team/CDK/pkg/tool/netcat"
 	"github.com/cdk-team/CDK/pkg/tool/network"
@@ -14,9 +19,6 @@ import (
 	"github.com/cdk-team/CDK/pkg/tool/ps"
 	"github.com/cdk-team/CDK/pkg/tool/vi"
 	"github.com/docopt/docopt-go"
-	"log"
-	"os"
-	"strconv"
 )
 
 func PassInnerArgs() {
@@ -44,7 +46,12 @@ func ParseCDKMain() {
 		plugin.RunSingleTask("auto-escape")
 		return
 	}
-	if Args["evaluate"].(bool) {
+
+	// support for cdk eval and cdk evaluate
+	_, fok := Args["evaluate"]
+	_, ok := Args["eval"]
+
+	if ok || fok {
 
 		fmt.Printf("\n[Information Gathering - System Info]\n")
 		evaluate.BasicSysInfo()
