@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/cdk-team/CDK/pkg/util"
 	"github.com/cdk-team/CDK/pkg/util/capability"
 )
 
@@ -36,9 +37,12 @@ func GetProcCapabilities() bool {
 		// make capabilities readable
 		lst := strings.Split(matched, ":")
 		if len(lst) == 2 {
+
 			capStr := strings.TrimSpace(lst[1])
 			caps, err := capability.CapHexParser(capStr)
+
 			fmt.Printf("\tCap decode: 0x%s = %s\n", capStr, capability.CapListToString(caps))
+			fmt.Printf("\tAdd capability list: %s\n", capability.CapListToString(getAddCaps(caps)))
 
 			if err != nil {
 				log.Printf("[-] capability.CapHexParser: %v\n", err)
@@ -65,4 +69,14 @@ func GetProcCapabilities() bool {
 	}
 
 	return false
+}
+
+func getAddCaps(currentCaps []string) []string {
+	var addCaps []string
+	for _, c := range currentCaps {
+		if !util.StringContains(capability.DockerDefaultCaps, c) {
+			addCaps = append(addCaps, c)
+		}
+	}
+	return addCaps
 }

@@ -325,6 +325,23 @@ type Cap struct {
 	int
 }
 
+var DockerDefaultCaps = []string{
+	"CAP_CHOWN",
+	"CAP_DAC_OVERRIDE",
+	"CAP_FOWNER",
+	"CAP_FSETID",
+	"CAP_KILL",
+	"CAP_SETGID",
+	"CAP_SETUID",
+	"CAP_SETPCAP",
+	"CAP_NET_BIND_SERVICE",
+	"CAP_NET_RAW",
+	"CAP_SYS_CHROOT",
+	"CAP_MKNOD",
+	"CAP_AUDIT_WRITE",
+	"CAP_SETFCAP",
+}
+
 // CAPStringsList cap strings with order
 var CAPStringsList = []string{
 	"CAP_CHOWN",
