@@ -47,11 +47,13 @@ func ParseCDKMain() {
 		return
 	}
 
-	// support for cdk eval and cdk evaluate
-	_, fok := Args["evaluate"]
-	_, ok := Args["eval"]
+	// support for cdk eva(Evangelion) and cdk evaluate
+	fok := Args["evaluate"]
+	ok := Args["eva"]
 
-	if ok || fok {
+	// docopt let fok = true, so we need to check it
+	// fix #37 https://github.com/cdk-team/CDK/issues/37
+	if ok.(bool) || fok.(bool) {
 
 		fmt.Printf("\n[Information Gathering - System Info]\n")
 		evaluate.BasicSysInfo()

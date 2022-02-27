@@ -1,9 +1,10 @@
 package cli
 
 import (
-	"github.com/docopt/docopt-go"
 	"log"
 	"os"
+
+	"github.com/docopt/docopt-go"
 )
 
 var BannerVersion = "cdk v0.1.10"
@@ -16,12 +17,14 @@ Find tutorial, configuration and use-case in https://github.com/cdk-team/CDK/wik
 var BannerContainer = BannerHeader + `
 Usage:
   cdk evaluate [--full]
+  cdk eva [--full]
   cdk run (--list | <exploit> [<args>...])
   cdk auto-escape <cmd>
   cdk <tool> [<args>...]
 
 Evaluate:
   cdk evaluate                              Gather information to find weakness inside container.
+  cdk eva                                  Alias of "cdk evaluate".
   cdk evaluate --full                       Enable file scan during information gathering.
 
 Exploit:
@@ -66,7 +69,7 @@ var Args docopt.Opts
 func parseDocopt() {
 	args, err := docopt.ParseArgs(BannerContainer, os.Args[1:], BannerVersion)
 	if err != nil {
-		log.Fatalln("docopt err: ",err)
+		log.Fatalln("docopt err: ", err)
 	}
 	Args = args
 }
