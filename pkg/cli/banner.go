@@ -1,18 +1,23 @@
 package cli
 
 import (
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/docopt/docopt-go"
 )
 
-var BannerVersion = "cdk v0.1.10"
+var Args docopt.Opts
+var GitCommit string
 
-var BannerHeader = `Container DucK
-Zero-dependency k8s/docker/serverless penetration toolkit by <i@cdxy.me>
+var BannerVersion = fmt.Sprintf("%s %s", "CDK Version(GitCommit):", GitCommit)
+
+var BannerHeader = fmt.Sprintf(`Container DucK
+%s
+Zero-dependency k8s/docker/serverless penetration toolkit by cdxy & neargle
 Find tutorial, configuration and use-case in https://github.com/cdk-team/CDK/wiki
-`
+`, BannerVersion)
 
 var BannerContainer = BannerHeader + `
 Usage:
@@ -63,8 +68,6 @@ Example:
 1. public server(e.g. 1.2.3.4) start listen tcp port 999 using "nc -lvp 999"
 2. inside serverless function service execute "./cdk-serverless /code 1.2.3.4 999"
 `
-
-var Args docopt.Opts
 
 func parseDocopt() {
 	args, err := docopt.ParseArgs(BannerContainer, os.Args[1:], BannerVersion)
