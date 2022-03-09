@@ -9,23 +9,23 @@ import (
 	"strings"
 )
 
-const mountInfoPath 	string = "/proc/self/mountinfo"
-const hostDeviceFlag	string = "/etc/hosts"
+const mountInfoPath string = "/proc/self/mountinfo"
+const hostDeviceFlag string = "/etc/hosts"
 
 type MountInfo struct {
-	Device		string
-	Fstype		string
-	Root		string
-	MountPoint	string
-	Opts		[]string
-	Marjor		string
-	Minor		string
+	Device     string
+	Fstype     string
+	Root       string
+	MountPoint string
+	Opts       []string
+	Major      string
+	Minor      string
 }
 
 // find block device id
 func FindTargetDeviceID(mi *MountInfo) bool {
 	if mi.MountPoint == hostDeviceFlag {
-		log.Printf("found host blockDeviceId Marjor: %s Minor: %s\n", mi.Marjor, mi.Minor)
+		log.Printf("found host blockDeviceId Major: %s Minor: %s\n", mi.Major, mi.Minor)
 		return true
 	}
 	return false
@@ -65,7 +65,7 @@ func GetMountInfo() ([]MountInfo, error) {
 		if len(blockId) != 2 {
 			return nil, fmt.Errorf("found invalid mountinfo line in file %s: %s ", mountInfoPath, r)
 		}
-		mi.Marjor = blockId[0]
+		mi.Major = blockId[0]
 		mi.Minor = blockId[1]
 		fields = strings.Fields(parts[1])
 		mi.Device = fields[1]
@@ -111,5 +111,3 @@ func SetBlockAccessible(path string) error {
 
 	return nil
 }
-
-
