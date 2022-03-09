@@ -13,13 +13,14 @@ const mountInfoPath string = "/proc/self/mountinfo"
 const hostDeviceFlag string = "/etc/hosts"
 
 type MountInfo struct {
-	Device     string
-	Fstype     string
-	Root       string
-	MountPoint string
-	Opts       []string
-	Major      string
-	Minor      string
+	Device            string
+	Fstype            string
+	Root              string
+	MountPoint        string
+	Opts              []string
+	Major             string
+	Minor             string
+	SuperBlockOptions []string
 }
 
 // find block device id
@@ -57,19 +58,27 @@ func GetMountInfo() ([]MountInfo, error) {
 			return nil, fmt.Errorf("found invalid mountinfo line in file %s: %s ", mountInfoPath, r)
 		}
 		mi := MountInfo{}
+
+		// former Part
+		// https://man7.org/linux/man-pages/man5/proc.5.html
 		fields := strings.Fields(parts[0])
-		mi.Root = fields[3]
-		mi.MountPoint = fields[4]
-		mi.Opts = strings.Split(fields[5], ",")
+		// mountID = fields[0] ; parentID = fields[1]
 		blockId := strings.Split(fields[2], ":")
 		if len(blockId) != 2 {
 			return nil, fmt.Errorf("found invalid mountinfo line in file %s: %s ", mountInfoPath, r)
 		}
 		mi.Major = blockId[0]
 		mi.Minor = blockId[1]
+		mi.Root = fields[3]
+		mi.MountPoint = fields[4]
+		mi.Opts = strings.Split(fields[5], ",")
+
+		// latter part
 		fields = strings.Fields(parts[1])
-		mi.Device = fields[1]
 		mi.Fstype = fields[0]
+		mi.Device = fields[1]
+		mi.SuperBlockOptions = strings.Split(fields[2], ",")
+
 		mountInfos = append(mountInfos, mi)
 	}
 
