@@ -1,3 +1,4 @@
+//go:build !thin && !no_containerd_shim_pwn && !no_k8s_shadow_apiserver
 // +build !thin,!no_containerd_shim_pwn,!no_k8s_shadow_apiserver
 
 package task
@@ -44,7 +45,7 @@ func autoEscape(shellCommand string) bool {
 		}
 
 		// try to exec shell cmd via cgroup-mount exploit
-		err = exploit.EscapeCgroup(shellCommand)
+		err = exploit.EscapeCgroup(shellCommand, "memory")
 		if err != nil {
 			log.Println(err)
 		} else {
