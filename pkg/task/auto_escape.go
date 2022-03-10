@@ -1,5 +1,5 @@
-//go:build !thin && !no_containerd_shim_pwn && !no_k8s_shadow_apiserver
-// +build !thin,!no_containerd_shim_pwn,!no_k8s_shadow_apiserver
+//go:build !thin && !no_containerd_shim_pwn && !no_k8s_shadow_apiserver && linux
+// +build !thin,!no_containerd_shim_pwn,!no_k8s_shadow_apiserver,linux
 
 package task
 
