@@ -2,7 +2,7 @@ name: CDK CI
 
 on:
   release:
-      types: [created]
+      types: [released]
 
 jobs:
 

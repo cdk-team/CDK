@@ -10,4 +10,16 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: '1.17'
-    - run: go run ./cmd/cdk/cdk.go
+    - run: |
+        export CGO_ENABLED=0
+
+        GOOS=darwin	 GOARCH=amd64 go build -ldflags="-s -w " ./cmd/cdk/cdk.go
+        GOOS=linux	 GOARCH=386 go build -ldflags="-s -w " ./cmd/cdk/cdk.go
+        GOOS=linux	 GOARCH=amd64 go build -ldflags="-s -w " ./cmd/cdk/cdk.go
+        GOOS=linux	 GOARCH=arm go build -ldflags="-s -w " ./cmd/cdk/cdk.go
+        GOOS=linux	 GOARCH=arm64 go build -ldflags="-s -w " ./cmd/cdk/cdk.go
+
+        GOOS=linux GOARCH=386   go build -ldflags="-s -w " ./cmd/cdk/cdk.go
+        GOOS=linux GOARCH=amd64 go build -ldflags="-s -w " ./cmd/cdk/cdk.go
+        GOOS=linux GOARCH=arm64 go build -ldflags="-s -w " ./cmd/cdk/cdk.go
+
