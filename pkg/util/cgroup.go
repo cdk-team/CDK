@@ -2,7 +2,9 @@ package util
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
+	"golang.org/x/sys/unix"
 	"log"
 	"os"
 	"strconv"
@@ -11,6 +13,7 @@ import (
 
 const mountInfoPath string = "/proc/self/mountinfo"
 const hostDeviceFlag string = "/etc/hosts"
+const cgroupInfoPath string = "/proc/self/cgroup"
 
 type MountInfo struct {
 	Device            string
@@ -119,4 +122,81 @@ func SetBlockAccessible(path string) error {
 	log.Printf("set all block device accessible success.\n")
 
 	return nil
+}
+
+// get kernel version
+func GetKernelVersion() ([]int, error) {
+	utsInfo := &unix.Utsname{}
+	err := unix.Uname(utsInfo)
+	if err != nil {
+		return nil, err
+	}
+	relStr := string(utsInfo.Release[:])
+	relIdx := strings.Index(relStr, "-")
+	if relIdx == -1 {
+		return nil, errors.New("unknown internal error when executing uname")
+	}
+	ret := make([]int, 3)
+	for _, v := range strings.Split(relStr[:relIdx], ".") {
+		verData, err := strconv.Atoi(v)
+		if err != nil {
+			return nil, err
+		}
+		ret = append(ret, verData)
+	}
+	return ret, nil
+}
+
+// get cgroup version V1/V2
+// hybrid mode will not work in container
+func GetCgroupVersion() (int, error) {
+	// detect by /sys/fs/cgroup/cgroup.controllers
+	// others:
+	// or /proc/filesystems
+	// or directly try to mount cgroup2 with none
+	_, err := os.Stat("/sys/fs/cgroup/cgroup.controllers")
+	if err == nil {
+		return 2, nil
+	}
+	if strings.Contains(err.Error(), "no such file or directory") {
+		return 1, nil
+	}
+	return -1, err
+}
+
+type CgroupInfo struct {
+	HierarchyID   int
+	ControllerLst string // split by "," but should not be split
+	CgroupPath    string
+}
+
+func GetAllCGroup() ([]CgroupInfo, error) {
+	var cginfo []CgroupInfo
+	datafd, err := os.Open(cgroupInfoPath)
+	defer datafd.Close()
+	if err != nil {
+		return nil, err
+	}
+	sc := bufio.NewScanner(datafd)
+	for sc.Scan() {
+		singleCG := strings.Split(strings.TrimSuffix(sc.Text(), "\n"), ":")
+		hID, err := strconv.Atoi(singleCG[0])
+		if err != nil {
+			return nil, err
+		}
+		cginfo = append(cginfo, CgroupInfo{hID, singleCG[1], singleCG[2]})
+	}
+	return cginfo, nil
+}
+
+func GetAllCGroupSubSystem() ([]string, error) {
+	cgSyses, err := GetAllCGroup()
+	if err != nil {
+		return nil, err
+	}
+	var syses []string
+	for _, v := range cgSyses {
+		syses = append(syses, v.ControllerLst)
+	}
+	return syses, nil
 }
