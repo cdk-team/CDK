@@ -34,6 +34,16 @@ func ByteToString(orig []byte) string {
 	return string(orig[l:n])
 }
 
+func ContainsStrInSlice(elem string, sli []string) bool {
+	// grabbed from https://stackoverflow.com/questions/10485743/contains-method-for-a-slice
+	for _, a := range sli {
+		if a == elem {
+			return true
+		}
+	}
+	return false
+}
+
 func RandString(n int) string {
 	// grabbed from https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
 	const (
