@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"golang.org/x/sys/unix"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+
+	"golang.org/x/sys/unix"
 )
 
 const mountInfoPath string = "/proc/self/mountinfo"
@@ -168,24 +169,44 @@ type CgroupInfo struct {
 	HierarchyID   int
 	ControllerLst string // split by "," but should not be split
 	CgroupPath    string
+	OriginalInfo  string
 }
 
 func GetAllCGroup() ([]CgroupInfo, error) {
+	return GetCgroup(0)
+}
+
+// GetCgroup returns the cgroup info of the process
+// param pid: 0 = self, 1 = container main process
+func GetCgroup(pid int) ([]CgroupInfo, error) {
 	var cginfo []CgroupInfo
+	var pidStr string
+
+	if pid == 0 {
+		pidStr = "self"
+	} else {
+		pidStr = fmt.Sprint(pid)
+	}
+
+	cgroupInfoPath := fmt.Sprintf("/proc/%s/cgroup", pidStr)
 	datafd, err := os.Open(cgroupInfoPath)
-	defer datafd.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer datafd.Close()
+
 	sc := bufio.NewScanner(datafd)
 	for sc.Scan() {
-		singleCG := strings.Split(strings.TrimSuffix(sc.Text(), "\n"), ":")
+		// Sample "9:devices:/docker/fc1413683c2976fa292c0b1e011224706c1ecc151bad9ceabc9cfcb8dce4ddbb"
+		originalInfo := sc.Text()
+		singleCG := strings.Split(strings.TrimSuffix(originalInfo, "\n"), ":")
 		hID, err := strconv.Atoi(singleCG[0])
 		if err != nil {
 			return nil, err
 		}
-		cginfo = append(cginfo, CgroupInfo{hID, singleCG[1], singleCG[2]})
+		cginfo = append(cginfo, CgroupInfo{hID, singleCG[1], singleCG[2], originalInfo})
 	}
+
 	return cginfo, nil
 }
 

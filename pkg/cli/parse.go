@@ -93,7 +93,7 @@ func ParseCDKMain() {
 			evaluate.ASLR()
 
 			fmt.Printf("\n[Information Gathering - Cgroups]\n")
-			evaluate.DumpMainCgroup()
+			evaluate.DumpCgroup()
 
 		}
 		return

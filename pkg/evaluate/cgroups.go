@@ -2,26 +2,38 @@ package evaluate
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
-	"bufio"
-	"strings"
+
+	"github.com/cdk-team/CDK/pkg/util"
 )
 
-var MainPIDCgroup = "/proc/1/cgroup"
+func DumpCgroup() {
 
-func DumpMainCgroup() {
+	cgroupLst, err := util.GetCgroup(1)
+	sLst := make([]string, len(cgroupLst))
 
-	data, err := ioutil.ReadFile(MainPIDCgroup)
 	if err != nil {
-		log.Printf("err found while open %s: %v\n", MainPIDCgroup, err)
+		log.Printf("/proc/1/cgroup error: %v\n", err)
 		return
 	}
-	log.Println("/proc/1/cgroup file content:")
 
-	scanner := bufio.NewScanner(strings.NewReader(string(data)))
-	for scanner.Scan() {
-		fmt.Printf("\t%s\n", scanner.Text())
+	log.Println("/proc/1/cgroup file content:")
+	for _, v := range cgroupLst {
+		fmt.Printf("\t%s\n", v.OriginalInfo)
+		sLst = append(sLst, v.OriginalInfo)
+	}
+
+	cgroupLstSelf, err := util.GetCgroup(0)
+	if err != nil {
+		log.Printf("/proc/self/cgroup error: %v\n", err)
+		return
+	}
+
+	log.Println("/proc/self/cgroup file added content (compare pid 1) :")
+	for _, v := range cgroupLstSelf {
+		if !util.StringContains(sLst, v.OriginalInfo) {
+			fmt.Printf("\t%s\n", v.OriginalInfo)
+		}
 	}
 
 }
