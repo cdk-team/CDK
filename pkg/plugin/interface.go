@@ -44,6 +44,10 @@ func RegisterExploit(name string, exploit ExploitInterface) {
 }
 
 func RunSingleTask(name string) {
+	// fmt.Printf("[+] Running exploit: %s.\n", name)
+	// fmt.Printf("[+] %s\n", Tasks[name].Desc())
+	// Can not call cli.Args here, because it will cause "import cycle".
+	// fmt.Printf("[+] Args: %v.\n", cli.Args["<args>"])
 	Tasks[name].Exec()
 }
 
