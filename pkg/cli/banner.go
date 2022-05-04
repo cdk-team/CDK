@@ -28,7 +28,7 @@ import (
 var Args docopt.Opts
 var GitCommit string
 
-var BannerTitle = `Container DucK`
+var BannerTitle = `CDK (Container DucK)`
 var BannerVersion = fmt.Sprintf("%s %s", "CDK Version(GitCommit):", GitCommit)
 
 var BannerHeader = fmt.Sprintf(`%s
@@ -47,7 +47,7 @@ var BannerContainerTpl = BannerHeader + `
 
 %s
   cdk evaluate                              Gather information to find weakness inside container.
-  cdk eva                                  Alias of "cdk evaluate".
+  cdk eva                                   Alias of "cdk evaluate".
   cdk evaluate --full                       Enable file scan during information gathering.
 
 
