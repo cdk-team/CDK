@@ -8,6 +8,7 @@ require (
 	github.com/containerd/containerd v1.4.3
 	github.com/containerd/ttrpc v1.0.2
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
+	github.com/fatih/color v1.13.0
 	github.com/gdamore/tcell v1.4.0
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/go-cmp v0.5.4 // indirect

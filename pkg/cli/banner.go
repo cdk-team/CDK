@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -22,41 +21,42 @@ import (
 	"log"
 	"os"
 
+	"github.com/cdk-team/CDK/pkg/util"
 	"github.com/docopt/docopt-go"
 )
 
 var Args docopt.Opts
 var GitCommit string
 
+var BannerTitle = `Container DucK`
 var BannerVersion = fmt.Sprintf("%s %s", "CDK Version(GitCommit):", GitCommit)
 
-var BannerHeader = fmt.Sprintf(`Container DucK
+var BannerHeader = fmt.Sprintf(`%s
 %s
-Zero-dependency k8s/docker/serverless penetration toolkit by cdxy & neargle
+Zero-dependency cloudnative k8s/docker/serverless penetration toolkit by cdxy & neargle
 Find tutorial, configuration and use-case in https://github.com/cdk-team/CDK/wiki
-`, BannerVersion)
+`, util.GreenBold.Sprint(BannerTitle), BannerVersion)
 
-var BannerContainer = BannerHeader + `
-Usage:
+var BannerContainerTpl = BannerHeader + `
+%s
   cdk evaluate [--full]
   cdk eva [--full]
   cdk run (--list | <exploit> [<args>...])
   cdk auto-escape <cmd>
   cdk <tool> [<args>...]
 
-Evaluate:
+%s
   cdk evaluate                              Gather information to find weakness inside container.
   cdk eva                                  Alias of "cdk evaluate".
   cdk evaluate --full                       Enable file scan during information gathering.
 
-Exploit:
+
+%s
   cdk run --list                            List all available exploits.
   cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/cdk-team/CDK/wiki
-
-Auto Escape:
   cdk auto-escape <cmd>                     Escape container in different ways then let target execute <cmd>.
 
-Tool:
+%s
   vi <file>                                 Edit files in container like "vi" command.
   ps                                        Show process information like "ps -ef" command.
   nc [options]                              Create TCP tunnel.
@@ -65,10 +65,21 @@ Tool:
   ucurl (get|post) <socket> <uri> <data>    Make request to docker unix socket.
   probe <ip> <port> <parallel> <timeout-ms> TCP port scan, example: cdk probe 10.0.1.0-255 80,8080-9443 50 1000
 
-Options:
+%s
   -h --help     Show this help msg.
   -v --version  Show version.
 `
+
+// BannerContainer is the banner of CDK command line with colorful.
+var BannerContainer = fmt.Sprintf(
+	BannerContainerTpl,
+	util.GreenBold.Sprint("Usage:"),
+	util.GreenBold.Sprint("Evaluate:"),
+	util.GreenBold.Sprint("Exploit:"),
+	util.GreenBold.Sprint("Tool:"),
+	util.GreenBold.Sprint("Options:"),
+)
+
 var BannerServerless = BannerHeader + `
 THIS IS THE SLIM VERSION FOR DUMPING SECRET/AK IN SERVERLESS FUNCTIONS.
 
