@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -100,6 +99,9 @@ func ParseCDKMain() {
 
 		fmt.Printf("\n[Discovery - Cloud Provider Metadata API]\n")
 		evaluate.CheckCloudMetadataAPI()
+
+		fmt.Printf("\n[Information Gathering - DNS-Based Service Discovery]\n")
+		evaluate.DNSBasedServiceDiscovery()
 
 		if Args["--full"].(bool) {
 
