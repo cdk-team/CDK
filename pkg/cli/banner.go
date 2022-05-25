@@ -73,11 +73,11 @@ var BannerContainerTpl = BannerHeader + `
 // BannerContainer is the banner of CDK command line with colorful.
 var BannerContainer = fmt.Sprintf(
 	BannerContainerTpl,
-	util.GreenBold.Sprint("Usage:"),
+  "Usage:",
 	util.GreenBold.Sprint("Evaluate:"),
 	util.GreenBold.Sprint("Exploit:"),
 	util.GreenBold.Sprint("Tool:"),
-	util.GreenBold.Sprint("Options:"),
+  "Options:",
 )
 
 var BannerServerless = BannerHeader + `
