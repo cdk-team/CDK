@@ -179,9 +179,13 @@ If you want to know how we released a new version, how thin is produced, why we 
 
 First off, thanks for taking the time to contribute!
 
-By reporting any issue, ideas or PRs, your GitHub ID will be listed here.
+Thanks for the following contributors:
 
-* https://github.com/cdk-team/CDK/blob/main/thanks.md
+<a href="https://github.com/cdk-team/cdk/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=cdk-team/cdk" />
+</a>
+
+More contributors：[Contributors List](thanks.md)
 
 #### Bug Reporting
 
