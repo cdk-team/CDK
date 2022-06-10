@@ -151,22 +151,24 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 	}
 	//defer resp.Body.Close()
 
-	// Fix a bug reported by the author of crossc2 on whc2021.
-	// When the DeployBackdoorDaemonset call fails and returns an error, it will still feedback true.
-	if !util.IntContains(MaybeSuccessfulStatuscodeList, resp.StatusCode) {
-		errMsg := fmt.Sprintf("err found in post request, error response code: %v.", resp.Status)
-		return "", &errors.CDKRuntimeError{
-			Err:       err,
-			CustomMsg: errMsg,
-		}
-	}
-
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
 	}
 
-	return string(content), nil
+	res := string(content)
+
+	// Fix a bug reported by the author of crossc2 on whc2021.
+	// When the DeployBackdoorDaemonset call fails and returns an error, it will still feedback true.
+	if !util.IntContains(MaybeSuccessfulStatuscodeList, resp.StatusCode) {
+		errMsg := fmt.Sprintf("err found in post request, error response code: %v.", resp.Status)
+		return res, &errors.CDKRuntimeError{
+			Err:       err,
+			CustomMsg: errMsg,
+		}
+	}
+
+	return res, nil
 }
 
 func GetServerVersion(serverAddr string) (string, error) {
