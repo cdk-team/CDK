@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -54,6 +53,7 @@ var MaybeSuccessfulStatuscodeList = []int{
 
 type K8sRequestOption struct {
 	TokenPath string
+	Token     string
 	Server    string
 	Api       string
 	Method    string
@@ -92,14 +92,13 @@ curl -s https://192.168.0.234:6443/api/v1/nodes?watch  --header "Authorization: 
 func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 
 	// parse token
-	var token string
 	var tokenErr error
 	if opts.Anonymous {
-		token = ""
-	} else if opts.TokenPath == "" {
-		token, tokenErr = GetServiceAccountToken(conf.K8sSATokenDefaultPath)
-	} else {
-		token, tokenErr = GetServiceAccountToken(opts.TokenPath)
+		opts.Token = ""
+	} else if opts.TokenPath != "" {
+		opts.Token, tokenErr = GetServiceAccountToken(opts.TokenPath)
+	} else if opts.Token == "" {
+		opts.Token, tokenErr = GetServiceAccountToken(conf.K8sSATokenDefaultPath)
 	}
 	if tokenErr != nil {
 		return "", &errors.CDKRuntimeError{Err: tokenErr, CustomMsg: "load K8s service account token error."}
@@ -140,8 +139,8 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 		request.Header.Set("Content-Type", "application/json")
 	}
 	// auth token
-	if len(token) > 0 {
-		token = strings.TrimSpace(token)
+	if len(opts.Token) > 0 {
+		token := strings.TrimSpace(opts.Token)
 		request.Header.Set("Authorization", "Bearer "+token)
 	}
 
