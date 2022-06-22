@@ -49,9 +49,16 @@ func EtcdctlToolApi(args []string) {
 	switch strings.ToUpper(args[1]) {
 	case "GET":
 		opt.Api = "/v3/kv/range"
+		opt.Method = "POST"
 		opt.PostData = GenerateQuery(args[2])
 		//opt.TlsConfig = &tls.Config{}
 		DoRequest(opt)
+		resp, err := DoRequest(opt)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		GetKeys(resp, false)
 	default: // err break
 		fmt.Println(ectlBanner)
 		return

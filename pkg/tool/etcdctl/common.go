@@ -35,11 +35,11 @@ type EtcdRequestOption struct {
 	Api       string
 	PostData  string
 	TlsConfig *tls.Config
-	Anonymous bool
+	Method    string
 	Silent    bool
 }
 
-func DoRequest(opt EtcdRequestOption) (map[string]string, error) {
+func DoRequest(opt EtcdRequestOption) (string, error) {
 	// http client
 	if opt.TlsConfig == nil || len(opt.TlsConfig.Certificates) == 0 || opt.TlsConfig.RootCAs == nil {
 		opt.TlsConfig = &tls.Config{InsecureSkipVerify: true}
@@ -51,9 +51,9 @@ func DoRequest(opt EtcdRequestOption) (map[string]string, error) {
 		Timeout: time.Duration(5) * time.Second,
 	}
 
-	request, err := http.NewRequest("POST", opt.Endpoint+opt.Api, bytes.NewBuffer([]byte(opt.PostData)))
+	request, err := http.NewRequest(opt.Method, opt.Endpoint+opt.Api, bytes.NewBuffer([]byte(opt.PostData)))
 	if err != nil {
-		return nil, &errors.CDKRuntimeError{Err: err, CustomMsg: "err found while generate post request in net.http ."}
+		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found while generate post request in net.http ."}
 	}
 	request.Header.Set("Content-Type", "application/json")
 
@@ -61,15 +61,19 @@ func DoRequest(opt EtcdRequestOption) (map[string]string, error) {
 	if resp != nil {
 		defer resp.Body.Close()
 	} else if err != nil {
-		return nil, &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
+		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
 	}
 
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
+		return "", &errors.CDKRuntimeError{Err: err, CustomMsg: "err found in post request."}
 	}
 
-	kvs := gjson.Get(string(content), "kvs").Array()
+	return string(content), nil
+}
+
+func GetKeys(content string, silent bool) (map[string]string, error) {
+	kvs := gjson.Get(content, "kvs").Array()
 	ret := make(map[string]string, len(kvs))
 	for _, k := range kvs {
 		name, err := base64.StdEncoding.DecodeString(k.Get("key").String())
@@ -79,13 +83,13 @@ func DoRequest(opt EtcdRequestOption) (map[string]string, error) {
 		}
 
 		ret[string(name)] = ""
-		if !opt.Silent {
+		if !silent {
 			fmt.Println(string(name))
 		}
 
 		if k.Get("value").Exists() {
 			v, _ := base64.StdEncoding.DecodeString(k.Get("value").String())
-			if !opt.Silent {
+			if !silent {
 				fmt.Println(string(v))
 			}
 			ret[string(name)] = string(v)
@@ -103,4 +107,20 @@ func GenerateQuery(key string) (query string) {
 		query = fmt.Sprintf("{\"key\": \"%s\"}", b64key)
 	}
 	return
+}
+
+// Only v3 version is supported，lower version support comments reserved.
+func GetVersion(endpoint string) (string, string, error) {
+	opt := EtcdRequestOption{
+		Endpoint: endpoint,
+		Api:      "/version",
+		Method:   "GET",
+	}
+	resp, err := DoRequest(opt)
+	if err != nil {
+		return "", "", err
+	}
+	sv := gjson.Get(resp, "etcdserver").String()
+	cv := gjson.Get(resp, "etcdcluster").String()
+	return sv, cv, nil
 }
