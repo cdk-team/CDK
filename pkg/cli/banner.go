@@ -62,6 +62,7 @@ var BannerContainerTpl = BannerHeader + `
   nc [options]                              Create TCP tunnel.
   ifconfig                                  Show network information.
   kcurl <path> (get|post) <uri> [<data>]    Make request to K8s api-server.
+  ectl <endpoint> get <key>                 Unauthorized enumeration of ectd keys.
   ucurl (get|post) <socket> <uri> <data>    Make request to docker unix socket.
   probe <ip> <port> <parallel> <timeout-ms> TCP port scan, example: cdk probe 10.0.1.0-255 80,8080-9443 50 1000
 
@@ -73,11 +74,11 @@ var BannerContainerTpl = BannerHeader + `
 // BannerContainer is the banner of CDK command line with colorful.
 var BannerContainer = fmt.Sprintf(
 	BannerContainerTpl,
-  "Usage:",
+	"Usage:",
 	util.GreenBold.Sprint("Evaluate:"),
 	util.GreenBold.Sprint("Exploit:"),
 	util.GreenBold.Sprint("Tool:"),
-  "Options:",
+	"Options:",
 )
 
 var BannerServerless = BannerHeader + `

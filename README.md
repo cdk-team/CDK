@@ -63,6 +63,7 @@ Tool:
   nc [options]                              Create TCP tunnel.
   ifconfig                                  Show network information.
   kcurl <path> (get|post) <uri> <data>      Make request to K8s api-server.
+  ectl <endpoint> get <key>                 Unauthorized enumeration of ectd keys.
   ucurl (get|post) <socket> <uri> <data>    Make request to docker unix socket.
   probe <ip> <port> <parallel> <timeout-ms> TCP port scan, example: cdk probe 10.0.1.0-255 80,8080-9443 50 1000
 
@@ -136,6 +137,7 @@ cdk run <script-name> [options]
 | Remote Control       | Reverse Shell                                              | reverse-shell          | ✔         | ✔                                                                          | [link](https://github.com/cdk-team/CDK/wiki/Exploit:-reverse-shell)                  |
 | Credential Access    | Registry BruteForce                                        | registry-brute         | ✔         | ✔                                                                          | [link](https://github.com/cdk-team/CDK/wiki/Exploit:-Container-Image-Registry-Brute) |
 | Credential Access    | Access Key Scanning                                        | ak-leakage             | ✔         | ✔                                                                          | [link](https://github.com/cdk-team/CDK/wiki/Exploit:-ak-leakage)                     |
+| Credential Access    | Etcd Get K8s Token                                         | etcd-get-k8s-token     | ✔         | ✔                                                                          |                |
 | Credential Access    | Dump K8s Secrets                                           | k8s-secret-dump        | ✔         | ✔                                                                          | [link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-secret-dump)                |
 | Credential Access    | Dump K8s Config                                            | k8s-configmap-dump     | ✔         | ✔                                                                          | [link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-configmap-dump)             |
 | Privilege Escalation | K8s RBAC Bypass                                            | k8s-get-sa-token       | ✔         | ✔                                                                          | [link](https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-get-sa-token)               |
@@ -161,6 +163,7 @@ cdk ps
 |ps|Process Information|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ps)|
 |ifconfig|Network Information|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ifconfig)|
 |vi|Edit Files|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-vi)|
+|ectl|Unauthorized enumeration of ectd keys|✔||
 |kcurl|Request to K8s api-server|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-kcurl)|
 |dcurl|Request to Docker HTTP API|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-dcurl)|
 |ucurl|Request to Docker Unix Socket|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ucurl)|

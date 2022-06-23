@@ -23,6 +23,7 @@ import (
 	"github.com/cdk-team/CDK/pkg/evaluate"
 	"github.com/cdk-team/CDK/pkg/plugin"
 	"github.com/cdk-team/CDK/pkg/tool/dockerd_api"
+	"github.com/cdk-team/CDK/pkg/tool/etcdctl"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 
 	"log"
@@ -142,6 +143,8 @@ func ParseCDKMain() {
 			vi.RunVendorVi()
 		case "kcurl":
 			kubectl.KubectlToolApi(args)
+		case "ectl":
+			etcdctl.EtcdctlToolApi(args)
 		case "ucurl":
 			dockerd_api.UcurlToolApi(args)
 		case "dcurl":
