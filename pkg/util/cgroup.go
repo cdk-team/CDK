@@ -33,6 +33,10 @@ const mountInfoPath string = "/proc/self/mountinfo"
 const hostDeviceFlag string = "/etc/hosts"
 const cgroupInfoPath string = "/proc/self/cgroup"
 
+// MountInfo 
+// Sample: 36 35 98:0 /mnt1 /mnt2 rw,noatime master:1 - ext3 /dev/root rw,errors=continue
+// Sample2: 1659 1605 253:1 /var/lib/kubelet/pods/cc76265f-d44d-4624-91c8-6f6812f85c7e/etc-hosts /etc/hosts rw,noatime - ext4 /dev/vda1 rw
+// format: mountID parentID major:minor root mountPoint opts fstype
 type MountInfo struct {
 	Device            string
 	Fstype            string

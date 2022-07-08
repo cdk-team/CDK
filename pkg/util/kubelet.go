@@ -17,48 +17,59 @@ limitations under the License.
 package util
 
 import (
+	"bufio"
+	"encoding/binary"
 	"fmt"
-	"golang.org/x/net/route"
+	"net"
+	"os"
+	"strconv"
+	"strings"
+
 )
 
+// from https://stackoverflow.com/questions/40682760/what-syscall-method-could-i-use-to-get-the-default-network-gateway
+const (
+    file  = "/proc/net/route"
+    line  = 1    // line containing the gateway addr. (first line: 0)
+    sep   = "\t" // field separator
+    field = 2    // field containing hex gateway address (first field: 0)
+)
 
 // GetGateway returns the default gateway for the system.
-// from https://gist.github.com/abimaelmartell/dcbbff464dc0778165b2dcc5092f90e6
 func GetGateway() (string, error) {
-	var defaultRoute = [4]byte{0, 0, 0, 0}
 
-	rib, _ := route.FetchRIB(0, route.RIBTypeRoute, 0)
-	messages, err := route.ParseRIB(route.RIBTypeRoute, rib)
+    file, err := os.Open(file)
+    if err != nil {
+        return "", err
+    }
+    defer file.Close()
 
-	if err != nil {
-		return "", err
-	}
+    scanner := bufio.NewScanner(file)
 
-	for _, message := range messages {
-		route_message := message.(*route.RouteMessage)
-		addresses := route_message.Addrs
+    for scanner.Scan() {
 
-		var destination, gateway *route.Inet4Addr
-		ok := false
+        // jump to line containing the agteway address
+        for i := 0; i < line; i++ {
+            scanner.Scan()
+        }
 
-		if destination, ok = addresses[0].(*route.Inet4Addr); !ok {
-			continue
-		}
+        // get field containing gateway address
+        tokens := strings.Split(scanner.Text(), sep)
+        gatewayHex := "0x" + tokens[field]
 
-		if gateway, ok = addresses[1].(*route.Inet4Addr); !ok {
-			continue
-		}
+        // cast hex address to uint32
+        d, _ := strconv.ParseInt(gatewayHex, 0, 64)
+        d32 := uint32(d)
 
-		if destination == nil || gateway == nil {
-			continue
-		}
+        // make net.IP address from uint32
+        ipd32 := make(net.IP, 4)
+        binary.LittleEndian.PutUint32(ipd32, d32)
 
-		if destination.IP == defaultRoute {
-			gateway :=  gateway.IP
-			str := fmt.Sprintf("%v.%v.%v.%v", gateway[0], gateway[1], gateway[2], gateway[3])
-			return str, nil
-		}
-	}
+        // format net.IP to dotted ipV4 string
+        ip := net.IP(ipd32).String()
+        
+        return ip, nil
+    }
 
 	return "", fmt.Errorf("no default gateway found")
 }
