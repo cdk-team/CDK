@@ -42,7 +42,7 @@ func PassInnerArgs() {
 	os.Args = os.Args[1:]
 }
 
-func ParseCDKMain() {
+func ParseCDKMain() bool {
 
 	if len(os.Args) == 1 {
 		docopt.PrintHelpAndExit(nil, BannerContainer)
@@ -53,7 +53,7 @@ func ParseCDKMain() {
 		// https://github.com/jiguangin/netcat
 		PassInnerArgs()
 		netcat.RunVendorNetcat()
-		return
+		return true
 	}
 
 	// docopt argparse start
@@ -61,7 +61,7 @@ func ParseCDKMain() {
 
 	if Args["auto-escape"].(bool) {
 		plugin.RunSingleTask("auto-escape")
-		return
+		return true
 	}
 
 	// support for cdk eva(Evangelion) and cdk evaluate
@@ -116,7 +116,7 @@ func ParseCDKMain() {
 			evaluate.DumpCgroup()
 
 		}
-		return
+		return true
 	}
 
 	if Args["run"].(bool) {
@@ -128,10 +128,10 @@ func ParseCDKMain() {
 		if plugin.Exploits[name] == nil {
 			fmt.Printf("\nInvalid script name: %s , available scripts:\n", name)
 			plugin.ListAllExploit()
-			return
+			return true
 		}
 		plugin.RunSingleExploit(name)
-		return
+		return true
 	}
 
 	if Args["<tool>"] != nil {
@@ -174,4 +174,6 @@ func ParseCDKMain() {
 			docopt.PrintHelpAndExit(nil, BannerContainer)
 		}
 	}
+
+	return false
 }

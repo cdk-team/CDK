@@ -24,6 +24,7 @@ import (
 )
 
 func GetLocalAddresses() {
+	log.Printf("[+] run ifconfig, using GetLocalAddresses()")
 	ifaces, err := net.Interfaces()
 	if err != nil {
 		log.Print(fmt.Errorf("localAddresses: %v\n", err.Error()))
