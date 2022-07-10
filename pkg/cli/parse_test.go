@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package cli
+package cli_test
 
 import (
 	"bytes"
@@ -24,8 +24,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cdk-team/CDK/pkg/cli"
 	_ "github.com/cdk-team/CDK/pkg/exploit" // register all exploits
-	_ "github.com/cdk-team/CDK/pkg/task"    // register all task
 )
 
 type testArgsCase struct {
@@ -39,7 +39,7 @@ func doParseCDKMainWithTimeout() {
 	result := make(chan bool, 1)
 
 	go func ()  {
-		result <- ParseCDKMain()
+		result <- cli.ParseCDKMain()
 	}()
 
 	select {
