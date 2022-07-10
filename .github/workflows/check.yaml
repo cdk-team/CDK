@@ -19,8 +19,7 @@ jobs:
         GOOS=linux GOARCH=arm64 go build -ldflags="-s -w " ./cmd/cdk/cdk.go
         GOOS=linux GOARCH=amd64 go build -ldflags="-s -w " ./cmd/cdk/cdk.go
 
-        # test Evaluate, Exploit and Tool
-        ./cdk eva 2>&1 | head
-        ./cdk run test-poc | head
-        ./cdk ifconfig | head
+        # test main function with Evaluate, Exploit and Tool
+        go test -v -timeout 30s -run ^TestParseCDKMain$ pkg/cli/*.go
+        
 
