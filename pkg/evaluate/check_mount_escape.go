@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -18,23 +17,14 @@ limitations under the License.
 package evaluate
 
 import (
-	"bufio"
 	"fmt"
-	"github.com/cdk-team/CDK/pkg/errors"
 	"io"
-	"log"
-	"os"
 	"regexp"
 	"strings"
-	"syscall"
-)
 
-type Mount struct {
-	Device     string
-	Path       string
-	Filesystem string
-	Flags      string
-}
+	"github.com/cdk-team/CDK/pkg/errors"
+	"github.com/cdk-team/CDK/pkg/util"
+)
 
 // The checkClose function calls close on a Closer and panics with a
 // runtime error if the Closer returns an error
@@ -44,48 +34,38 @@ func checkClose(c io.Closer) {
 	}
 }
 
-func GetMounts() ([]Mount, error) {
-	readPath := "/proc/self/mounts"
-	file, err := os.Open(readPath)
-	if err != nil {
-		log.Printf("[Err] Open %s failed.", readPath)
-		return nil, err
-	}
-	defer checkClose(file)
-	mounts := []Mount(nil)
-	reader := bufio.NewReaderSize(file, 64*1024)
-	for {
-		line, isPrefix, err := reader.ReadLine()
-		if err != nil {
-			if err == io.EOF {
-				return mounts, nil
-			}
-			return nil, err
-		}
-		if isPrefix {
-			return nil, syscall.EIO
-		}
-		parts := strings.SplitN(string(line), " ", 5)
-		if len(parts) != 5 {
-			return nil, syscall.EIO
-		}
-		mounts = append(mounts, Mount{parts[0], parts[1], parts[2], parts[3]})
-	}
-}
 
 func MountEscape() {
-	mounts, _ := GetMounts()
+
+	mounts, _ := util.GetMountInfo()
 
 	for _, m := range mounts {
-		if strings.Contains(m.Device, "/") || strings.Contains(m.Filesystem, "ext") {
-			matched, _ := regexp.MatchString("/kubelet/|/dev/[\\w-]*?\\blog$|/etc/host[\\w]*?$|/etc/[\\w]*?\\.conf$", m.Path)
+
+		// TODO: why so may null byte in the Mounts
+		// [Information Gathering - Mounts]
+		// :    -
+		if m.Major == "" {
+			continue
+		}
+
+
+		// ? why match those mount points?
+		if strings.Contains(m.Device, "/") || strings.Contains(m.Fstype, "ext") {
+			matched, _ := regexp.MatchString("/kubelet/|/dev/[\\w-]*?\\blog$|/etc/host[\\w]*?$|/etc/[\\w]*?\\.conf$", m.Root)
 			if !matched {
-				fmt.Printf("Device:%s Path:%s Filesystem:%s Flags:%s\n", m.Device, m.Path, m.Filesystem, m.Flags)
+				m.Root = util.RedBold.Sprint(m.Root)
+				m.Fstype = util.RedBold.Sprint(m.Fstype)
 			}
 		}
-		if m.Device == "lxcfs" && strings.Contains(m.Flags,"rw"){
-			fmt.Println("Find mounted lxcfs with rw flags, run `cdk run lxcfs-rw` or `cdk run lxcfs-rw-cgroup` to escape container!")
-			fmt.Printf("Device:%s Path:%s Filesystem:%s Flags:%s\n", m.Device, m.Path, m.Filesystem, m.Flags)
+
+		// find lxcfs mount point for escape exploit
+		if m.Device == "lxcfs" && util.StringContains(m.Opts, "rw"){
+			fmt.Printf("Find mounted lxcfs with rw flags, run `%s` or `%s` to escape container!\n", util.RedBold.Sprint("cdk run lxcfs-rw"), util.RedBold.Sprint("cdk run lxcfs-rw-cgroup"))
+			m.Device = util.RedBold.Sprint(m.Device)
+			m.MountPoint = util.RedBold.Sprint(m.Device)
 		}
+
+		fmt.Println(m.String())
+
 	}
 }

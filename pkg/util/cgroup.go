@@ -36,7 +36,8 @@ const cgroupInfoPath string = "/proc/self/cgroup"
 // MountInfo 
 // Sample: 36 35 98:0 /mnt1 /mnt2 rw,noatime master:1 - ext3 /dev/root rw,errors=continue
 // Sample2: 1659 1605 253:1 /var/lib/kubelet/pods/cc76265f-d44d-4624-91c8-6f6812f85c7e/etc-hosts /etc/hosts rw,noatime - ext4 /dev/vda1 rw
-// format: mountID parentID major:minor root mountPoint opts fstype
+// Sample3: 52 36 0:47 / /sys/fs/cgroup/memory rw,nosuid,nodev,noexec,relatime shared:26 - cgroup cgroup rw,memory
+// format: mountID parentID major:minor root mountPoint opts - Fstype device SuperBlockOptions
 type MountInfo struct {
 	Device            string
 	Fstype            string
@@ -46,6 +47,13 @@ type MountInfo struct {
 	Major             string
 	Minor             string
 	SuperBlockOptions []string
+}
+
+// String format: major:minor root mountPoint opts - Fstype device SuperBlockOptions
+func (mi MountInfo) String() string {
+	optStr := strings.Join(mi.Opts, ",")
+	superBlockOptionsStr := strings.Join(mi.SuperBlockOptions, ",")
+	return fmt.Sprintf("%s:%s %s %s %s - %s %s %s", mi.Major, mi.Minor, mi.Root, mi.MountPoint, optStr, mi.Fstype, mi.Device, superBlockOptionsStr)
 }
 
 // find block device id
