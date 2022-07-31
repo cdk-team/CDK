@@ -84,7 +84,7 @@ func MountEscape() {
 			}
 		}
 		if m.Device == "lxcfs" && strings.Contains(m.Flags,"rw"){
-			fmt.Println("Find mounted lxcfs with rw flags, run `cdk run lxcfs-rw` to escape container!")
+			fmt.Println("Find mounted lxcfs with rw flags, run `cdk run lxcfs-rw` or `cdk run lxcfs-rw-cgroup` to escape container!")
 			fmt.Printf("Device:%s Path:%s Filesystem:%s Flags:%s\n", m.Device, m.Path, m.Filesystem, m.Flags)
 		}
 	}
