@@ -59,7 +59,11 @@ func GetProcCapabilities() bool {
 			caps, err := capability.CapHexParser(capStr)
 
 			fmt.Printf("\tCap decode: 0x%s = %s\n", capStr, capability.CapListToString(caps))
-			fmt.Printf("\tAdd capability list: %s\n", capability.CapListToString(getAddCaps(caps)))
+
+			addCaps := getAddCaps(caps)
+			if len(addCaps) > 0 {
+				util.RedBold.Printf("\tAdded capability list: %s\n", capability.CapListToString(addCaps))
+			}
 
 			if err != nil {
 				log.Printf("[-] capability.CapHexParser: %v\n", err)
