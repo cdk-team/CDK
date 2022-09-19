@@ -61,6 +61,18 @@ var LinuxCommandChecklist = []string{
 	"ruby",
 }
 
+var DefaultPathEnv = []string{
+	"/usr/local/sbin",
+	"/usr/local/bin",
+	"/usr/sbin",
+	"/usr/bin",
+	"/sbin",
+	"/bin",
+	"/usr/games",
+	"/usr/local/games",
+	"/snap/bin",
+}
+
 // match ENV to find useful service
 var SensitiveEnvRegex = "(?i)\\bssh_|k8s|kubernetes|docker|gopath"
 
