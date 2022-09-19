@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -18,11 +17,14 @@ limitations under the License.
 package evaluate
 
 import (
-	"github.com/shirou/gopsutil/v3/host"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/user"
-	"io/ioutil"
+
+	"github.com/cdk-team/CDK/conf"
+	"github.com/cdk-team/CDK/pkg/util"
+	"github.com/shirou/gopsutil/v3/host"
 )
 
 func BasicSysInfo() {
@@ -57,6 +59,40 @@ func BasicSysInfo() {
 
 }
 
+// FindSidFiles such as run `find /bin/. -perm -4000 -type f `
+func FindSidFiles() {
+
+	var setuidfiles []string
+
+	for _, dir := range conf.DefaultPathEnv {
+		files, err := ioutil.ReadDir(dir)
+		if err != nil {
+			continue
+		}
+	
+		for _, file := range files {
+			// check setuid bit
+			if file.Mode() & os.ModeSetuid != 0 {
+				setuidfiles = append(setuidfiles, dir + "/" + file.Name())
+			}
+
+			// check capabilites, like getcap -r /bin
+			// TODO: check capabilites
+		}
+	}
+
+	if len(setuidfiles) > 0 {
+		util.PrintItemKey("Setuid files found:", false)
+		for _, file := range setuidfiles {
+			util.PrintItemValue(file, true)
+		}
+	}
+}
+
+// CommandAllow check command allow to run
+func CommandAllow() {
+}
+
 func ASLR() {
 	// ASLR off: /proc/sys/kernel/randomize_va_space = 0 
 	var ASLRSetting = "/proc/sys/kernel/randomize_va_space"
@@ -75,3 +111,4 @@ func ASLR() {
 	}
 
 }
+
