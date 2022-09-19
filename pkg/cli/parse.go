@@ -19,6 +19,7 @@ package cli
 import (
 	"fmt"
 
+	"github.com/cdk-team/CDK/pkg/util"
 	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/evaluate"
 	"github.com/cdk-team/CDK/pkg/plugin"
@@ -72,47 +73,49 @@ func ParseCDKMain() bool {
 	// fix #37 https://github.com/cdk-team/CDK/issues/37
 	if ok.(bool) || fok.(bool) {
 
-		fmt.Printf("\n[Information Gathering - System Info]\n")
+		fmt.Printf(BannerHeader)
+
+		util.PrintH2("Information Gathering - System Info")
 		evaluate.BasicSysInfo()
 
-		fmt.Printf("\n[Information Gathering - Services]\n")
+		util.PrintH2("Information Gathering - Services")
 		evaluate.SearchSensitiveEnv()
 		evaluate.SearchSensitiveService()
 
-		fmt.Printf("\n[Information Gathering - Commands and Capabilities]\n")
+		util.PrintH2("Information Gathering - Commands and Capabilities")
 		evaluate.SearchAvailableCommands()
 		evaluate.GetProcCapabilities()
 
-		fmt.Printf("\n[Information Gathering - Mounts]\n")
+		util.PrintH2("Information Gathering - Mounts")
 		evaluate.MountEscape()
 
-		fmt.Printf("\n[Information Gathering - Net Namespace]\n")
+		util.PrintH2("Information Gathering - Net Namespace")
 		evaluate.CheckNetNamespace()
 
-		fmt.Printf("\n[Information Gathering - Sysctl Variables]\n")
+		util.PrintH2("Information Gathering - Sysctl Variables")
 		evaluate.CheckRouteLocalNetworkValue()
 
-		fmt.Printf("\n[Discovery - K8s API Server]\n")
+		util.PrintH2("Discovery - K8s API Server")
 		evaluate.CheckK8sAnonymousLogin()
 
-		fmt.Printf("\n[Discovery - K8s Service Account]\n")
+		util.PrintH2("Discovery - K8s Service Account")
 		evaluate.CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
 
-		fmt.Printf("\n[Discovery - Cloud Provider Metadata API]\n")
+		util.PrintH2("Discovery - Cloud Provider Metadata API")
 		evaluate.CheckCloudMetadataAPI()
 
-		fmt.Printf("\n[Information Gathering - DNS-Based Service Discovery]\n")
+		util.PrintH2("Information Gathering - DNS-Based Service Discovery")
 		evaluate.DNSBasedServiceDiscovery()
 
 		if Args["--full"].(bool) {
 
-			fmt.Printf("\n[Information Gathering - Sensitive Files]\n")
+			util.PrintH2("Information Gathering - Sensitive Files")
 			evaluate.SearchLocalFilePath()
 
-			fmt.Printf("\n[Information Gathering - ASLR]\n")
+			util.PrintH2("Information Gathering - ASLR")
 			evaluate.ASLR()
 
-			fmt.Printf("\n[Information Gathering - Cgroups]\n")
+			util.PrintH2("Information Gathering - Cgroups")
 			evaluate.DumpCgroup()
 
 		}

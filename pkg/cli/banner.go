@@ -34,7 +34,7 @@ var BannerVersion = fmt.Sprintf("%s %s", "CDK Version(GitCommit):", GitCommit)
 var BannerHeader = fmt.Sprintf(`%s
 %s
 Zero-dependency cloudnative k8s/docker/serverless penetration toolkit by cdxy & neargle
-Find tutorial, configuration and use-case in https://github.com/cdk-team/CDK/wiki
+Find tutorial, configuration and use-case in https://github.com/cdk-team/CDK/
 `, util.GreenBold.Sprint(BannerTitle), BannerVersion)
 
 var BannerContainerTpl = BannerHeader + `
