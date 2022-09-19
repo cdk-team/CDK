@@ -19,8 +19,6 @@ package cli
 import (
 	"fmt"
 
-	"github.com/cdk-team/CDK/pkg/util"
-	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/evaluate"
 	"github.com/cdk-team/CDK/pkg/plugin"
 	"github.com/cdk-team/CDK/pkg/tool/dockerd_api"
@@ -74,50 +72,10 @@ func ParseCDKMain() bool {
 	if ok.(bool) || fok.(bool) {
 
 		fmt.Printf(BannerHeader)
-
-		util.PrintH2("Information Gathering - System Info")
-		evaluate.BasicSysInfo()
-
-		util.PrintH2("Information Gathering - Services")
-		evaluate.SearchSensitiveEnv()
-		evaluate.SearchSensitiveService()
-
-		util.PrintH2("Information Gathering - Commands and Capabilities")
-		evaluate.SearchAvailableCommands()
-		evaluate.GetProcCapabilities()
-
-		util.PrintH2("Information Gathering - Mounts")
-		evaluate.MountEscape()
-
-		util.PrintH2("Information Gathering - Net Namespace")
-		evaluate.CheckNetNamespace()
-
-		util.PrintH2("Information Gathering - Sysctl Variables")
-		evaluate.CheckRouteLocalNetworkValue()
-
-		util.PrintH2("Discovery - K8s API Server")
-		evaluate.CheckK8sAnonymousLogin()
-
-		util.PrintH2("Discovery - K8s Service Account")
-		evaluate.CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
-
-		util.PrintH2("Discovery - Cloud Provider Metadata API")
-		evaluate.CheckCloudMetadataAPI()
-
-		util.PrintH2("Information Gathering - DNS-Based Service Discovery")
-		evaluate.DNSBasedServiceDiscovery()
+		evaluate.CallBasics()
 
 		if Args["--full"].(bool) {
-
-			util.PrintH2("Information Gathering - Sensitive Files")
-			evaluate.SearchLocalFilePath()
-
-			util.PrintH2("Information Gathering - ASLR")
-			evaluate.ASLR()
-
-			util.PrintH2("Information Gathering - Cgroups")
-			evaluate.DumpCgroup()
-
+			evaluate.CallAddedFunc()
 		}
 		return true
 	}

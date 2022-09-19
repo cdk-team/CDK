@@ -26,3 +26,8 @@ func TestDumpCgroup(t *testing.T) {
 	fmt.Printf("\n[Information Gathering - Cgroups]\n")
 	DumpCgroup()
 }
+
+func TestFindSidFiles(t *testing.T) {
+	fmt.Printf("\n[Information Gathering - SIDs]\n")
+	FindSidFiles()
+}
