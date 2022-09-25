@@ -46,3 +46,15 @@ func PrintItemValue(value string, color bool) {
 	}
 }
 
+func PrintItemValueWithKeyOneLine(key, value string, color bool) {
+	if color {
+		log.Printf("%s: %s", key, GreenBold.Sprint(value))
+	} else {
+		log.Printf("%s: %s", key, value)
+	}
+}
+
+func PrintOrignal(out string) {
+	fmt.Printf("%s\n", out)
+}
+
