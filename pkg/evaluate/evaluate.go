@@ -44,6 +44,9 @@ func CallBasics() {
 	util.PrintH2("Information Gathering - Sysctl Variables")
 	CheckRouteLocalNetworkValue()
 
+	util.PrintH2("Information Gathering - DNS-Based Service Discovery")
+	DNSBasedServiceDiscovery()
+
 	util.PrintH2("Discovery - K8s API Server")
 	CheckK8sAnonymousLogin()
 
@@ -53,8 +56,8 @@ func CallBasics() {
 	util.PrintH2("Discovery - Cloud Provider Metadata API")
 	CheckCloudMetadataAPI()
 
-	util.PrintH2("Information Gathering - DNS-Based Service Discovery")
-	DNSBasedServiceDiscovery()
+	util.PrintH2("Exploit Pre - Kernel Exploits")
+	kernelExploitSuggester()
 }
 
 func CallAddedFunc() {
