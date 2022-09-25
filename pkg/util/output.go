@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -15,19 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package evaluate
+package util
 
 import (
 	"fmt"
-	"testing"
+	"log"
 )
 
-func TestDumpCgroup(t *testing.T) {
-	fmt.Printf("\n[Information Gathering - Cgroups]\n")
-	DumpCgroup()
+const Colorful = true
+
+// fmt.Printf(util.GreenBold.Sprint("\n[Information Gathering - System Info]\n"))
+func PrintH2(title string) {
+	fmt.Printf(BlueBold.Sprint("\n[  ") + GreenBold.Sprint(title) + BlueBold.Sprint("  ]\n"))
 }
 
-func TestFindSidFiles(t *testing.T) {
-	fmt.Printf("\n[Information Gathering - SIDs]\n")
-	FindSidFiles()
+func PrintItemKey(key string, color bool) {
+	key = key + "\n"
+	if color {
+		log.Printf(YellowBold.Sprint(key))
+	} else {
+		log.Printf(key)
+	}
 }
+
+func PrintItemValue(value string, color bool) {
+	value = "\t" + value + "\n"
+	if color {
+		fmt.Printf(RedBold.Sprint(value))
+	} else {
+		fmt.Printf(value)
+	}
+}
+
