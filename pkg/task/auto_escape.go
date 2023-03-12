@@ -162,11 +162,15 @@ func (p taskAutoEscapeS) Desc() string {
 }
 func (p taskAutoEscapeS) Exec() bool {
 	cmd := cli.Args["<cmd>"].(string)
+
+	log.Printf("%s\n", util.RedBold.Sprint("Caution: Flag auto-escape is deprecated as of CDK v1.5.1, and will be archived in v2.0. We recommend migrating to `./cdk eva --full` and `./cdk run`."))
+
 	if autoEscape(cmd) {
 		log.Println("all exploits are finished, auto exploit success!")
 	} else {
 		log.Println("all exploits are finished, auto exploit failed.")
 	}
+
 	return true
 }
 
