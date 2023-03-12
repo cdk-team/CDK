@@ -85,6 +85,24 @@ func GetServiceAccountToken(tokenPath string) (string, error) {
 	return string(token), nil
 }
 
+func SecretToken(tokenPath string) (string, error) {
+	var tokenErr error
+	var token string
+
+	if tokenPath != "" {
+		token, tokenErr = GetServiceAccountToken(tokenPath)
+	} else if token == "" {
+		token, tokenErr = GetServiceAccountToken(conf.K8sSATokenDefaultPath)
+	}
+	if tokenErr != nil {
+		return "", &errors.CDKRuntimeError{Err: tokenErr, CustomMsg: "load K8s service account token error."}
+	}
+
+	token = strings.TrimSpace(token)
+
+	return token, nil
+}
+
 /*
 curl -s https://192.168.0.234:6443/api/v1/nodes?watch  --header "Authorization: Bearer xxx" --cacert ca.crt
 */
@@ -92,16 +110,12 @@ curl -s https://192.168.0.234:6443/api/v1/nodes?watch  --header "Authorization: 
 func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 
 	// parse token
-	var tokenErr error
 	if opts.Anonymous {
 		opts.Token = ""
-	} else if opts.TokenPath != "" {
-		opts.Token, tokenErr = GetServiceAccountToken(opts.TokenPath)
-	} else if opts.Token == "" {
-		opts.Token, tokenErr = GetServiceAccountToken(conf.K8sSATokenDefaultPath)
-	}
-	if tokenErr != nil {
-		return "", &errors.CDKRuntimeError{Err: tokenErr, CustomMsg: "load K8s service account token error."}
+	} else if token, err := SecretToken(opts.TokenPath); err != nil {
+		return "", err
+	} else {
+		opts.Token = token
 	}
 
 	// parse url if opts.Url is ""
