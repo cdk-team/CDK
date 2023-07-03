@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -18,11 +17,34 @@ limitations under the License.
 package evaluate
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"log"
+	"regexp"
 	"strings"
 )
+
+type SelfSubjectRulesReview struct {
+	Status struct {
+		ResourceRules []struct {
+			Verbs     []string `json:"verbs"`
+			Resources []string `json:"resources"`
+		} `json:"resourceRules"`
+	} `json:"status"`
+}
+
+var subjectRules = `
+{
+    "apiVersion": "authorization.k8s.io/v1",
+    "kind": "SelfSubjectRulesReview",
+    "spec": {
+      "namespace": "$ns_current"
+    }
+}
+`
+
+var reviewResp SelfSubjectRulesReview
 
 func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 	resp, err := kubectl.ServerAccountRequest(
@@ -52,7 +74,7 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 				PostData:  "",
 				Anonymous: false,
 			})
-		if err != nil {
+		if err != nil && !strings.Contains(resp, "403") {
 			fmt.Println(err)
 			return false
 		}
@@ -60,7 +82,16 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 			fmt.Println("\tsuccess, the service-account have a high authority.")
 			fmt.Println("\tnow you can make your own request to takeover the entire k8s cluster with `./cdk kcurl` command\n\tgood luck and have fun.")
 			return true
+		}
+		// get namespace name from resp
+		re := regexp.MustCompile(`system:serviceaccount:(\S+):`)
+		matches := re.FindStringSubmatch(resp)
+		if len(matches) > 1 {
+			log.Println("current namespace is:", matches[1])
+			CheckSaPermissionForNs(matches[1])
+			return true
 		} else {
+			//fail totally
 			fmt.Println("\tfailed")
 			fmt.Println("\tresponse:" + resp)
 			return false
@@ -70,4 +101,33 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 		fmt.Println("\tresponse:" + resp)
 		return false
 	}
+}
+
+// if attacker can get the namespace name, then check the sa permissions in that namespace
+func CheckSaPermissionForNs(ns string) bool {
+	log.Println("trying to list permissions of in namespace:", ns)
+	subjectRules = strings.ReplaceAll(subjectRules, "$ns_current", ns)
+	resp, err := kubectl.ServerAccountRequest(
+		kubectl.K8sRequestOption{
+			TokenPath: "",
+			Server:    "",
+			Api:       "/apis/authorization.k8s.io/v1/selfsubjectrulesreviews",
+			Method:    "POSt",
+			PostData:  subjectRules,
+			Anonymous: false,
+		})
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	// Use json.Unmarshal to parse the JSON data
+	if err := json.Unmarshal([]byte(resp), &reviewResp); err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	// Loop over resourceRules to get the verbs and resources
+	for i, rule := range reviewResp.Status.ResourceRules {
+		log.Printf("Namespace %s Resources[%d]: %s, And Permissons: %s", ns, i, strings.Join(rule.Resources, ","), rule.Verbs)
+	}
+	return true
 }
