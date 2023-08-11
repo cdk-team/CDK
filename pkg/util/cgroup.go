@@ -111,7 +111,7 @@ func GetMountInfo() ([]MountInfo, error) {
 		// Device: filesystem-specific information or "none".
 		// SuperBlockOptions: per-superblock options (see mount(2)).
 		fields = strings.Fields(parts[1])
-		if len(fields) <= 1 || len(fields) >= 3 {
+		if len(fields) <= 1 || len(fields) > 3 {
 			// unexpect mountinfo
 			return nil, fmt.Errorf("found invalid mountinfo line in file %s: %s ", mountInfoPath, r)
 		}
