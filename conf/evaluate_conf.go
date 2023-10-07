@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -157,5 +156,11 @@ var CloudAPI = []cloudAPIS{
 		API:           "http://100.80.80.80/meta-data/latest/uhost/",
 		ResponseMatch: "uhost-id",
 		DocURL:        "https://docs.ucloud.cn/uhost/guide/metadata/metadata-server",
+	},
+	{
+		CloudProvider: "Huawei Cloud (HCloud)",
+		API:           "http://169.254.169.254/openstack/latest/meta_data.json",
+		ResponseMatch: "hostname",
+		DocURL:        "https://support.huaweicloud.com/usermanual-ecs/ecs_03_0166.html",
 	},
 }
