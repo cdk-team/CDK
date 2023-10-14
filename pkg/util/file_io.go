@@ -20,6 +20,7 @@ package util
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -91,7 +92,7 @@ func RewriteFile(path string, content string, perm os.FileMode) {
 	if err != nil {
 		log.Fatal("overwrite file:", path, "err: "+err.Error())
 	} else {
-		n, _ := cmdFile.Seek(0, os.SEEK_END)
+		n, _ := cmdFile.Seek(0, io.SeekEnd)
 		_, err = cmdFile.WriteAt([]byte(content), n)
 		log.Println("overwrite file:", path, "success.")
 		defer cmdFile.Close()
