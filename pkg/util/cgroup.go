@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -33,7 +32,7 @@ const mountInfoPath string = "/proc/self/mountinfo"
 const hostDeviceFlag string = "/etc/hosts"
 const cgroupInfoPath string = "/proc/self/cgroup"
 
-// MountInfo 
+// MountInfo
 // Sample: 36 35 98:0 /mnt1 /mnt2 rw,noatime master:1 - ext3 /dev/root rw,errors=continue
 // Sample2: 1659 1605 253:1 /var/lib/kubelet/pods/cc76265f-d44d-4624-91c8-6f6812f85c7e/etc-hosts /etc/hosts rw,noatime - ext4 /dev/vda1 rw
 // Sample3: 52 36 0:47 / /sys/fs/cgroup/memory rw,nosuid,nodev,noexec,relatime shared:26 - cgroup cgroup rw,memory
@@ -107,10 +106,26 @@ func GetMountInfo() ([]MountInfo, error) {
 		mi.Opts = strings.Split(fields[5], ",")
 
 		// latter part
+		// from https://man7.org/linux/man-pages/man5/proc.5.html
+		// Fstype: the filesystem type in the form "type[.subtype]".
+		// Device: filesystem-specific information or "none".
+		// SuperBlockOptions: per-superblock options (see mount(2)).
 		fields = strings.Fields(parts[1])
+		if len(fields) <= 1 || len(fields) > 3 {
+			// unexpect mountinfo
+			return nil, fmt.Errorf("found invalid mountinfo line in file %s: %s ", mountInfoPath, r)
+		}
+
 		mi.Fstype = fields[0]
-		mi.Device = fields[1]
-		mi.SuperBlockOptions = strings.Split(fields[2], ",")
+
+		if len(fields) == 2 {
+			// means Device is "none"
+			mi.Device = ""
+			mi.SuperBlockOptions = strings.Split(fields[1], ",")
+		} else {
+			mi.Device = fields[1]
+			mi.SuperBlockOptions = strings.Split(fields[2], ",")
+		}
 
 		mountInfos = append(mountInfos, mi)
 	}
