@@ -26,6 +26,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/errors"
@@ -139,6 +140,7 @@ func ServerAccountRequest(opts K8sRequestOption) (string, error) {
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		},
+		Timeout: time.Second * 3,
 	}
 	var request *http.Request
 	opts.Method = strings.ToUpper(opts.Method)
