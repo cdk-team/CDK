@@ -59,6 +59,7 @@ var BannerContainerTpl = BannerHeader + `
 %s
   vi <file>                                 Edit files in container like "vi" command.
   ps                                        Show process information like "ps -ef" command.
+  netstat                                   Like "netstat -antup" command.
   nc [options]                              Create TCP tunnel.
   ifconfig                                  Show network information.
   kcurl <path> (get|post) <uri> [<data>]    Make request to K8s api-server.
