@@ -18,6 +18,7 @@ package cli
 
 import (
 	"fmt"
+	"github.com/cdk-team/CDK/pkg/tool/netstat"
 
 	"github.com/cdk-team/CDK/pkg/evaluate"
 	"github.com/cdk-team/CDK/pkg/plugin"
@@ -114,6 +115,8 @@ func ParseCDKMain() bool {
 			network.GetLocalAddresses()
 		case "ps":
 			ps.RunPs()
+		case "netstat":
+			netstat.RunNetstat()
 		case "probe":
 			if len(args) != 4 {
 				log.Println("Invalid input args.")
