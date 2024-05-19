@@ -183,6 +183,7 @@ cdk ps
 |---|---|---|---|
 |nc|TCP Tunnel|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-nc)|
 |ps|Process Information|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ps)|
+|netstat|Like "netstat -antup" command|✔||
 |ifconfig|Network Information|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-ifconfig)|
 |vi|Edit Files|✔|[link](https://github.com/cdk-team/CDK/wiki/Tool:-vi)|
 |ectl|Unauthorized enumeration of ectd keys|✔||
