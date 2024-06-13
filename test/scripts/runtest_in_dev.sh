@@ -9,4 +9,6 @@ project_dir=`dirname "${ppdir}"`
 #CGO_CFLAGS="-Wno-deprecated-declarations"
 #export CGO_CFLAGS="-Wno-undef -Wno-deprecated-declarations"
 
-go run "$project_dir/cmd/cdk/cdk.go" "$@" 2>&1 | sed '/# github.com/,/has been explicitly marked deprecated here$/d'
+#2>&1 | sed '/# github.com/,/has been explicitly marked deprecated here$/d'
+
+go run -tags="hw" "$project_dir/cmd/cdk/cdk.go" "$@"

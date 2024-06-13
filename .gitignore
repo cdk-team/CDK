@@ -32,3 +32,5 @@ cmd/cdk/cdk
 .vscode/
 .chglog/
 __debug_bin
+
+/pkg/tool/kubectl/assets/
