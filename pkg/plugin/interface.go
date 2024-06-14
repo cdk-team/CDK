@@ -19,12 +19,14 @@ package plugin
 import (
 	"fmt"
 	"os"
+	"sort"
 	"text/tabwriter"
 )
 
 type ExploitInterface interface {
 	Desc() string
 	Run() bool
+	GetExploitType() string
 }
 
 type TaskInterface interface {
@@ -41,10 +43,29 @@ func init() {
 }
 
 func ListAllExploit() {
-	writer := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)
+
+	writer := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', tabwriter.AlignRight|tabwriter.Debug)
+
+	type kv struct {
+		Name        string
+		ExploitType string
+		Desc        string
+	}
+
+	sortedExploits := make([]kv, 0)
 
 	for name, plugin := range Exploits {
-		str := fmt.Sprintf("%s\t %s", name, plugin.Desc())
+		sortedExploits = append(sortedExploits, kv{name, plugin.GetExploitType(), plugin.Desc()})
+	}
+
+	sort.Slice(sortedExploits, func(i, j int) bool {
+		return sortedExploits[i].ExploitType < sortedExploits[j].ExploitType
+	})
+
+	fmt.Fprintln(writer, "TYPE \t NAME \t DESC")
+
+	for _, kv := range sortedExploits {
+		str := fmt.Sprintf("%s \t %s \t %s", kv.ExploitType, kv.Name, kv.Desc)
 		fmt.Fprintln(writer, str)
 	}
 
