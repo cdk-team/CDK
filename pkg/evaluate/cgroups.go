@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -27,7 +26,7 @@ import (
 func DumpCgroup() {
 
 	cgroupLst, err := util.GetCgroup(1)
-	sLst := make([]string, len(cgroupLst))
+	sLst := make([]string, 0, len(cgroupLst))
 
 	if err != nil {
 		log.Printf("/proc/1/cgroup error: %v\n", err)
