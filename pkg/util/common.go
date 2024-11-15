@@ -144,3 +144,18 @@ func IntContains(s []int, e int) bool {
 	}
 	return false
 }
+
+// DistinctArr distinct
+func DistinctStrArr(s []string) []string {
+	distinctMap := make(map[string]bool)
+	var result []string
+	
+	for _, item := range s {
+		if _, exists := distinctMap[item]; !exists {
+			distinctMap[item] = true
+			result = append(result, item)
+		}
+	}
+	
+	return result
+}

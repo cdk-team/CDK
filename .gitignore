@@ -34,3 +34,5 @@ cmd/cdk/cdk
 __debug_bin
 
 /pkg/tool/kubectl/assets/
+
+/cdk
