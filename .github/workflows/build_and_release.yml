@@ -1,8 +1,9 @@
 name: CDK CI
 
 on:
+  workflow_dispatch:
   release:
-      types: [released]
+      types: [released, prereleased]
 
 jobs:
 
@@ -13,7 +14,7 @@ jobs:
     steps:
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          go-version: 1.22.2
       - uses: actions/setup-node@v1
         with:
           node-version: 10.x
@@ -21,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
       - name: Upload Release and Renew Changelog
         env:
           UPLOAD_URL: ${{ github.event.release.upload_url }}
@@ -30,6 +31,7 @@ jobs:
           RELEASE_URL: ${{ github.event.release.url }}
 
         run: |
+          set -euo pipefail
           set -x
 
           go get github.com/mitchellh/gox
