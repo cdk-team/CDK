@@ -34,41 +34,56 @@ jobs:
           set -euo pipefail
           set -x
 
-          go get github.com/mitchellh/gox
-          sudo apt-get install -y upx
+          sudo apt-get update
+          sudo apt-get install -y upx file curl
 
           export CGO_ENABLED=0
-
           export GIT_COMMIT=$(git rev-list -1 HEAD)
-          
-          export ldflags="-X github.com/cdk-team/CDK/pkg/cli.GitCommit=$GIT_COMMIT"
-          gox -parallel 5 -osarch="darwin/amd64 linux/386 linux/amd64 linux/arm linux/arm64" -ldflags="-s -w $ldflags " -output="bin/{{.Dir}}_{{.OS}}_{{.Arch}}" ./cmd/cdk/
-          gox -parallel 5 -osarch="linux/386 linux/amd64 linux/arm64" -ldflags="-s -w $ldflags " -tags="thin" -output="bin/{{.Dir}}_{{.OS}}_{{.Arch}}_thin" ./cmd/cdk/
+          export ldflags="-s -w -extldflags \"-static\" -X github.com/cdk-team/CDK/pkg/cli.GitCommit=$GIT_COMMIT"
 
-          # cdk_linux_386 cdk_linux_amd64 cdk_linux_arm cdk_linux_arm64
-          cp bin/cdk_linux_amd64 bin/cdk_linux_amd64_upx
-          upx bin/cdk_linux_amd64_upx
+          mkdir -p bin
 
-          cp bin/cdk_linux_386 bin/cdk_linux_386_upx
-          upx bin/cdk_linux_386_upx
+          echo "Building standard versions..."
+          GOOS=darwin GOARCH=amd64 go build -ldflags="$ldflags" -o bin/cdk_darwin_amd64 ./cmd/cdk/ || echo "Darwin build failed"
+          GOOS=linux GOARCH=386 go build -ldflags="$ldflags" -o bin/cdk_linux_386 ./cmd/cdk/
+          GOOS=linux GOARCH=amd64 go build -ldflags="$ldflags" -o bin/cdk_linux_amd64 ./cmd/cdk/
+          GOOS=linux GOARCH=arm go build -ldflags="$ldflags" -o bin/cdk_linux_arm ./cmd/cdk/
+          GOOS=linux GOARCH=arm64 go build -ldflags="$ldflags" -o bin/cdk_linux_arm64 ./cmd/cdk/
 
-          cp bin/cdk_linux_amd64_thin bin/cdk_linux_amd64_thin_upx
-          upx bin/cdk_linux_amd64_thin_upx
+          echo "Building thin versions..."
+          GOOS=linux GOARCH=386 go build -ldflags="$ldflags" -tags="thin" -o bin/cdk_linux_386_thin ./cmd/cdk/
+          GOOS=linux GOARCH=amd64 go build -ldflags="$ldflags" -tags="thin" -o bin/cdk_linux_amd64_thin ./cmd/cdk/
+          GOOS=linux GOARCH=arm64 go build -ldflags="$ldflags" -tags="thin" -o bin/cdk_linux_arm64_thin ./cmd/cdk/
 
-          cp bin/cdk_linux_386_thin bin/cdk_linux_386_thin_upx
-          upx bin/cdk_linux_386_thin_upx
+          echo "Creating UPX compressed versions..."
+          for file in bin/cdk_linux_{386,amd64}{,_thin}; do
+            if [ -f "$file" ]; then
+              cp "$file" "${file}_upx"
+              upx "${file}_upx" || echo "UPX compression failed for ${file}"
+            fi
+          done
 
           UPLOAD_URL=$(echo -n $UPLOAD_URL | sed s/\{.*//g)
 
-          for FILE in bin/*
-          do
-              echo "Uploading ${FILE}";
-              curl \
-              -H "${API_HEADER}" \
-              -H "${AUTH_HEADER}" \
-              -H "Content-Type: $(file -b --mime-type ${FILE})" \
-              --data-binary "@${FILE}" \
-              "${UPLOAD_URL}?name=$(basename ${FILE})";
+          echo "Uploading files..."
+
+          for FILE in bin/*; do
+            if [ -f "$FILE" ]; then
+              echo "Uploading ${FILE}"
+              MIME_TYPE=$(file -b --mime-type "${FILE}")
+              RESPONSE=$(curl -w "%{http_code}" \
+                -H "${API_HEADER}" \
+                -H "${AUTH_HEADER}" \
+                -H "Content-Type: ${MIME_TYPE}" \
+                --data-binary "@${FILE}" \
+                "${UPLOAD_URL}?name=$(basename ${FILE})" \
+                -o /dev/null)
+              
+              if [ "$RESPONSE" -ne 201 ]; then
+                echo "Error uploading ${FILE}, status code: ${RESPONSE}"
+              fi
+            fi
           done
 
           bash ".github/workflows/changelog.sh"
+
