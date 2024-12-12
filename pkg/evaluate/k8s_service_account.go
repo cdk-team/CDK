@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -18,17 +17,19 @@ limitations under the License.
 package evaluate
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"log"
+	"os/exec"
 	"strings"
 )
 
-func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
+func CheckPrivilegedK8sServiceAccount(tokenPath string, address string) bool {
 	resp, err := kubectl.ServerAccountRequest(
 		kubectl.K8sRequestOption{
-			TokenPath: "",
-			Server:    "",
+			TokenPath: tokenPath + "/token",
+			Server:    address,
 			Api:       "/apis",
 			Method:    "get",
 			PostData:  "",
@@ -70,4 +71,54 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 		fmt.Println("\tresponse:" + resp)
 		return false
 	}
+}
+
+func GetDefaultK8SAccountInfo() string {
+	// 执行 df -T 命令来看 serviceaccount 保存路径
+	cmd := exec.Command("df", "-T")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &out
+
+	err := cmd.Run()
+	if err != nil {
+		fmt.Printf("Command execution failed: %s\n", err)
+		return ""
+	}
+
+	output := out.String()
+	lines := strings.Split(output, "\n")
+
+	var serviceAccountLines []string
+
+	for _, line := range lines {
+		if strings.Contains(line, "serviceaccount") {
+			fmt.Println("\tk8s account service path fetch success" + line)
+			serviceAccountLines = append(serviceAccountLines, line)
+		}
+	}
+
+	return strings.Join(serviceAccountLines, "\n")
+}
+
+func GetKubernetesAddress() (string, error) {
+	cmd := exec.Command("env")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &out
+	err := cmd.Run()
+	if err != nil {
+		return "", fmt.Errorf("command execution failed: %s", err)
+	}
+
+	output := out.String()
+	lines := strings.Split(output, "\n")
+
+	for _, line := range lines {
+		if strings.HasPrefix(line, "KUBERNETES_PORT_443_TCP_ADDR=") {
+			return strings.TrimPrefix(line, "KUBERNETES_PORT_443_TCP_ADDR="), nil
+		}
+	}
+
+	return "", fmt.Errorf("KUBERNETES_PORT_443_TCP_ADDR not found")
 }
