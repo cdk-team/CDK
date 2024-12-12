@@ -17,13 +17,15 @@ limitations under the License.
 package evaluate
 
 import (
-	"bytes"
+	"bufio"
 	"fmt"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"log"
-	"os/exec"
+	"os"
 	"strings"
 )
+
+const mountInfoPath string = "/proc/self/mountinfo"
 
 func CheckPrivilegedK8sServiceAccount(tokenPath string, address string) bool {
 	resp, err := kubectl.ServerAccountRequest(
@@ -74,51 +76,35 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string, address string) bool {
 }
 
 func GetDefaultK8SAccountInfo() string {
-	// 执行 df -T 命令来看 serviceaccount 保存路径
-	cmd := exec.Command("df", "-T")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &out
-
-	err := cmd.Run()
+	file, err := os.Open("/proc/self/mountinfo")
 	if err != nil {
-		fmt.Printf("Command execution failed: %s\n", err)
-		return ""
+		fmt.Println("error opening /proc/self/mountinfo: %w", err)
 	}
+	defer file.Close()
 
-	output := out.String()
-	lines := strings.Split(output, "\n")
+	scanner := bufio.NewScanner(file)
 
-	var serviceAccountLines []string
-
-	for _, line := range lines {
+	for scanner.Scan() {
+		line := scanner.Text()
 		if strings.Contains(line, "serviceaccount") {
-			fmt.Println("\tk8s account service path fetch success" + line)
-			serviceAccountLines = append(serviceAccountLines, line)
+			fmt.Println("find serviceaccount successfully")
+			return line
 		}
 	}
 
-	return strings.Join(serviceAccountLines, "\n")
+	if err := scanner.Err(); err != nil {
+		fmt.Println("error reading /proc/self/mountinfo: %w", err)
+	}
+
+	return ""
 }
 
-func GetKubernetesAddress() (string, error) {
-	cmd := exec.Command("env")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &out
-	err := cmd.Run()
-	if err != nil {
-		return "", fmt.Errorf("command execution failed: %s", err)
-	}
-
-	output := out.String()
-	lines := strings.Split(output, "\n")
-
-	for _, line := range lines {
-		if strings.HasPrefix(line, "KUBERNETES_PORT_443_TCP_ADDR=") {
-			return strings.TrimPrefix(line, "KUBERNETES_PORT_443_TCP_ADDR="), nil
+func GetKubernetesAddress() string {
+	env := os.Environ()
+	for _, e := range env {
+		if strings.HasPrefix(e, "KUBERNETES_PORT_443_TCP_ADDR=") {
+			return strings.TrimPrefix(e, "KUBERNETES_PORT_443_TCP_ADDR=")
 		}
 	}
-
-	return "", fmt.Errorf("KUBERNETES_PORT_443_TCP_ADDR not found")
+	return "KUBERNETES_PORT_443_TCP_ADDR not found"
 }

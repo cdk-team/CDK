@@ -17,7 +17,6 @@ limitations under the License.
 package evaluate
 
 import (
-	"fmt"
 	"github.com/cdk-team/CDK/pkg/util"
 )
 
@@ -52,16 +51,7 @@ func CallBasics() {
 
 	util.PrintH2("Discovery - K8s Service Account")
 
-	path := GetDefaultK8SAccountInfo()
-	address, err := GetKubernetesAddress()
-
-	if err != nil {
-		fmt.Println("Error:", err)
-	} else {
-		fmt.Println("KUBERNETES_PORT_443_TCP_ADDR:", address)
-	}
-
-	CheckPrivilegedK8sServiceAccount(path, address)
+	CheckPrivilegedK8sServiceAccount(GetDefaultK8SAccountInfo(), GetKubernetesAddress())
 
 	util.PrintH2("Discovery - Cloud Provider Metadata API")
 	CheckCloudMetadataAPI()
