@@ -17,6 +17,7 @@ limitations under the License.
 package evaluate
 
 import (
+	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/util"
 )
 
@@ -51,7 +52,7 @@ func CallBasics() {
 
 	util.PrintH2("Discovery - K8s Service Account")
 
-	CheckPrivilegedK8sServiceAccount(GetDefaultK8SAccountInfo(), GetKubernetesAddress())
+	CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
 
 	util.PrintH2("Discovery - Cloud Provider Metadata API")
 	CheckCloudMetadataAPI()

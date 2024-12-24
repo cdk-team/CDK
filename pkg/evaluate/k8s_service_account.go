@@ -25,13 +25,38 @@ import (
 	"strings"
 )
 
-const mountInfoPath string = "/proc/self/mountinfo"
+var (
+	k8sAccountInfoPath string
+	kubernetesAddress  string
+)
 
-func CheckPrivilegedK8sServiceAccount(tokenPath string, address string) bool {
+func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
+
+	// fetch mount info
+	file, err := os.Open("/proc/self/mountinfo")
+	if err != nil {
+		fmt.Printf("error opening /proc/self/mountinfo: %v\n", err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "serviceaccount") {
+			fmt.Println("find serviceaccount successfully")
+			k8sAccountInfoPath = line
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Printf("error reading /proc/self/mountinfo: %v\n", err)
+	}
+
 	resp, err := kubectl.ServerAccountRequest(
 		kubectl.K8sRequestOption{
-			TokenPath: tokenPath + "/token",
-			Server:    address,
+			TokenPath: k8sAccountInfoPath,
+			Server:    "",
 			Api:       "/apis",
 			Method:    "get",
 			PostData:  "",
@@ -73,38 +98,4 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string, address string) bool {
 		fmt.Println("\tresponse:" + resp)
 		return false
 	}
-}
-
-func GetDefaultK8SAccountInfo() string {
-	file, err := os.Open("/proc/self/mountinfo")
-	if err != nil {
-		fmt.Println("error opening /proc/self/mountinfo: %w", err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, "serviceaccount") {
-			fmt.Println("find serviceaccount successfully")
-			return line
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println("error reading /proc/self/mountinfo: %w", err)
-	}
-
-	return ""
-}
-
-func GetKubernetesAddress() string {
-	env := os.Environ()
-	for _, e := range env {
-		if strings.HasPrefix(e, "KUBERNETES_PORT_443_TCP_ADDR=") {
-			return strings.TrimPrefix(e, "KUBERNETES_PORT_443_TCP_ADDR=")
-		}
-	}
-	return "KUBERNETES_PORT_443_TCP_ADDR not found"
 }
