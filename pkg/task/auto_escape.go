@@ -108,12 +108,7 @@ func autoEscape(shellCommand string) bool {
 	// 4. check k8s anonymous login
 	fmt.Printf("\n[Auto Escape - K8s API Server]\n")
 	anonymousLogin := evaluate.CheckK8sAnonymousLogin()
-	defaultAccountInfo := GetDefaultK8SAccountInfo()
-	kubernetesAddress := GetKubernetesAddress()
-
-	privServiceAccount := evaluate.CheckPrivilegedK8sServiceAccount(
-		CheckPrivilegedK8sServiceAccount(defaultAccountInfo, kubernetesAddress),
-	)
+	privServiceAccount := evaluate.CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
 
 	k8sExploit = privServiceAccount || anonymousLogin
 

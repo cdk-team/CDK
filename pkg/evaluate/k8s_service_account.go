@@ -73,7 +73,7 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 		log.Println("trying to list namespaces")
 		resp, err := kubectl.ServerAccountRequest(
 			kubectl.K8sRequestOption{
-				TokenPath: "",
+				TokenPath: k8sAccountInfoPath,
 				Server:    "",
 				Api:       "/api/v1/namespaces",
 				Method:    "get",
