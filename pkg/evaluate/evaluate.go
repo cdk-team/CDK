@@ -17,8 +17,8 @@ limitations under the License.
 package evaluate
 
 import (
-	"github.com/cdk-team/CDK/pkg/util"
 	"github.com/cdk-team/CDK/conf"
+	"github.com/cdk-team/CDK/pkg/util"
 )
 
 // CallBasics is a function to call basic functions
@@ -51,6 +51,7 @@ func CallBasics() {
 	CheckK8sAnonymousLogin()
 
 	util.PrintH2("Discovery - K8s Service Account")
+
 	CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
 
 	util.PrintH2("Discovery - Cloud Provider Metadata API")

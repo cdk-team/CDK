@@ -25,7 +25,6 @@ import (
 	"github.com/cdk-team/CDK/pkg/exploit/persistence"
 	"log"
 
-	"github.com/cdk-team/CDK/conf"
 	"github.com/cdk-team/CDK/pkg/cli"
 	"github.com/cdk-team/CDK/pkg/evaluate"
 	"github.com/cdk-team/CDK/pkg/plugin"
@@ -110,6 +109,7 @@ func autoEscape(shellCommand string) bool {
 	fmt.Printf("\n[Auto Escape - K8s API Server]\n")
 	anonymousLogin := evaluate.CheckK8sAnonymousLogin()
 	privServiceAccount := evaluate.CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
+
 	k8sExploit = privServiceAccount || anonymousLogin
 
 	if !k8sExploit {

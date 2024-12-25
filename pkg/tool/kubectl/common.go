@@ -92,7 +92,7 @@ func SecretToken(tokenPath string) (string, error) {
 	var token string
 
 	if tokenPath != "" {
-		token, tokenErr = GetServiceAccountToken(tokenPath)
+		token, tokenErr = GetServiceAccountToken(tokenPath + "/token")
 	} else if token == "" {
 		token, tokenErr = GetServiceAccountToken(conf.K8sSATokenDefaultPath)
 	}
