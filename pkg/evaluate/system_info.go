@@ -69,11 +69,11 @@ func FindSidFiles() {
 		if err != nil {
 			continue
 		}
-	
+
 		for _, file := range files {
 			// check setuid bit
-			if file.Mode() & os.ModeSetuid != 0 {
-				setuidfiles = append(setuidfiles, dir + "/" + file.Name())
+			if file.Mode()&os.ModeSetuid != 0 {
+				setuidfiles = append(setuidfiles, dir+"/"+file.Name())
 			}
 
 			// check capabilites, like getcap -r /bin
@@ -94,7 +94,7 @@ func CommandAllow() {
 }
 
 func ASLR() {
-	// ASLR off: /proc/sys/kernel/randomize_va_space = 0 
+	// ASLR off: /proc/sys/kernel/randomize_va_space = 0
 	var ASLRSetting = "/proc/sys/kernel/randomize_va_space"
 
 	data, err := ioutil.ReadFile(ASLRSetting)
@@ -111,4 +111,3 @@ func ASLR() {
 	}
 
 }
-

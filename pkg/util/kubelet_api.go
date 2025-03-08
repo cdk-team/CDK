@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -49,12 +48,12 @@ type OwnerReference struct {
 }
 
 type ManagedField struct {
-	Manager     string    `json:"manager"`
-	Operation   string    `json:"operation"`
-	APIVersion  string    `json:"apiVersion"`
-	Time        time.Time `json:"time"`
-	FieldsType  string    `json:"fieldsType"`
-	FieldsV1    FieldsV1  `json:"fieldsV1"`
+	Manager    string    `json:"manager"`
+	Operation  string    `json:"operation"`
+	APIVersion string    `json:"apiVersion"`
+	Time       time.Time `json:"time"`
+	FieldsType string    `json:"fieldsType"`
+	FieldsV1   FieldsV1  `json:"fieldsV1"`
 }
 
 type FieldsV1 struct {
@@ -64,10 +63,10 @@ type FieldsV1 struct {
 		OwnerRefs    map[string]string `json:"ownerReferences"`
 	} `json:"metadata"`
 	Spec struct {
-		Affinity      map[string]interface{} `json:"affinity"`
-		Containers    map[string]interface{} `json:"containers"`
-		RestartPolicy string                 `json:"restartPolicy"`
-		SchedulerName string                 `json:"schedulerName"`
+		Affinity        map[string]interface{} `json:"affinity"`
+		Containers      map[string]interface{} `json:"containers"`
+		RestartPolicy   string                 `json:"restartPolicy"`
+		SchedulerName   string                 `json:"schedulerName"`
 		SecurityContext struct {
 			Sysctls []Sysctl `json:"sysctls"`
 		} `json:"securityContext"`
@@ -80,23 +79,23 @@ type Sysctl struct {
 }
 
 type Pod struct {
-	Metadata     Metadata       `json:"metadata"`
-	Spec         PodSpec        `json:"spec"`
-	Status       PodStatus      `json:"status"`
+	Metadata      Metadata       `json:"metadata"`
+	Spec          PodSpec        `json:"spec"`
+	Status        PodStatus      `json:"status"`
 	ManagedFields []ManagedField `json:"managedFields"`
 }
 
 type PodSpec struct {
-	Containers                   []Container   `json:"containers"`
-	RestartPolicy                string        `json:"restartPolicy"`
-	TerminationGracePeriodSeconds int           `json:"terminationGracePeriodSeconds"`
-	DNSPolicy                    string        `json:"dnsPolicy"`
-	ServiceAccountName           string        `json:"serviceAccountName"`
-	NodeName                     string        `json:"nodeName"`
-	SecurityContext              SecurityContext `json:"securityContext"`
-	Affinity                     Affinity      `json:"affinity"`
-	Tolerations                  []Toleration  `json:"tolerations"`
-	SchedulerName                string        `json:"schedulerName"`
+	Containers                    []Container     `json:"containers"`
+	RestartPolicy                 string          `json:"restartPolicy"`
+	TerminationGracePeriodSeconds int             `json:"terminationGracePeriodSeconds"`
+	DNSPolicy                     string          `json:"dnsPolicy"`
+	ServiceAccountName            string          `json:"serviceAccountName"`
+	NodeName                      string          `json:"nodeName"`
+	SecurityContext               SecurityContext `json:"securityContext"`
+	Affinity                      Affinity        `json:"affinity"`
+	Tolerations                   []Toleration    `json:"tolerations"`
+	SchedulerName                 string          `json:"schedulerName"`
 }
 
 type SecurityContext struct {
@@ -147,14 +146,14 @@ type EnvVar struct {
 type Resources struct{}
 
 type PodStatus struct {
-	Phase             string             `json:"phase"`
-	Conditions        []Condition        `json:"conditions"`
-	HostIP            string             `json:"hostIP"`
-	PodIP             string             `json:"podIP"`
-	PodIPs            []PodIP            `json:"podIPs"`
-	StartTime         time.Time          `json:"startTime"`
-	ContainerStatuses []ContainerStatus  `json:"containerStatuses"`
-	QOSClass          string             `json:"qosClass"`
+	Phase             string            `json:"phase"`
+	Conditions        []Condition       `json:"conditions"`
+	HostIP            string            `json:"hostIP"`
+	PodIP             string            `json:"podIP"`
+	PodIPs            []PodIP           `json:"podIPs"`
+	StartTime         time.Time         `json:"startTime"`
+	ContainerStatuses []ContainerStatus `json:"containerStatuses"`
+	QOSClass          string            `json:"qosClass"`
 }
 
 type Condition struct {
@@ -169,21 +168,21 @@ type PodIP struct {
 }
 
 type ContainerStatus struct {
-	Name        string      `json:"name"`
-	State       ContainerState `json:"state"`
-	LastState   ContainerState `json:"lastState"`
-	Ready       bool        `json:"ready"`
-	RestartCount int         `json:"restartCount"`
-	Image       string      `json:"image"`
-	ImageID     string      `json:"imageID"`
-	ContainerID string      `json:"containerID"`
-	Started     bool        `json:"started"`
+	Name         string         `json:"name"`
+	State        ContainerState `json:"state"`
+	LastState    ContainerState `json:"lastState"`
+	Ready        bool           `json:"ready"`
+	RestartCount int            `json:"restartCount"`
+	Image        string         `json:"image"`
+	ImageID      string         `json:"imageID"`
+	ContainerID  string         `json:"containerID"`
+	Started      bool           `json:"started"`
 }
 
 type ContainerState struct {
-	Running    *ContainerStateRunning `json:"running,omitempty"`
+	Running    *ContainerStateRunning    `json:"running,omitempty"`
 	Terminated *ContainerStateTerminated `json:"terminated,omitempty"`
-	Waiting    *ContainerStateWaiting `json:"waiting,omitempty"`
+	Waiting    *ContainerStateWaiting    `json:"waiting,omitempty"`
 }
 
 type ContainerStateRunning struct {
@@ -205,5 +204,3 @@ type Toleration struct {
 	Effect            string `json:"effect"`
 	TolerationSeconds *int64 `json:"tolerationSeconds,omitempty"`
 }
-
-

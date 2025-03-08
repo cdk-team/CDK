@@ -1,5 +1,5 @@
+//go:build thin || no_vi_tool
 // +build thin no_vi_tool
-
 
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .

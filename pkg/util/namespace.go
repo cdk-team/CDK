@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -26,11 +25,14 @@ import (
 
 // CheckUnpriUserNS checks if the current host enable unprivileged user namespace.
 // reference:
-//   https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/
-//   https://unit42.paloaltonetworks.com/cve-2022-0492-cgroups/
+//
+//	https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/
+//	https://unit42.paloaltonetworks.com/cve-2022-0492-cgroups/
+//
 // exceptional case:
-//  the sysctl files(/proc/sys/kernel/unprivileged_userns_clone) only exist in Debian, Ubuntu.
-//  We can not check the sysctl file in other distros, test in CentOS Linux release 8.4.2105 (Core).
+//
+//	the sysctl files(/proc/sys/kernel/unprivileged_userns_clone) only exist in Debian, Ubuntu.
+//	We can not check the sysctl file in other distros, test in CentOS Linux release 8.4.2105 (Core).
 func CheckUnpriUserNS() error {
 
 	data, err := ioutil.ReadFile("/proc/sys/kernel/unprivileged_userns_clone")

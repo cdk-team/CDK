@@ -18,7 +18,7 @@ func kernelExploitSuggester() {
 	if err != nil {
 		return
 	}
-	
+
 	// run command get output
 	util.PrintItemValueWithKeyOneLine("refer", "https://github.com/mzet-/linux-exploit-suggester", false)
 	output, err := exec.Command("bash", "-c", script).Output()
@@ -52,5 +52,5 @@ func kernelExploitSuggester() {
 			util.PrintOrignal(lines[i])
 		}
 	}
-	
+
 }
