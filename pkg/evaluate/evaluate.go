@@ -17,8 +17,8 @@ limitations under the License.
 package evaluate
 
 import (
-	"github.com/cdk-team/CDK/pkg/util"
 	"github.com/cdk-team/CDK/conf"
+	"github.com/cdk-team/CDK/pkg/util"
 )
 
 // CallBasics is a function to call basic functions

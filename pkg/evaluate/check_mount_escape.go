@@ -34,7 +34,6 @@ func checkClose(c io.Closer) {
 	}
 }
 
-
 func MountEscape() {
 
 	mounts, _ := util.GetMountInfo()
@@ -48,7 +47,6 @@ func MountEscape() {
 			continue
 		}
 
-
 		// ? why match those mount points?
 		if strings.Contains(m.Device, "/") || strings.Contains(m.Fstype, "ext") {
 			matched, _ := regexp.MatchString("/kubelet/|/dev/[\\w-]*?\\blog$|/etc/host[\\w]*?$|/etc/[\\w]*?\\.conf$", m.Root)
@@ -59,7 +57,7 @@ func MountEscape() {
 		}
 
 		// find lxcfs mount point for escape exploit
-		if m.Device == "lxcfs" && util.StringContains(m.Opts, "rw"){
+		if m.Device == "lxcfs" && util.StringContains(m.Opts, "rw") {
 			fmt.Printf("Find mounted lxcfs with rw flags, run `%s` or `%s` to escape container!\n", util.RedBold.Sprint("cdk run lxcfs-rw"), util.RedBold.Sprint("cdk run lxcfs-rw-cgroup"))
 			m.Device = util.RedBold.Sprint(m.Device)
 			m.MountPoint = util.RedBold.Sprint(m.Device)

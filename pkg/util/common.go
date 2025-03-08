@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Authors of https://github.com/CDK-TEAM/CDK .
 
@@ -149,13 +148,13 @@ func IntContains(s []int, e int) bool {
 func DistinctStrArr(s []string) []string {
 	distinctMap := make(map[string]bool)
 	var result []string
-	
+
 	for _, item := range s {
 		if _, exists := distinctMap[item]; !exists {
 			distinctMap[item] = true
 			result = append(result, item)
 		}
 	}
-	
+
 	return result
 }

@@ -57,4 +57,3 @@ func PrintItemValueWithKeyOneLine(key, value string, color bool) {
 func PrintOrignal(out string) {
 	fmt.Printf("%s\n", out)
 }
-

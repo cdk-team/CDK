@@ -29,8 +29,8 @@ import (
 )
 
 type testArgsCase struct {
-	name string
-	args []string
+	name       string
+	args       []string
 	successStr string
 }
 
@@ -38,7 +38,7 @@ func doParseCDKMainWithTimeout() {
 
 	result := make(chan bool, 1)
 
-	go func ()  {
+	go func() {
 		result <- cli.ParseCDKMain()
 	}()
 
@@ -47,13 +47,12 @@ func doParseCDKMainWithTimeout() {
 		log.Println("check run ok, timeout in 2s, and return.")
 		return
 	case <-result:
-		return 
+		return
 	}
 
 }
 
 func TestParseCDKMain(t *testing.T) {
-
 
 	// ./cdk eva 2>&1 | head
 	// ./cdk run test-poc | head
@@ -61,18 +60,18 @@ func TestParseCDKMain(t *testing.T) {
 
 	tests := []testArgsCase{
 		{
-			name: "./cdk eva",
-			args: []string{"./cdk_cli_path", "eva"},
+			name:       "./cdk eva",
+			args:       []string{"./cdk_cli_path", "eva"},
 			successStr: "current user",
 		},
 		{
-			name: "./cdk run test-poc",
-			args: []string{"./cdk_cli_path", "run", "test-poc"},
+			name:       "./cdk run test-poc",
+			args:       []string{"./cdk_cli_path", "run", "test-poc"},
 			successStr: "run success",
 		},
 		{
-			name: "./cdk ifconfig",
-			args: []string{"./cdk_cli_path", "ifconfig"},
+			name:       "./cdk ifconfig",
+			args:       []string{"./cdk_cli_path", "ifconfig"},
 			successStr: "GetLocalAddresses",
 		},
 	}
@@ -111,7 +110,6 @@ func TestParseCDKMain(t *testing.T) {
 
 				t.Errorf(("parse cdk main failed, name: %s, args: %v, buf: %s"), tt.name, tt.args, str)
 			}
-
 
 		})
 
