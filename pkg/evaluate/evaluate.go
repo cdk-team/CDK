@@ -51,6 +51,7 @@ func CallBasics() {
 	CheckK8sAnonymousLogin()
 
 	util.PrintH2("Discovery - K8s Service Account")
+
 	CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
 
 	util.PrintH2("Discovery - Cloud Provider Metadata API")

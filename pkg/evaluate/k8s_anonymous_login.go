@@ -17,8 +17,10 @@ limitations under the License.
 package evaluate
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
@@ -29,9 +31,30 @@ func CheckK8sAnonymousLogin() bool {
 	// check if api-server allows system:anonymous request
 	log.Println("checking if api-server allows system:anonymous request.")
 
+	// fetch mount info
+	file, err := os.Open("/proc/self/mountinfo")
+	if err != nil {
+		fmt.Printf("error opening /proc/self/mountinfo: %v\n", err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "serviceaccount") {
+			fmt.Println("find serviceaccount successfully")
+			k8sAccountInfoPath = line
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Printf("error reading /proc/self/mountinfo: %v\n", err)
+	}
+
 	resp, err := kubectl.ServerAccountRequest(
 		kubectl.K8sRequestOption{
-			TokenPath: "",
+			TokenPath: k8sAccountInfoPath,
 			Server:    "", // default
 			Api:       "/",
 			Method:    "get",

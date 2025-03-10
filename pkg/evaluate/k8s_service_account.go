@@ -17,16 +17,45 @@ limitations under the License.
 package evaluate
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"log"
+	"os"
 	"strings"
 )
 
+var (
+	k8sAccountInfoPath string
+	kubernetesAddress  string
+)
+
 func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
+
+	// fetch mount info
+	file, err := os.Open("/proc/self/mountinfo")
+	if err != nil {
+		fmt.Printf("error opening /proc/self/mountinfo: %v\n", err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "serviceaccount") {
+			fmt.Println("find serviceaccount successfully")
+			k8sAccountInfoPath = line
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Printf("error reading /proc/self/mountinfo: %v\n", err)
+	}
+
 	resp, err := kubectl.ServerAccountRequest(
 		kubectl.K8sRequestOption{
-			TokenPath: "",
+			TokenPath: k8sAccountInfoPath,
 			Server:    "",
 			Api:       "/apis",
 			Method:    "get",
@@ -44,7 +73,7 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 		log.Println("trying to list namespaces")
 		resp, err := kubectl.ServerAccountRequest(
 			kubectl.K8sRequestOption{
-				TokenPath: "",
+				TokenPath: k8sAccountInfoPath,
 				Server:    "",
 				Api:       "/api/v1/namespaces",
 				Method:    "get",
