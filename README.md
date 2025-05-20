@@ -255,7 +255,7 @@ Project CDK is now included in 404Team [Starlink Project 2.0](https://github.com
 
 ### WHC 2021 (补天白帽大会)
 
-- [CDK: Also a Awesome BugBounty Tool for Cloud Platform](https://github.com/neargle/slidefiles/blob/main/2021%20WHC2021%20CDK-Also-a-Awesome-BugBounty-Tool-for-Cloud-Platform.pptx.pdf)
+- [CDK: Also a Awesome BugBounty Tool for Cloud Platform](https://github.com/neargle/my-re0-k8s-security/blob/main/slide/2021%20WHC2021%20CDK-Also-a-Awesome-BugBounty-Tool-for-Cloud-Platform.pptx.pdf)
 
 ### KCON 2021 Arsenal
 
