@@ -63,20 +63,18 @@ chmod a+x cdk
 ## Usage
 ```
 Usage:
-  cdk evaluate [--full]
+  cdk evaluate [--full] [--profile=<name>]
   cdk run (--list | <exploit> [<args>...])
   cdk <tool> [<args>...]
 
 Evaluate:
   cdk evaluate                              Gather information to find weakness inside container.
   cdk evaluate --full                       Enable file scan during information gathering.
+  cdk evaluate --profile=<name>             Run a specific evaluation profile (basic, extended, additional).
 
 Exploit:
   cdk run --list                            List all available exploits.
   cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/cdk-team/CDK/wiki
-
-Auto Escape:
-  cdk auto-escape <cmd>                     Escape container in different ways then let target execute <cmd>.
 
 Tool:
   vi <file>                                 Edit files in container like "vi" command.
@@ -91,6 +89,7 @@ Tool:
 Options:
   -h --help     Show this help msg.
   -v --version  Show version.
+  --profile=<name> Select evaluation profile.
 ```
 
 ## Features
@@ -105,9 +104,9 @@ CDK has three modules:
 
 Usage
 ```
-cdk evaluate [--full]
+cdk evaluate [--full] [--profile=<name>]
 ```
-This command will run the scripts below without local file scanning, using `--full` to enable all.
+This command runs the baseline profile by default. Use `--full` (alias for `--profile=extended`) to include file-system checks, or pick a specific profile with `--profile=basic`, `--profile=additional`, or `--profile=extended`.
 
 |Tactics|Script|Supported|Usage/Example|
 |---|---|---|---|
@@ -264,4 +263,3 @@ Project CDK is now included in 404Team [Starlink Project 2.0](https://github.com
 ### Kubernetes community Days 2021 
 
 - [https://community.cncf.io/events/details/cncf-kcd-china-presents-kubernetes-community-days-china/](https://community.cncf.io/events/details/cncf-kcd-china-presents-kubernetes-community-days-china/)
-

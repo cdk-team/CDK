@@ -65,6 +65,11 @@ func TestParseCDKMain(t *testing.T) {
 			successStr: "current user",
 		},
 		{
+			name:       "./cdk eva --profile=additional",
+			args:       []string{"./cdk_cli_path", "eva", "--profile=additional"},
+			successStr: "randomize_va_space",
+		},
+		{
 			name:       "./cdk run test-poc",
 			args:       []string{"./cdk_cli_path", "run", "test-poc"},
 			successStr: "run success",

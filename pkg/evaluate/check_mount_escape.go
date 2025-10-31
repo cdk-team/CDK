@@ -67,3 +67,7 @@ func MountEscape() {
 
 	}
 }
+
+func init() {
+	RegisterSimpleCheck(CategoryMounts, "mounts.escape", "Inspect mount escape opportunities", MountEscape)
+}

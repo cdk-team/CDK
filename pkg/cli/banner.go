@@ -39,10 +39,10 @@ Find tutorial, configuration and use-case in https://github.com/cdk-team/CDK/
 
 var BannerContainerTpl = BannerHeader + `
 %s
-  cdk evaluate [--full]
-  cdk eva [--full]
+  cdk eva
+  cdk eva --full
+  cdk evaluate [--full] [--profile=<name>]
   cdk run (--list | <exploit> [<args>...])
-  cdk auto-escape <cmd>
   cdk <tool> [<args>...]
 
 %s
@@ -54,7 +54,6 @@ var BannerContainerTpl = BannerHeader + `
 %s
   cdk run --list                            List all available exploits.
   cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/cdk-team/CDK/wiki
-  cdk auto-escape <cmd>                     Escape container in different ways then let target execute <cmd>.
 
 %s
   vi <file>                                 Edit files in container like "vi" command.
@@ -70,6 +69,7 @@ var BannerContainerTpl = BannerHeader + `
 %s
   -h --help     Show this help msg.
   -v --version  Show version.
+  --profile=<name> Select evaluation profile (basic, extended, additional).
 `
 
 // BannerContainer is the banner of CDK command line with colorful.

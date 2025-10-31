@@ -38,3 +38,7 @@ func DNSBasedServiceDiscovery() {
 		fmt.Println(srv.Target, srv.Port)
 	}
 }
+
+func init() {
+	RegisterSimpleCheck(CategoryDNS, "dns.service_discovery", "Enumerate DNS-based service discovery", DNSBasedServiceDiscovery)
+}

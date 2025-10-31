@@ -16,57 +16,18 @@ limitations under the License.
 
 package evaluate
 
-import (
-	"github.com/cdk-team/CDK/conf"
-	"github.com/cdk-team/CDK/pkg/util"
-)
+import "log"
 
-// CallBasics is a function to call basic functions
+// CallBasics executes the baseline evaluation profile.
 func CallBasics() {
-	util.PrintH2("Information Gathering - System Info")
-	BasicSysInfo()
-	FindSidFiles()
-
-	util.PrintH2("Information Gathering - Services")
-	SearchSensitiveEnv()
-	SearchSensitiveService()
-
-	util.PrintH2("Information Gathering - Commands and Capabilities")
-	SearchAvailableCommands()
-	GetProcCapabilities()
-
-	util.PrintH2("Information Gathering - Mounts")
-	MountEscape()
-
-	util.PrintH2("Information Gathering - Net Namespace")
-	CheckNetNamespace()
-
-	util.PrintH2("Information Gathering - Sysctl Variables")
-	CheckRouteLocalNetworkValue()
-
-	util.PrintH2("Information Gathering - DNS-Based Service Discovery")
-	DNSBasedServiceDiscovery()
-
-	util.PrintH2("Discovery - K8s API Server")
-	CheckK8sAnonymousLogin()
-
-	util.PrintH2("Discovery - K8s Service Account")
-	CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
-
-	util.PrintH2("Discovery - Cloud Provider Metadata API")
-	CheckCloudMetadataAPI()
-
-	util.PrintH2("Exploit Pre - Kernel Exploits")
-	kernelExploitSuggester()
+	if err := NewEvaluator().RunProfile(ProfileBasic, nil); err != nil {
+		log.Printf("basic evaluation failed: %v", err)
+	}
 }
 
+// CallAddedFunc executes the additional evaluation profile.
 func CallAddedFunc() {
-	util.PrintH2("Information Gathering - Sensitive Files")
-	SearchLocalFilePath()
-
-	util.PrintH2("Information Gathering - ASLR")
-	ASLR()
-
-	util.PrintH2("Information Gathering - Cgroups")
-	DumpCgroup()
+	if err := NewEvaluator().RunProfile(ProfileAdditional, nil); err != nil {
+		log.Printf("additional evaluation failed: %v", err)
+	}
 }

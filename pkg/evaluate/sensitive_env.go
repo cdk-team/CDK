@@ -33,3 +33,7 @@ func SearchSensitiveEnv() {
 		}
 	}
 }
+
+func init() {
+	RegisterSimpleCheck(CategoryServices, "services.sensitive_env", "Search sensitive environment variables", SearchSensitiveEnv)
+}

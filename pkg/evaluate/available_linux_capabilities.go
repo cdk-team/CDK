@@ -100,3 +100,14 @@ func getAddCaps(currentCaps []string) []string {
 	}
 	return addCaps
 }
+
+func init() {
+	RegisterSimpleCheck(
+		CategoryCommands,
+		"commands.capabilities",
+		"Inspect process capabilities",
+		func() {
+			GetProcCapabilities()
+		},
+	)
+}

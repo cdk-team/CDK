@@ -36,3 +36,7 @@ func CheckRouteLocalNetworkValue() {
 		log.Println("You may be able to access the localhost service of the current container node or other nodes.")
 	}
 }
+
+func init() {
+	RegisterSimpleCheck(CategorySysctl, "sysctl.route_localnet", "Check route_localnet sysctl value", CheckRouteLocalNetworkValue)
+}
