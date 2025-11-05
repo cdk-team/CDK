@@ -63,14 +63,13 @@ chmod a+x cdk
 ## Usage
 ```
 Usage:
-  cdk evaluate [--full] [--profile=<name>]
+  cdk evaluate [--full]
   cdk run (--list | <exploit> [<args>...])
   cdk <tool> [<args>...]
 
 Evaluate:
   cdk evaluate                              Gather information to find weakness inside container.
   cdk evaluate --full                       Enable file scan during information gathering.
-  cdk evaluate --profile=<name>             Run a specific evaluation profile (basic, extended, additional).
 
 Exploit:
   cdk run --list                            List all available exploits.
@@ -104,9 +103,8 @@ CDK has three modules:
 
 Usage
 ```
-cdk evaluate [--full] [--profile=<name>]
+cdk evaluate [--full]
 ```
-This command runs the baseline profile by default. Use `--full` (alias for `--profile=extended`) to include file-system checks, or pick a specific profile with `--profile=basic`, `--profile=additional`, or `--profile=extended`.
 
 |Tactics|Script|Supported|Usage/Example|
 |---|---|---|---|

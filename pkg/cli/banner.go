@@ -41,7 +41,7 @@ var BannerContainerTpl = BannerHeader + `
 %s
   cdk eva
   cdk eva --full
-  cdk evaluate [--full] [--profile=<name>]
+  cdk evaluate [--full]
   cdk run (--list | <exploit> [<args>...])
   cdk <tool> [<args>...]
 

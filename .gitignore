@@ -36,3 +36,4 @@ __debug_bin
 /pkg/tool/kubectl/assets/
 
 /cdk
+.cache/
