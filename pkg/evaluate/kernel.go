@@ -54,3 +54,7 @@ func kernelExploitSuggester() {
 	}
 
 }
+
+func init() {
+	RegisterSimpleCheck(CategoryKernel, "kernel.exploits", "Suggest applicable kernel exploits", kernelExploitSuggester)
+}

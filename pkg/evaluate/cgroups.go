@@ -53,3 +53,7 @@ func DumpCgroup() {
 	}
 
 }
+
+func init() {
+	RegisterSimpleCheck(CategoryCgroups, "cgroups.dump", "Dump cgroup configuration", DumpCgroup)
+}

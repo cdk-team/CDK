@@ -59,10 +59,12 @@ func ParseCDKMain() bool {
 	// docopt argparse start
 	parseDocopt()
 
-	if Args["auto-escape"].(bool) {
-		plugin.RunSingleTask("auto-escape")
-		return true
-	}
+	// delete auto-escape
+
+	// if Args["auto-escape"].(bool) {
+	// 	plugin.RunSingleTask("auto-escape")
+	// 	return true
+	// }
 
 	// support for cdk eva(Evangelion) and cdk evaluate
 	fok := Args["evaluate"]
@@ -73,10 +75,17 @@ func ParseCDKMain() bool {
 	if ok.(bool) || fok.(bool) {
 
 		fmt.Printf(BannerHeader)
-		evaluate.CallBasics()
-
-		if Args["--full"].(bool) {
-			evaluate.CallAddedFunc()
+		profileID := evaluate.ProfileBasic
+		if rawProfile, ok := Args["--profile"]; ok {
+			if v, ok := rawProfile.(string); ok && v != "" {
+				profileID = v
+			}
+		}
+		if profileID == evaluate.ProfileBasic && Args["--full"].(bool) {
+			profileID = evaluate.ProfileExtended
+		}
+		if err := evaluate.NewEvaluator().RunProfile(profileID, nil); err != nil {
+			log.Printf("evaluate profile %q failed: %v", profileID, err)
 		}
 		return true
 	}

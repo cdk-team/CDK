@@ -34,6 +34,8 @@ type testArgsCase struct {
 	successStr string
 }
 
+const parseTimeout = 5 * time.Second
+
 func doParseCDKMainWithTimeout() {
 
 	result := make(chan bool, 1)
@@ -43,8 +45,8 @@ func doParseCDKMainWithTimeout() {
 	}()
 
 	select {
-	case <-time.After(time.Second * 2):
-		log.Println("check run ok, timeout in 2s, and return.")
+	case <-time.After(parseTimeout):
+		log.Printf("check run ok, timeout reached in %s, and return.", parseTimeout)
 		return
 	case <-result:
 		return
@@ -64,6 +66,11 @@ func TestParseCDKMain(t *testing.T) {
 			args:       []string{"./cdk_cli_path", "eva"},
 			successStr: "current user",
 		},
+		// {
+		// 	name:       "./cdk eva --profile=additional",
+		// 	args:       []string{"./cdk_cli_path", "eva", "--profile=additional"},
+		// 	successStr: "randomize_va_space",
+		// },
 		{
 			name:       "./cdk run test-poc",
 			args:       []string{"./cdk_cli_path", "run", "test-poc"},

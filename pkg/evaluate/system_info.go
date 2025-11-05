@@ -111,3 +111,9 @@ func ASLR() {
 	}
 
 }
+
+func init() {
+	RegisterSimpleCheck(CategorySystemInfo, "system.basic_info", "Collect basic system information", BasicSysInfo)
+	RegisterSimpleCheck(CategorySystemInfo, "system.setuid_files", "Search for setuid binaries", FindSidFiles)
+	RegisterSimpleCheck(CategoryASLR, "system.aslr", "Inspect ASLR configuration", ASLR)
+}

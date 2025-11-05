@@ -18,9 +18,11 @@ package evaluate
 
 import (
 	"fmt"
-	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 	"log"
 	"strings"
+
+	"github.com/cdk-team/CDK/conf"
+	"github.com/cdk-team/CDK/pkg/tool/kubectl"
 )
 
 func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
@@ -69,4 +71,15 @@ func CheckPrivilegedK8sServiceAccount(tokenPath string) bool {
 		fmt.Println("\tresponse:" + resp)
 		return false
 	}
+}
+
+func init() {
+	RegisterSimpleCheck(
+		CategoryK8sServiceAccount,
+		"k8s.privileged_service_account",
+		"Check Kubernetes service account privileges",
+		func() {
+			CheckPrivilegedK8sServiceAccount(conf.K8sSATokenDefaultPath)
+		},
+	)
 }

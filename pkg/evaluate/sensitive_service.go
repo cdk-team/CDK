@@ -37,3 +37,7 @@ func SearchSensitiveService() {
 		}
 	}
 }
+
+func init() {
+	RegisterSimpleCheck(CategoryServices, "services.sensitive_service", "Search sensitive services", SearchSensitiveService)
+}

@@ -116,6 +116,12 @@ type cloudAPIS struct {
 
 var CloudAPI = []cloudAPIS{
 	{
+		CloudProvider: "Volcano Engine (Volcengine)",
+		API:           "http://100.96.0.96/latest",
+		ResponseMatch: "instance",
+		DocURL:        "https://www.volcengine.com/docs/6396/113780",
+	},
+	{
 		CloudProvider: "Alibaba Cloud",
 		API:           "http://100.100.100.200/latest/meta-data/",
 		ResponseMatch: "instance-id",

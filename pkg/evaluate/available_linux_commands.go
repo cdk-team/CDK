@@ -33,3 +33,7 @@ func SearchAvailableCommands() {
 	}
 	log.Printf("available commands:\n\t%s\n", strings.Join(ans, ","))
 }
+
+func init() {
+	RegisterSimpleCheck(CategoryCommands, "commands.available", "Enumerate available commands", SearchAvailableCommands)
+}

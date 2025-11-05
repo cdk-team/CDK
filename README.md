@@ -75,9 +75,6 @@ Exploit:
   cdk run --list                            List all available exploits.
   cdk run <exploit> [<args>...]             Run single exploit, docs in https://github.com/cdk-team/CDK/wiki
 
-Auto Escape:
-  cdk auto-escape <cmd>                     Escape container in different ways then let target execute <cmd>.
-
 Tool:
   vi <file>                                 Edit files in container like "vi" command.
   ps                                        Show process information like "ps -ef" command.
@@ -91,6 +88,7 @@ Tool:
 Options:
   -h --help     Show this help msg.
   -v --version  Show version.
+  --profile=<name> Select evaluation profile.
 ```
 
 ## Features
@@ -107,7 +105,6 @@ Usage
 ```
 cdk evaluate [--full]
 ```
-This command will run the scripts below without local file scanning, using `--full` to enable all.
 
 |Tactics|Script|Supported|Usage/Example|
 |---|---|---|---|
@@ -264,4 +261,3 @@ Project CDK is now included in 404Team [Starlink Project 2.0](https://github.com
 ### Kubernetes community Days 2021 
 
 - [https://community.cncf.io/events/details/cncf-kcd-china-presents-kubernetes-community-days-china/](https://community.cncf.io/events/details/cncf-kcd-china-presents-kubernetes-community-days-china/)
-
