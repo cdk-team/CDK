@@ -82,7 +82,7 @@ func GetMountInfo() ([]MountInfo, error) {
 		ret = append(ret, strings.Trim(line, "\n"))
 	}
 	// 2346 2345 0:261 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw
-	mountInfos := make([]MountInfo, len(ret))
+	mountInfos := make([]MountInfo, 0, len(ret))
 
 	for _, r := range ret {
 		parts := strings.Split(r, " - ")
